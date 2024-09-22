@@ -1,4 +1,6 @@
-# Venta App
+# Lendr App
+
+Debt-tracking app.
 
 ## To run and test the app locally, follow the steps below:
 
