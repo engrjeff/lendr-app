@@ -12,14 +12,14 @@ export const NavLink = React.forwardRef<
 >(({ className, ...props }, ref) => {
   const pathname = usePathname()
 
-  const isActive = pathname === props.href
+  const isActive = pathname.startsWith(props.href.toString())
 
   return (
     <Link
       {...props}
       ref={ref}
       className={cn(
-        "flex items-center gap-3 rounded px-3 py-1.5 transition-all text-[13px]",
+        "flex items-center gap-3 px-3 py-1.5 transition-all text-[13px]",
         isActive
           ? "text-primary-foreground bg-primary data-[submenu=true]:bg-background data-[submenu=true]:text-primary"
           : "text-muted-foreground hover:text-primary",

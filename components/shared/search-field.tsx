@@ -38,11 +38,11 @@ export function SearchField({
   }, 300)
 
   return (
-    <div className="relative h-8 min-w-80">
+    <div className="relative h-10 min-w-80">
       <SearchIcon className="absolute left-2 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
       <Input
         {...props}
-        className={cn("h-8 pl-8", className)}
+        className={cn("h-10 pl-8", className)}
         defaultValue={searchParams.get("search")?.toString()}
         onChange={(e) => {
           handleSearch(e.currentTarget.value)

@@ -14,11 +14,13 @@ import {
 interface DataTableProps<TData> {
   table: ReactTable<TData>
   columnLength: number
+  noHover?: boolean
 }
 
 export function DataTable<TData>({
   table,
   columnLength,
+  noHover,
 }: DataTableProps<TData>) {
   return (
     <div className="rounded-md border">
@@ -30,7 +32,11 @@ export function DataTable<TData>({
                 return (
                   <TableHead
                     key={header.id}
-                    className={header.id === "select" ? "" : "px-1"}
+                    className={
+                      header.id === "select" || header.id === "index"
+                        ? ""
+                        : "px-1"
+                    }
                   >
                     {header.isPlaceholder
                       ? null
@@ -50,6 +56,7 @@ export function DataTable<TData>({
               <TableRow
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}
+                className={noHover ? "hover:bg-background" : ""}
               >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id} className="py-3">

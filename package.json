@@ -1,14 +1,14 @@
 {
-  "name": "venta-app",
+  "name": "lendr-app",
   "version": "0.1.0",
   "private": true,
   "prisma": {
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
   },
   "scripts": {
-    "dev": "next dev -p 3002",
+    "dev": "next dev",
     "build": "npx prisma generate && next build",
-    "start": "next start -p 3002",
+    "start": "next start",
     "lint": "next lint",
     "lint:fix": "next lint --fix"
   },

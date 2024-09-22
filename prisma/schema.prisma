@@ -4,8 +4,7 @@ datasource db {
 }
 
 generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["fullTextSearch"]
+  provider = "prisma-client-js"
 }
 
 enum ROLE {
@@ -30,18 +29,7 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  stores              Store[]
-  productServiceItems ProductServiceItem[]
-  categories          Category[]
-  suppliers           Supplier[]
-  customers           Customer[]
-  paymentMethods      PaymentMethod[]
-  expenses            Expense[]
-  bills               Bill[]
-  bookAccounts        BookAccount[]
-  invoices            Invoice[]
-  Unit                Unit[]
-  UnitConversion      UnitConversion[]
+  debts Debt[]
 }
 
 model Account {
@@ -100,644 +88,64 @@ model Authenticator {
   @@id([userId, credentialID])
 }
 
-enum StoreStatus {
-  ACTIVE
-  INACTIVE
+enum DebtStatus {
+  IN_PROGRESS
+  PAID
+  CANCELLED
 }
 
-model Store {
-  id        String  @id @default(cuid())
-  logo      String
-  name      String
-  slug      String
-  legalName String
-  vatNumber String?
-  email     String
-  phone     String?
-  website   String?
-
-  status StoreStatus @default(ACTIVE)
-
-  addressId               String?
-  customerFacingAddressId String?
-  legalAddressId          String?
-
-  address               Address? @relation(name: "address", fields: [addressId], references: [id])
-  customerFacingAddress Address? @relation(name: "customerFacingAddress", fields: [customerFacingAddressId], references: [id])
-  legalAddress          Address? @relation(name: "legalAddress", fields: [legalAddressId], references: [id])
-
-  owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-  ownerId String
-
-  productServiceItems ProductServiceItem[]
-  categories          Category[]
-  suppliers           Supplier[]
-  customers           Customer[]
-  invoices            Invoice[]
-  storeTags           StoreTag[]
-  storeTagGroups      StoreTagGroup[]
-  paymentMethods      PaymentMethod[]
-  expenses            Expense[]
-  bills               Bill[]
-  bookAccounts        BookAccount[]
-
-  units           Unit[]
-  unitConversions UnitConversion[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([ownerId])
-  @@index([slug])
-  @@index([ownerId, id])
-  @@index([ownerId, slug])
+enum InstallmentPlanItemStatus {
+  UPCOMING
+  PAST_DUE
+  PAID
 }
 
-model Address {
-  id      String @id @default(cuid())
-  street  String
-  city    String
-  state   String
-  zipCode String
-  country String
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  storeAddresses               Store[]    @relation(name: "address")
-  storeCustomerFacingAddresses Store[]    @relation(name: "customerFacingAddress")
-  storeLegalAddress            Store[]    @relation(name: "legalAddress")
-  supplierAddress              Supplier[] @relation(name: "supplierAddress")
-  customerBillingAddress       Customer[] @relation(name: "customerBillingAddress")
-  customerShippingAddress      Customer[] @relation(name: "customerShippingAddress")
-}
-
-enum ProductServiceStatus {
-  ACTIVE
-  INACTIVE
-}
-
-enum ProductServiceStockStatus {
-  IN_STOCK
-  LOW_STOCK
-  OUT_OF_STOCK
-}
-
-enum ProductServiceType {
-  INVENTORY
-  NON_INVENTORY
-  INVENTORY_ASSEMBLY
-  SERVICE
-}
-
-model ProductServiceItem {
-  id   String             @id @default(cuid())
-  name String
-  sku  String?
-  type ProductServiceType @default(INVENTORY)
-
-  status      ProductServiceStatus      @default(ACTIVE)
-  stockStatus ProductServiceStockStatus @default(IN_STOCK)
-
-  category   Category? @relation(fields: [categoryId], references: [id])
-  categoryId String?
-
-  unit   Unit?   @relation(fields: [unitId], references: [id])
-  unitId String?
-
-  unitConversion   UnitConversion? @relation(fields: [unitConversionId], references: [id])
-  unitConversionId String?
-
-  image String?
-
-  initialQuantity  Int? // only if type = INVENTORY
-  asOfDate         DateTime?
-  reorderPoint     Float?
-  description      String?
-  salesPriceOrRate Float?
-
-  inventoryAssetAccount   BookAccount? @relation(name: "inventoryAssetAccount", fields: [inventoryAssetAccountId], references: [id])
-  inventoryAssetAccountId String?
-
-  incomeAccount   BookAccount? @relation(name: "incomeAccount", fields: [incomeAccountId], references: [id])
-  incomeAccountId String?
-
-  purchasingDescription String?
-  cost                  Float?
-
-  supplier   Supplier? @relation(fields: [supplierId], references: [id])
-  supplierId String?
-
-  expenseAccount   BookAccount? @relation(name: "expenseAccount", fields: [expenseAccountId], references: [id])
-  expenseAccountId String?
-
-  isSelling    Boolean? @default(true)
-  isPurchasing Boolean? @default(true)
-
-  bundledProducts ProductBundleItem[]
-
-  store   Store  @relation(fields: [storeId], references: [id], onDelete: Cascade)
-  storeId String
-
-  owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-  ownerId String
-
-  invoices InvoiceItem[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@unique([storeId, sku])
-  @@unique([storeId, name])
-  @@index([storeId])
-  @@index([ownerId])
-  @@index([ownerId, storeId])
-}
-
-model ProductBundleItem {
-  id        String @id @default(cuid())
-  quantity  Int
-  productId String
-
-  productServiceItem   ProductServiceItem? @relation(fields: [productServiceItemId], references: [id])
-  productServiceItemId String?
-
-  @@index([productId])
-}
-
-model Unit {
+model Debt {
   id String @id @default(cuid())
 
-  name String
+  nickname  String
+  category  String
+  frequency String
+  duration  Int        @default(1)
+  status    DebtStatus @default(IN_PROGRESS)
 
-  status ItemStatus @default(ACTIVE)
+  balance               Float
+  minimum_payment       Float
+  next_payment_due_date String
+  tracking_start_date   String
 
-  conversions UnitConversion[]
+  is_mine Boolean? @default(true)
 
-  store   Store  @relation(fields: [storeId], references: [id], onDelete: Cascade)
-  storeId String
-
-  owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-  ownerId String
-
-  productServiceItems ProductServiceItem[]
+  lendee_name   String?
+  lendee_email  String?
+  should_notify Boolean? @default(false)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@unique([storeId, name])
-  @@index([storeId])
-  @@index([ownerId])
-  @@index([ownerId, storeId])
+  user    User   @relation(references: [id], fields: [user_id], onDelete: Cascade)
+  user_id String
+
+  installment_plans InstallmentPlanItem[]
+
+  @@unique([nickname, user_id])
 }
 
-model UnitConversion {
+model InstallmentPlanItem {
   id String @id @default(cuid())
 
-  status ItemStatus @default(ACTIVE)
+  payment_date   String
+  payment_amount Float
 
-  name String
+  actual_payment_date String?
 
-  to String
+  status InstallmentPlanItemStatus @default(UPCOMING)
 
-  description String?
+  note String?
 
-  factor Float
-
-  store   Store  @relation(fields: [storeId], references: [id], onDelete: Cascade)
-  storeId String
-
-  owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-  ownerId String
-
-  unit   Unit?   @relation(fields: [unitId], references: [id])
-  unitId String?
-
-  productsWithThisConversion ProductServiceItem[]
+  debt   Debt   @relation(references: [id], fields: [debtId], onDelete: Cascade)
+  debtId String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  @@unique([storeId, unitId, name])
-  @@index([unitId])
-  @@index([storeId])
-  @@index([ownerId])
-  @@index([ownerId, storeId])
-}
-
-enum ItemStatus {
-  ACTIVE
-  INACTIVE
-}
-
-model Category {
-  id String @id @default(cuid())
-
-  name String
-
-  productServiceItems ProductServiceItem[]
-
-  status ItemStatus @default(ACTIVE)
-
-  store   Store  @relation(fields: [storeId], references: [id], onDelete: Cascade)
-  storeId String
-
-  owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-  ownerId String
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@unique([storeId, name])
-  @@index([storeId])
-  @@index([ownerId])
-  @@index([ownerId, storeId])
-}
-
-enum BookAccountLabel {
-  UNCATEGORIZED
-  ASSET
-  INVENTORY
-  INCOME
-  EXPENSE
-  BILL
-}
-
-model BookAccount {
-  id          String           @id @default(cuid())
-  name        String
-  label       BookAccountLabel @default(UNCATEGORIZED)
-  description String?
-
-  accountType   BookAccountType @relation(fields: [accountTypeId], references: [id])
-  accountTypeId String
-
-  detailType   BookDetailType @relation(fields: [detailTypeId], references: [id])
-  detailTypeId String
-
-  itemsInventoryAssetAccount ProductServiceItem[] @relation(name: "inventoryAssetAccount")
-  itemsIncomeAccount         ProductServiceItem[] @relation(name: "incomeAccount")
-  itemsExpenseAccount        ProductServiceItem[] @relation(name: "expenseAccount")
-
-  expenseItemsUnderThisAccount ExpenseItem[]
-  billItemsUnderThisAccount    BillItem[]
-
-  store   Store  @relation(fields: [storeId], references: [id], onDelete: Cascade)
-  storeId String
-
-  owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-  ownerId String
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@unique([storeId, name])
-  @@index([ownerId])
-  @@index([storeId])
-  @@index([ownerId, storeId])
-  @@index([name])
-  @@index([label])
-}
-
-model BookAccountType {
-  id       String   @id @default(cuid())
-  name     String
-  balance  Float?
-  isActive Boolean? @default(true)
-
-  bookAccounts BookAccount[]
-  detailTypes  BookDetailType[]
-
-  expensesUnderThis Expense[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model BookDetailType {
-  id       String   @id @default(cuid())
-  name     String
-  balance  Float?
-  isActive Boolean? @default(true)
-
-  accountType   BookAccountType @relation(fields: [accountTypeId], references: [id])
-  accountTypeId String
-
-  bookAccounts BookAccount[]
-
-  expenseItemsUnderThis ExpenseItem[]
-  billItemsUnderThis    BillItem[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Supplier {
-  id   String @id @default(cuid())
-  name String
-
-  title      String? // e.g. Mr, Mrs, Sir
-  firstName  String?
-  middleName String?
-  lastName   String?
-  suffix     String?
-
-  companyName  String?
-  email        String?
-  phoneNumber  String?
-  mobileNumber String?
-  fax          String?
-  website      String?
-
-  billsPaidToThis Bill[]
-
-  address   Address? @relation(name: "supplierAddress", fields: [addressId], references: [id])
-  addressId String?
-
-  store   Store  @relation(fields: [storeId], references: [id], onDelete: Cascade)
-  storeId String
-
-  owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-  ownerId String
-
-  productServiceItems ProductServiceItem[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@unique([storeId, name])
-  @@index([storeId])
-  @@index([ownerId])
-  @@index([ownerId, storeId])
-}
-
-model Customer {
-  id   String @id @default(cuid())
-  name String
-
-  title      String? // e.g. Mr, Mrs, Sir
-  firstName  String?
-  middleName String?
-  lastName   String?
-  suffix     String?
-
-  companyName  String?
-  email        String?
-  phoneNumber  String?
-  mobileNumber String?
-  fax          String?
-  website      String?
-
-  billingAddress   Address @relation(name: "customerBillingAddress", fields: [billingAddressId], references: [id])
-  billingAddressId String
-
-  shippingAddress   Address @relation(name: "customerShippingAddress", fields: [shippingAddressId], references: [id])
-  shippingAddressId String
-
-  store   Store  @relation(fields: [storeId], references: [id], onDelete: Cascade)
-  storeId String
-
-  owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-  ownerId String
-
-  invoices Invoice[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([storeId])
-  @@index([ownerId])
-  @@index([ownerId, storeId])
-}
-
-enum InvoiceTerms {
-  DUE_ON_RECEIPT
-  NET15
-  NET30
-  NET60
-  CUSTOM
-}
-
-enum InvoiceStatus {
-  NEEDS_ATTENTION
-  OVERDUE
-  NOT_DUE
-  NOT_DEPOSITED
-  DEPOSITED
-}
-
-model Invoice {
-  id            String @id @default(cuid())
-  invoiceNumber String
-
-  customer   Customer @relation(fields: [customerId], references: [id])
-  customerId String
-
-  status      InvoiceStatus
-  terms       InvoiceTerms  @default(DUE_ON_RECEIPT)
-  invoiceDate DateTime
-  dueDate     DateTime
-
-  items InvoiceItem[]
-
-  tags StoreTag[]
-
-  messageOnInvoice   String?
-  messageOnStateMent String?
-
-  store   Store  @relation(fields: [storeId], references: [id], onDelete: Cascade)
-  storeId String
-
-  owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-  ownerId String
-
-  attachments     String[] // file/media urls
-  receivingEmails String[] // array of emails
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([storeId])
-  @@index([ownerId])
-  @@index([ownerId, storeId])
-}
-
-model InvoiceItem {
-  id          String             @id @default(cuid())
-  serviceDate DateTime
-  item        ProductServiceItem @relation(fields: [itemId], references: [id])
-  itemId      String
-  invoice     Invoice?           @relation(fields: [invoiceId], references: [id])
-  invoiceId   String?
-
-  @@index([invoiceId])
-}
-
-model StoreTag {
-  id   String @id @default(cuid())
-  name String
-
-  store   Store  @relation(fields: [storeId], references: [id])
-  storeId String
-
-  group   StoreTagGroup? @relation(fields: [groupId], references: [id])
-  groupId String?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  invoicesWithTag Invoice? @relation(fields: [invoiceId], references: [id])
-  invoiceId       String?
-
-  billsWithTag Bill?   @relation(fields: [billId], references: [id])
-  billId       String?
-
-  @@unique([storeId, name])
-  @@index([groupId])
-  @@index([storeId])
-  @@index([invoiceId])
-  @@index([billId])
-}
-
-model StoreTagGroup {
-  id   String @id @default(cuid())
-  name String
-
-  tags StoreTag[]
-
-  store   Store  @relation(fields: [storeId], references: [id])
-  storeId String
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@unique([storeId, name])
-  @@index([storeId])
-}
-
-model PaymentMethod {
-  id           String   @id @default(cuid())
-  name         String
-  isCreditCard Boolean? @default(false)
-
-  store   Store  @relation(fields: [storeId], references: [id], onDelete: Cascade)
-  storeId String
-
-  owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-  ownerId String
-
-  expensesPaidWithThis Expense[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@unique([storeId, name])
-  @@index([storeId])
-  @@index([ownerId])
-  @@index([ownerId, storeId])
-}
-
-model Expense {
-  id              String  @id @default(cuid())
-  referenceNumber String? // maybe an O.R. number
-
-  payee     String // should reference a supplier, customer, or employee Id
-  payeeName String
-
-  expenseItems ExpenseItem[]
-
-  paymentAccount       BookAccountType @relation(fields: [paymentAccountTypeId], references: [id])
-  paymentAccountTypeId String
-
-  paymentDate DateTime
-  amount      Float
-
-  paymentMethod   PaymentMethod? @relation(fields: [paymentMethodId], references: [id])
-  paymentMethodId String?
-
-  memo        String?
-  attachments String[] // file/media urls
-
-  store   Store  @relation(fields: [storeId], references: [id], onDelete: Cascade)
-  storeId String
-
-  owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-  ownerId String
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([paymentAccountTypeId])
-  @@index([ownerId])
-  @@index([storeId])
-  @@index([ownerId, storeId])
-}
-
-model ExpenseItem {
-  id String @id @default(cuid())
-
-  category   BookDetailType @relation(fields: [categoryId], references: [id])
-  categoryId String
-
-  description String?
-  amount      Float
-
-  expense   Expense? @relation(fields: [expenseId], references: [id])
-  expenseId String?
-
-  bookAccount   BookAccount? @relation(fields: [bookAccountId], references: [id])
-  bookAccountId String?
-
-  @@index([expenseId])
-}
-
-model Bill {
-  id         String  @id @default(cuid())
-  billNumber String? // maybe an O.R. number
-
-  supplier   Supplier @relation(fields: [supplierId], references: [id]) // should reference a supplier
-  supplierId String
-
-  mailingAddress String
-  amount         Float // balance due
-
-  billDate DateTime
-  dueDate  DateTime
-
-  billItems BillItem[]
-  tags      StoreTag[]
-
-  memo        String?
-  attachments String[] // file/media urls
-
-  store   Store  @relation(fields: [storeId], references: [id], onDelete: Cascade)
-  storeId String
-
-  owner   User   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-  ownerId String
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([ownerId])
-  @@index([storeId])
-  @@index([ownerId, storeId])
-}
-
-model BillItem {
-  id String @id @default(cuid())
-
-  category   BookDetailType @relation(fields: [categoryId], references: [id])
-  categoryId String
-
-  description String?
-  amount      Float
-
-  billId String?
-  bill   Bill?   @relation(fields: [billId], references: [id])
-
-  bookAccount   BookAccount? @relation(fields: [bookAccountId], references: [id])
-  bookAccountId String?
-
-  @@index([billId])
 }

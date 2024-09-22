@@ -9,7 +9,9 @@ export const loginSchema = z.object({
 })
 
 export const registerSchema = loginSchema.extend({
-  name: z.string().min(1),
+  name: z
+    .string({ required_error: "Name is required." })
+    .min(1, { message: "Name is required." }),
 })
 
 export type LoginFormInput = z.infer<typeof loginSchema>

@@ -1,11 +1,4 @@
-import type { Metadata } from "next"
-
 import { AuthFooter } from "./components/AuthFooter"
-
-export const metadata: Metadata = {
-  title: "Venta",
-  description: "Venta App",
-}
 
 export default function AuthLayout({
   children,

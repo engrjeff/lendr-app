@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Debt" ADD COLUMN     "duration" INTEGER NOT NULL DEFAULT 1;

@@ -14,6 +14,7 @@ import {
 import { SignoutDialog } from "@/app/(auth)/components/SignoutDialog"
 
 import { Avatar, AvatarFallback } from "../ui/avatar"
+import { ThemeToggler } from "./theme-toggler"
 
 function getInitials(name: string) {
   return name
@@ -30,16 +31,28 @@ function UserMenu({ user }: { user?: Session["user"] }) {
       <DropdownMenuTrigger asChild>
         <Button variant="secondary" size="icon" className="rounded-full">
           <Avatar>
-            <AvatarFallback>{getInitials(user.name!)}</AvatarFallback>
+            <AvatarFallback className="bg-orange-500 text-white">
+              {getInitials(user.name!)}
+            </AvatarFallback>
           </Avatar>
           <span className="sr-only">Toggle user menu</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuLabel>{user.email}</DropdownMenuLabel>
+      <DropdownMenuContent align="end" className="w-60">
+        <DropdownMenuLabel>
+          <p>{user.name}</p>
+          <p className="text-xs font-normal text-muted-foreground">
+            {user.email}
+          </p>
+        </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>Settings</DropdownMenuItem>
-        <DropdownMenuItem>Support</DropdownMenuItem>
+        <DropdownMenuItem>Account</DropdownMenuItem>
+        <DropdownMenuItem>Track Debt</DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <div className="flex items-center justify-between px-2 py-1.5 text-sm">
+          <span>Theme</span>
+          <ThemeToggler />
+        </div>
         <DropdownMenuSeparator />
         <SignoutDialog />
       </DropdownMenuContent>

@@ -9,8 +9,11 @@ import "./globals.css"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Venta",
-  description: "Venta App",
+  title: {
+    default: "Lendr",
+    template: "%s | Lendr",
+  },
+  description: "Lendr App - Your hassle-free debt tracker",
 }
 
 export default function RootLayout({
