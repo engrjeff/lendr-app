@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { Debt } from "@prisma/client"
+import { Debt, DebtStatus } from "@prisma/client"
 import { MoreHorizontalIcon } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -41,7 +41,9 @@ export function DebtMenuActions({ debt }: { debt: Debt }) {
           <DropdownMenuItem asChild>
             <Link href={`/debts/${debt.id}`}>View Details</Link>
           </DropdownMenuItem>
-          <DropdownMenuItem>Edit</DropdownMenuItem>
+          {debt.status !== DebtStatus.PAID ? (
+            <DropdownMenuItem>Edit</DropdownMenuItem>
+          ) : null}
           <DropdownMenuItem
             onClick={() => setAction("delete")}
             className="text-destructive focus:text-destructive"

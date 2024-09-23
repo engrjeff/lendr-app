@@ -1,22 +1,22 @@
 "use client"
 
-import { InstallmentPlanItem } from "@prisma/client"
+import { Suspense } from "react"
+import { InstallmentPlanItem, InstallmentPlanItemStatus } from "@prisma/client"
 import { ColumnDef } from "@tanstack/react-table"
 
 import { Badge } from "@/components/ui/badge"
 import { Checkbox } from "@/components/ui/checkbox"
 import { DataTable } from "@/components/ui/data-table/data-table"
 import { useDataTable } from "@/components/ui/data-table/useDataTable"
-import { Label } from "@/components/ui/label"
-import { NativeSelect } from "@/components/ui/native-select"
 
 import { InstallmentPlanRowActions } from "./installment-plan-row-actions"
 import { PayAllButton } from "./pay-all-button"
+import { StatusFilter } from "./status-filter"
 
 export const columns: ColumnDef<InstallmentPlanItem>[] = [
   {
     id: "select",
-    header: ({ table }) => (
+    header: ({ table, column, header }) => (
       <Checkbox
         checked={
           table.getIsAllPageRowsSelected() ||
@@ -31,15 +31,9 @@ export const columns: ColumnDef<InstallmentPlanItem>[] = [
         checked={row.getIsSelected()}
         onCheckedChange={(value) => row.toggleSelected(!!value)}
         aria-label="Select row"
+        disabled={row.original.status === InstallmentPlanItemStatus.PAID}
       />
     ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
-    id: "index",
-    header: ({ table }) => <span>#</span>,
-    cell: ({ row }) => <span>{row.index + 1}</span>,
     enableSorting: false,
     enableHiding: false,
   },
@@ -66,6 +60,15 @@ export const columns: ColumnDef<InstallmentPlanItem>[] = [
       <Badge variant={row.original.status}>{row.getValue("status")}</Badge>
     ),
   },
+
+  {
+    accessorKey: "note",
+    header: () => <div className="px-4 py-3">Note</div>,
+    cell: ({ row }) => (
+      <div className="text-nowrap">{row.getValue("note")}</div>
+    ),
+  },
+
   {
     id: "actions",
     enableHiding: false,
@@ -74,12 +77,20 @@ export const columns: ColumnDef<InstallmentPlanItem>[] = [
       return <InstallmentPlanRowActions installmentPlanItem={row.original} />
     },
   },
+]
+
+const statusFilterOptions = [
   {
-    accessorKey: "note",
-    header: () => <div className="px-4 py-3">Note</div>,
-    cell: ({ row }) => (
-      <div className="text-nowrap">{row.getValue("note")}</div>
-    ),
+    value: InstallmentPlanItemStatus.UPCOMING,
+    label: "Upcoming",
+  },
+  {
+    value: InstallmentPlanItemStatus.PAID,
+    label: "Paid",
+  },
+  {
+    value: InstallmentPlanItemStatus.PAST_DUE,
+    label: "Past Due",
   },
 ]
 
@@ -90,22 +101,27 @@ export function DebtInstallmentPlans({
 }) {
   const table = useDataTable({ data: installmentPlans ?? [], columns })
 
+  const totalBalance = installmentPlans.reduce(
+    (total, item) => total + item.payment_amount,
+    0
+  )
+
+  const noUpcoming = installmentPlans.every(
+    (item) => item.status === InstallmentPlanItemStatus.PAID
+  )
+
   return (
     <div className="space-y-4">
       <div className="flex items-center">
-        <Label htmlFor="status-filter">Status</Label>
-        <NativeSelect
-          id="status-filter"
-          defaultValue="all"
-          className="ml-3 w-32"
-        >
-          <option value="all">All</option>
-          <option value="upcoming">Upcoming</option>
-          <option value="paid">Paid</option>
-          <option value="past-due">Past Due</option>
-        </NativeSelect>
-
-        {table.getIsAllRowsSelected() ? <PayAllButton /> : null}
+        <Suspense>
+          <StatusFilter
+            defaultValue={InstallmentPlanItemStatus.UPCOMING}
+            options={statusFilterOptions}
+          />
+        </Suspense>
+        {table.getIsAllRowsSelected() && installmentPlans.length !== 1 ? (
+          <PayAllButton totalBalance={totalBalance} />
+        ) : null}
       </div>
       <DataTable table={table} columnLength={columns.length} noHover />
     </div>

@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { getDebtByIdAction } from "@/actions/debt"
+import { InstallmentPlanItemStatus } from "@prisma/client"
 import { ArrowLeftIcon } from "lucide-react"
 
 import { cn } from "@/lib/utils"
@@ -10,10 +11,16 @@ import { DebtInstallmentPlans } from "@/components/features/debts/components/deb
 
 interface PageProps {
   params: { id: string }
+  searchParams: {
+    status: InstallmentPlanItemStatus
+  }
 }
 
-async function DebtDetailPage({ params }: PageProps) {
-  const [debt] = await getDebtByIdAction({ id: params.id })
+async function DebtDetailPage({ params, searchParams }: PageProps) {
+  const [debt] = await getDebtByIdAction({
+    id: params.id,
+    status: searchParams.status,
+  })
 
   if (!debt) notFound()
 
@@ -39,7 +46,10 @@ async function DebtDetailPage({ params }: PageProps) {
         </Link>
       </div>
 
-      <DebtInstallmentPlans installmentPlans={debt.installment_plans} />
+      <DebtInstallmentPlans
+        key={searchParams.status}
+        installmentPlans={debt.installment_plans}
+      />
     </div>
   )
 }

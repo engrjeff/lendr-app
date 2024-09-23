@@ -3,7 +3,7 @@
 import { ChangeEvent, startTransition, useCallback, useState } from "react"
 import Link from "next/link"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
-import { ArrowDownIcon, ArrowUpIcon } from "lucide-react"
+import { ArrowDownAZIcon, ArrowUpZAIcon } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
@@ -82,9 +82,9 @@ export function DebtSortSelect() {
         )}
       >
         {currentOrder === "asc" ? (
-          <ArrowUpIcon className="size-4" />
+          <ArrowUpZAIcon className="size-4" />
         ) : (
-          <ArrowDownIcon className="size-4" />
+          <ArrowDownAZIcon className="size-4" />
         )}
       </Link>
     </div>

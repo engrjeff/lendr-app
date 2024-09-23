@@ -9,10 +9,11 @@ import {
   payInstallmentSchema,
 } from "@/schema/debt"
 import { withEntityId } from "@/schema/utils"
-import { Debt, InstallmentPlanItemStatus } from "@prisma/client"
+import { Debt, DebtStatus, InstallmentPlanItemStatus } from "@prisma/client"
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library"
 import { addDays, addMonths, addWeeks, addYears, format } from "date-fns"
 import * as z from "zod"
+import { inferServerActionReturnData } from "zsa"
 
 import { authedProcedure } from "./procedures/auth"
 
@@ -24,6 +25,7 @@ export const getDebtsAction = action
       sort: z.string().default("balance"),
       order: z.string().default("desc"),
       search: z.string().optional(),
+      status: z.nativeEnum(DebtStatus).optional(),
     })
   )
   .handler(async ({ ctx, input }) => {
@@ -31,9 +33,22 @@ export const getDebtsAction = action
       const result = await prisma.debt.findMany({
         where: {
           user_id: ctx.user.id,
+          status: input.status ?? undefined,
           nickname: {
             contains: input.search,
             mode: "insensitive",
+          },
+        },
+
+        include: {
+          _count: {
+            select: {
+              installment_plans: {
+                where: {
+                  status: InstallmentPlanItemStatus.PAID,
+                },
+              },
+            },
           },
         },
 
@@ -50,6 +65,10 @@ export const getDebtsAction = action
       throw "Get Debts: Server Error"
     }
   })
+
+export type DebtItem = inferServerActionReturnData<
+  typeof getDebtsAction
+>[number]
 
 export const getDebtsGroupedByCategory = action.handler(async ({ ctx }) => {
   try {
@@ -141,13 +160,31 @@ export const deleteDebtAction = action
     }
   })
 
+const getDebtByIdActionArgs = withEntityId.merge(
+  z.object({
+    status: z
+      .nativeEnum(InstallmentPlanItemStatus)
+      .optional()
+      .default("UPCOMING"),
+  })
+)
+
 export const getDebtByIdAction = action
-  .input(withEntityId)
+  .input(getDebtByIdActionArgs)
   .handler(async ({ ctx, input }) => {
     try {
       const debt = await prisma.debt.findUnique({
         where: { id: input.id },
-        include: { installment_plans: true },
+        include: {
+          installment_plans: {
+            where: {
+              status: input.status,
+            },
+            orderBy: {
+              payment_date: "desc",
+            },
+          },
+        },
       })
 
       if (!debt) notFound()
@@ -181,6 +218,23 @@ export const payInstallmentItemAction = action
           debtId: true,
         },
       })
+
+      // update the debt status if all installment plan items are already PAID
+      const unpaidCount = await prisma.installmentPlanItem.count({
+        where: {
+          debtId: result.debtId,
+          status: {
+            not: InstallmentPlanItemStatus.PAID,
+          },
+        },
+      })
+
+      if (unpaidCount === 0) {
+        await prisma.debt.update({
+          where: { id: result.debtId },
+          data: { status: DebtStatus.PAID },
+        })
+      }
 
       revalidatePath(`/debts/${result.debtId}`)
 
@@ -216,6 +270,12 @@ export const payAllInstallmentAction = action
         },
       })
 
+      // mark the debt record as PAID
+      await prisma.debt.update({
+        where: { id: input.debtId },
+        data: { status: DebtStatus.PAID },
+      })
+
       revalidatePath(`/debts/${input.debtId}`)
 
       return result
@@ -223,6 +283,36 @@ export const payAllInstallmentAction = action
       if (typeof error === "string") throw error
 
       throw "Pay All Installment: Server Error"
+    }
+  })
+
+export const saveInstallmentNoteAction = action
+  .input(withEntityId.merge(z.object({ note: z.string().optional() })))
+  .handler(async ({ ctx, input }) => {
+    try {
+      const found = await prisma.installmentPlanItem.findUnique({
+        where: { id: input.id },
+      })
+
+      if (!found) throw `Cannot find installment plan item with ID ${input.id}`
+
+      const result = await prisma.installmentPlanItem.update({
+        where: { id: input.id },
+        data: {
+          note: input.note,
+        },
+        select: {
+          debtId: true,
+        },
+      })
+
+      revalidatePath(`/debts/${result.debtId}`)
+
+      return result
+    } catch (error) {
+      if (typeof error === "string") throw error
+
+      throw "Save Installment Note: Server Error"
     }
   })
 

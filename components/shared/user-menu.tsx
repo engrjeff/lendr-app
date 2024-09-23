@@ -31,7 +31,7 @@ function UserMenu({ user }: { user?: Session["user"] }) {
       <DropdownMenuTrigger asChild>
         <Button variant="secondary" size="icon" className="rounded-full">
           <Avatar>
-            <AvatarFallback className="bg-orange-500 text-white">
+            <AvatarFallback className="bg-primary text-foreground">
               {getInitials(user.name!)}
             </AvatarFallback>
           </Avatar>

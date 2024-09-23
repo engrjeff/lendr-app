@@ -1,10 +1,10 @@
-import { Debt } from "@prisma/client"
+import { DebtItem } from "@/actions/debt"
 
 import { DebtCard } from "./debt-card"
 
-export function DebtList({ debts }: { debts: Debt[] }) {
+export function DebtList({ debts }: { debts: DebtItem[] }) {
   return (
-    <ul className="space-y-4">
+    <ul className="grid gap-6">
       {debts.map((debt) => (
         <li key={`debt-${debt.id}`}>
           <DebtCard debt={debt} />

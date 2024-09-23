@@ -29,17 +29,14 @@ import { Input } from "@/components/ui/input"
 import { SubmitButton } from "@/components/ui/submit-button"
 import { Textarea } from "@/components/ui/textarea"
 
-export function PayAllButton() {
+export function PayAllButton({ totalBalance }: { totalBalance: number }) {
   const [open, setOpen] = useState(false)
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button
-          size="sm"
-          className="ml-4 h-10 bg-green-500 hover:bg-green-500/50"
-        >
-          <CheckIcon className="mr-3 size-4" /> Mark all as Paid
+        <Button size="sm" variant="secondary" className="ml-4 h-10">
+          <CheckIcon className="mr-3 size-4 text-green-500" /> Mark all as Paid
         </Button>
       </DialogTrigger>
       <DialogContent
@@ -47,7 +44,12 @@ export function PayAllButton() {
         onInteractOutside={(e) => e.preventDefault()}
       >
         <DialogHeader>
-          <DialogTitle>Pay All</DialogTitle>
+          <DialogTitle>
+            Pay a Total of{" "}
+            <span className="font-mono">
+              Php {totalBalance.toLocaleString()}
+            </span>
+          </DialogTitle>
         </DialogHeader>
         <InstallmentPayForm
           afterSubmit={() => {
