@@ -82,9 +82,9 @@ export function DebtSortSelect() {
         )}
       >
         {currentOrder === "asc" ? (
-          <ArrowUpZAIcon className="size-4" />
-        ) : (
           <ArrowDownAZIcon className="size-4" />
+        ) : (
+          <ArrowUpZAIcon className="size-4" />
         )}
       </Link>
     </div>

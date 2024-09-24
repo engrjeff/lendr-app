@@ -26,11 +26,7 @@ export function DebtMenuActions({ debt }: { debt: Debt }) {
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="absolute right-1 top-0 size-8"
-          >
+          <Button variant="ghost" size="icon" className="size-8">
             <MoreHorizontalIcon className="size-4" />
             <span className="sr-only">Toggle menu</span>
           </Button>

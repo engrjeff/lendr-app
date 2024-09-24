@@ -1,12 +1,13 @@
 import { Suspense } from "react"
 import { Metadata } from "next"
-import { getDebts, getDebtsGroupedByCategory } from "@/queries/debt"
+import { getDebts } from "@/queries/debt"
 import { DebtStatus } from "@prisma/client"
 
 import { Separator } from "@/components/ui/separator"
-import { DebtByCategoryChart } from "@/components/features/debts/components/debt-by-category-chart"
 import { DebtList } from "@/components/features/debts/components/debt-list"
 import { DebtSortSelect } from "@/components/features/debts/components/debt-sort-select"
+import { DebtTable } from "@/components/features/debts/components/debt-table"
+import { DebtViewButton } from "@/components/features/debts/components/debt-view-button"
 import { DebtsEmptyView } from "@/components/features/debts/components/debts-empty-view"
 import { NewDebtForm } from "@/components/features/debts/components/new-debt-form"
 import { NoUpcomingView } from "@/components/features/debts/components/no-upcoming-view"
@@ -23,6 +24,7 @@ interface PageProps {
     order?: string
     search?: string
     status?: DebtStatus
+    view?: "grid" | "list"
   }
 }
 
@@ -40,8 +42,6 @@ async function DebtsPage({ searchParams }: PageProps) {
     search: searchParams.search,
     status: searchParams.status,
   })
-
-  const debtsGroupedByCategory = await getDebtsGroupedByCategory()
 
   if (!debts?.length && !searchParams.search && !searchParams.status)
     return <DebtsEmptyView />
@@ -62,6 +62,7 @@ async function DebtsPage({ searchParams }: PageProps) {
         <Suspense>
           <div className="flex items-center gap-4">
             <StatusFilter defaultValue="" options={statusFilterOptions} />
+            <DebtViewButton />
             <div className="ml-auto flex items-center gap-4">
               <DebtSortSelect />
               <Separator orientation="vertical" className="h-8 py-1" />
@@ -72,15 +73,13 @@ async function DebtsPage({ searchParams }: PageProps) {
         {!debts?.length ? (
           <EmptyViews searchParams={searchParams} />
         ) : (
-          <div className="grid grid-cols-3 items-start gap-6">
-            <div className="col-span-2">
+          <>
+            {searchParams.view === "list" ? (
+              <DebtTable debts={debts ?? []} />
+            ) : (
               <DebtList debts={debts ?? []} />
-            </div>
-            <DebtByCategoryChart
-              key={debts?.length.toString()}
-              debtsByCategory={debtsGroupedByCategory}
-            />
-          </div>
+            )}
+          </>
         )}
       </div>
     </div>

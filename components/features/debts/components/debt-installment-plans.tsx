@@ -13,7 +13,7 @@ import { InstallmentPlanRowActions } from "./installment-plan-row-actions"
 import { PayAllButton } from "./pay-all-button"
 import { StatusFilter } from "./status-filter"
 
-export const columns: ColumnDef<InstallmentPlanItem>[] = [
+const columns: ColumnDef<InstallmentPlanItem>[] = [
   {
     id: "select",
     header: ({ table, column, header }) => (
@@ -104,10 +104,6 @@ export function DebtInstallmentPlans({
   const totalBalance = installmentPlans.reduce(
     (total, item) => total + item.payment_amount,
     0
-  )
-
-  const noUpcoming = installmentPlans.every(
-    (item) => item.status === InstallmentPlanItemStatus.PAID
   )
 
   return (

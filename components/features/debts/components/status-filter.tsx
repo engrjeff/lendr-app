@@ -25,12 +25,10 @@ export function StatusFilter({ options, defaultValue }: StatusFilterProps) {
         searchParams ? searchParams : undefined
       )
 
-      if (status !== null) {
+      if (status) {
         params.set(paramKey, status)
       } else {
         params.delete(paramKey)
-
-        return ""
       }
 
       return params.toString()
@@ -39,14 +37,6 @@ export function StatusFilter({ options, defaultValue }: StatusFilterProps) {
   )
 
   function handleFilterEvent(value: string) {
-    if (!value) {
-      startTransition(() => {
-        router.push(pathname)
-      })
-
-      return
-    }
-
     const queryString = createQueryString(value)
 
     startTransition(() => {

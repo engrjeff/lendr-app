@@ -5,6 +5,7 @@ import {
   HeartPulseIcon,
   LandmarkIcon,
   PiggyBankIcon,
+  PlayIcon,
   ShieldCheckIcon,
   UserIcon,
   WalletIcon,
@@ -26,6 +27,14 @@ export const categories = [
     textColor: "text-sky-500",
     icon: <CarFrontIcon className="size-5" />,
     chartColor: "#0ea5e9",
+  },
+  {
+    name: "Subscription",
+    borderColor: "border-blue-500",
+    bgColor: "bg-blue-100",
+    textColor: "text-blue-500",
+    icon: <PlayIcon className="size-5" />,
+    chartColor: "#3b82f6",
   },
   {
     name: "Personal Loan",

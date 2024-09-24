@@ -287,14 +287,14 @@ function DebtForm({ afterSubmit }: { afterSubmit: () => void }) {
                   <div className="flex items-center">
                     <NumberInput
                       disabled
-                      className="w-20 text-center"
+                      className="w-20 rounded-r-none border-r-0 text-center"
                       placeholder="1"
                       min={1}
                       {...form.register("duration", {
                         valueAsNumber: true,
                       })}
                     />
-                    <span className="inline-flex h-10 items-center border bg-muted/60 px-1.5 text-xs text-muted-foreground empty:hidden">
+                    <span className="inline-flex h-10 items-center rounded-r border bg-muted/60 px-1.5 text-xs text-muted-foreground empty:hidden">
                       {
                         durationMap[
                           form.watch("frequency") as keyof typeof durationMap

@@ -1,3 +1,12 @@
+import { Metadata } from "next"
+
+import { DebtByCategoryChart } from "@/components/features/debts/components/debt-by-category-chart"
+import { PayoffProgress } from "@/components/features/debts/components/payoff-progress"
+
+export const metadata: Metadata = {
+  title: "Dashboard",
+}
+
 function DashboardPage() {
   return (
     <div className="flex flex-col space-y-6">
@@ -8,6 +17,11 @@ function DashboardPage() {
             Quick insights on your balances.
           </p>
         </div>
+      </div>
+
+      <div className="grid grid-cols-3 gap-6 items-start">
+        <PayoffProgress />
+        <DebtByCategoryChart />
       </div>
     </div>
   )

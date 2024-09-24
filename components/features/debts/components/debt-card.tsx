@@ -17,7 +17,9 @@ import { DebtMenuActions } from "./debt-menu-actions"
 
 export function DebtCard({ debt }: { debt: DebtItem }) {
   const progress = (debt._count.installment_plans / debt.duration) * 100
-  const progressPercent = progress.toFixed(1) + "%"
+  const progressPercent = progress.toFixed(0) + "%"
+
+  const remainingBalance = (debt.balance * (100 - progress)) / 100
 
   return (
     <Card>
@@ -42,17 +44,27 @@ export function DebtCard({ debt }: { debt: DebtItem }) {
             </CardDescription>
           </div>
         </div>
-        <DebtMenuActions debt={debt} />
+        <div className="absolute top-0 right-1">
+          <DebtMenuActions debt={debt} />
+        </div>
       </CardHeader>
       <Separator />
       <CardContent className="grid grid-cols-2 justify-between gap-3 bg-muted p-4 text-sm dark:bg-white/5">
         <p className="text-muted-foreground">Remaining Balance</p>
-        <p className="font-medium">Php {debt.balance.toLocaleString()}</p>
+        <p className="font-medium">
+          Php {remainingBalance.toLocaleString()}{" "}
+          <span className="text-[10px] text-muted-foreground">
+            of {debt.balance.toLocaleString()}
+          </span>
+        </p>
         <p className="text-muted-foreground">Next Payment on</p>
         <p className="font-medium">
           {new Date(debt.next_payment_due_date).toDateString()}
         </p>
-        <p className="text-muted-foreground">{debt.frequency} Payment</p>
+        <p className="text-muted-foreground">
+          {debt.frequency}{" "}
+          {debt.frequency === "One Time Payment" ? "" : "Payment"}
+        </p>
         <p className="font-medium">
           Php {debt.minimum_payment.toLocaleString()}
         </p>
