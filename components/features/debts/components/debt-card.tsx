@@ -44,7 +44,7 @@ export function DebtCard({ debt }: { debt: DebtItem }) {
             </CardDescription>
           </div>
         </div>
-        <div className="absolute top-0 right-1">
+        <div className="absolute right-1 top-0">
           <DebtMenuActions debt={debt} />
         </div>
       </CardHeader>

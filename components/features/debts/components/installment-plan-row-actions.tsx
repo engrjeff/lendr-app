@@ -59,7 +59,7 @@ export function InstallmentPlanRowActions({
             size="sm"
             variant="link"
             onClick={() => setAction("pay-now")}
-            className="disabled:cursor-not-allowed disabled:text-muted-foreground text-green-500"
+            className="text-green-500 disabled:cursor-not-allowed disabled:text-muted-foreground"
           >
             Mark as Paid
           </Button>

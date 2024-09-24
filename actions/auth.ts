@@ -5,7 +5,7 @@ import { signIn, signOut } from "@/auth"
 import prisma from "@/prisma/client"
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes"
 import { loginSchema, registerSchema } from "@/schema/auth"
-import bcrypt from "bcrypt"
+import bcrypt from "bcryptjs"
 import { AuthError } from "next-auth"
 import { createServerAction } from "zsa"
 

@@ -21,7 +21,7 @@ export async function DebtByCategoryChart() {
           <CardDescription>Showing remaining balance to pay.</CardDescription>
         </CardHeader>
         <CardContent>
-          <p className="text-sm text-center text-muted-foreground">
+          <p className="text-center text-sm text-muted-foreground">
             No data to show
           </p>
         </CardContent>

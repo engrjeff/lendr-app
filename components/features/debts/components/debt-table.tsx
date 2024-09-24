@@ -49,7 +49,7 @@ const columns: ColumnDef<DebtItem>[] = [
       return (
         <div className="flex items-center gap-4">
           <Progress value={progress} max={100} className="h-2" />
-          <span className="text-muted-foreground text-xs">
+          <span className="text-xs text-muted-foreground">
             {progressPercent}
           </span>
         </div>

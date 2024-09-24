@@ -34,13 +34,13 @@ export function PayoffProgressClient({
           <CardDescription>Outstanding Balance</CardDescription>
           <CardTitle className="font-bold">
             PHP 0.00{" "}
-            <span className="text-xs text-muted-foreground font-sans font-normal">
+            <span className="font-sans text-xs font-normal text-muted-foreground">
               out of PHP 0.00
             </span>
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-sm text-center text-muted-foreground">
+          <p className="text-center text-sm text-muted-foreground">
             No data to show
           </p>
         </CardContent>
@@ -56,7 +56,7 @@ export function PayoffProgressClient({
         <CardDescription>Outstanding Balance</CardDescription>
         <CardTitle className="font-bold">
           PHP {unpaid.toLocaleString()}{" "}
-          <span className="text-xs text-muted-foreground font-sans font-normal">
+          <span className="font-sans text-xs font-normal text-muted-foreground">
             out of PHP {total.toLocaleString()}{" "}
           </span>
         </CardTitle>
@@ -64,28 +64,28 @@ export function PayoffProgressClient({
       <CardContent className="space-y-3">
         <div className="flex items-center">
           <div
-            className="bg-red-500 h-2 rounded-l"
+            className="h-2 rounded-l bg-red-500"
             style={{ width: `${percentUnpaid * 100}%` }}
           ></div>
-          <Separator className="bg-white h-3" orientation="vertical" />
+          <Separator className="h-3 bg-white" orientation="vertical" />
           <div
-            className="bg-green-500 h-2 rounded-r"
+            className="h-2 rounded-r bg-green-500"
             style={{ width: `${percentPaid * 100}%` }}
           ></div>
         </div>
         <div className="flex items-center gap-4">
           <div className="flex items-center">
-            <div className="size-2 shrink-0 rounded-[2px] bg-red-500 mr-3"></div>
+            <div className="mr-3 size-2 shrink-0 rounded-[2px] bg-red-500"></div>
             <span className="text-xs">Unpaid</span>
           </div>
           <div className="flex items-center">
-            <div className="size-2 shrink-0 rounded-[2px] bg-green-500 mr-3"></div>
+            <div className="mr-3 size-2 shrink-0 rounded-[2px] bg-green-500"></div>
             <span className="text-xs">Paid</span>
           </div>
         </div>
 
         {nextDue ? (
-          <div className="bg-muted/30 border p-4 rounded flex items-center justify-between">
+          <div className="flex items-center justify-between rounded border bg-muted/30 p-4">
             <p className="text-sm">
               Next payment of{" "}
               <span className="font-semibold">
@@ -95,9 +95,9 @@ export function PayoffProgressClient({
             </p>
             <Link
               href={`/debts/${nextDue.debtId}`}
-              className="text-blue-500 text-sm hover:underline flex items-center"
+              className="flex items-center text-sm text-blue-500 hover:underline"
             >
-              Learn More <ExternalLinkIcon className="size-4 ml-3" />
+              Learn More <ExternalLinkIcon className="ml-3 size-4" />
             </Link>
           </div>
         ) : null}
