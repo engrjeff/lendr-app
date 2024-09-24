@@ -7,7 +7,6 @@ import { Label, Pie, PieChart } from "recharts"
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -67,7 +66,6 @@ export function DebtByCategoryChart({ debtsByCategory }: Props) {
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
         <CardTitle className="text-lg">Balance by Category</CardTitle>
-        <CardDescription>September 2024</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
         <ChartContainer
@@ -124,7 +122,7 @@ export function DebtByCategoryChart({ debtsByCategory }: Props) {
           Trending up by 5.2% this month <TrendingUp className="size-4" />
         </div>
         <div className="leading-none text-muted-foreground">
-          Showing remaining balance as of this month
+          Showing remaining balance to pay.
         </div>
       </CardFooter>
     </Card>

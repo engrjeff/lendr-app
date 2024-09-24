@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import { registerUser } from "@/actions/auth"
+import { toast } from "sonner"
 import { useServerAction } from "zsa-react"
 
 import { Input } from "@/components/ui/input"
@@ -12,7 +13,13 @@ import { SubmitButton } from "@/components/ui/submit-button"
 import { FormError } from "@/components/shared/form-error"
 
 export function SignUpForm() {
-  const action = useServerAction(registerUser)
+  const action = useServerAction(registerUser, {
+    onSuccess(args) {
+      toast.success("Success! You are now registered.", {
+        position: "top-center",
+      })
+    },
+  })
 
   return (
     <div className="container max-w-md space-y-2">
@@ -60,6 +67,18 @@ export function SignUpForm() {
               className="bg-muted/30"
             />
             <FormError error={action.error?.fieldErrors?.password?.at(0)} />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="confirmPassword">Confirm Password</Label>
+            <PasswordInput
+              name="confirmPassword"
+              id="confirmPassword"
+              placeholder="Re-enter your password"
+              className="bg-muted/30"
+            />
+            <FormError
+              error={action.error?.fieldErrors?.confirmPassword?.at(0)}
+            />
             {action.error?.code === "ERROR" ? (
               <FormError error={action.error?.message} />
             ) : null}

@@ -12,7 +12,7 @@ export function ThemeToggler() {
     <ToggleGroup
       size="sm"
       type="single"
-      className="grow-0 border p-1"
+      className="grow-0 rounded border p-1"
       onValueChange={setTheme}
       value={theme}
     >

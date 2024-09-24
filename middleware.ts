@@ -1,3 +1,4 @@
+import { NextResponse } from "next/server"
 import authConfig from "@/auth.config"
 import { API_AUTH_PREFIX, AUTH_ROUTES, DEFAULT_LOGIN_REDIRECT } from "@/routes"
 import NextAuth from "next-auth"
@@ -9,6 +10,8 @@ export default auth((req) => {
 
   const { nextUrl } = req
 
+  if (nextUrl.pathname === "/") return NextResponse.next()
+
   const isApiAuthRoute = nextUrl.pathname.startsWith(API_AUTH_PREFIX)
   const isAuthPageRoute = AUTH_ROUTES.includes(nextUrl.pathname)
 
@@ -16,14 +19,14 @@ export default auth((req) => {
 
   if (isAuthPageRoute) {
     if (isLoggedIn) {
-      return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl))
+      return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl))
     }
 
     return
   }
 
   if (!isLoggedIn) {
-    return Response.redirect(new URL("/signin", nextUrl))
+    return NextResponse.redirect(new URL("/signin", nextUrl))
   }
 
   return

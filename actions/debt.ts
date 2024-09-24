@@ -79,6 +79,7 @@ export const getDebtsGroupedByCategory = action.handler(async ({ ctx }) => {
       },
       where: {
         user_id: ctx.user.id,
+        status: DebtStatus.IN_PROGRESS,
       },
       orderBy: {
         _sum: {

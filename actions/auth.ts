@@ -42,8 +42,6 @@ export const registerUser = createServerAction()
     try {
       const { name, email, password } = input
 
-      console.log(input)
-
       const existingUser = await prisma.user.findUnique({ where: { email } })
 
       if (existingUser)
