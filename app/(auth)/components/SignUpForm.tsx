@@ -15,14 +15,29 @@ export function SignUpForm() {
   const action = useServerAction(registerUser)
 
   return (
-    <div className="container max-w-sm space-y-3 rounded-md border p-6">
-      <h1 className="text-center text-xl font-semibold">Lendr App</h1>
-      <p className="text-center text-muted-foreground">Create your account</p>
+    <div className="container max-w-md space-y-2">
+      <h1 className="text-xl font-semibold">Create a Lendr account</h1>
+      <p className="pb-5 text-sm text-muted-foreground">
+        {"Already have an account? "}
+        <Link
+          href="/signin"
+          className="font-medium text-primary hover:underline"
+        >
+          Log in
+        </Link>
+        .
+      </p>
       <form onChange={action.reset} action={action.executeFormAction}>
         <fieldset className="space-y-2">
           <div className="space-y-2">
             <Label htmlFor="name">Name</Label>
-            <Input placeholder="Enter your name" name="name" id="name" />
+            <Input
+              autoFocus
+              placeholder="Enter your name"
+              name="name"
+              id="name"
+              className="bg-muted/30"
+            />
             <FormError error={action.error?.fieldErrors?.name?.at(0)} />
           </div>
           <div className="space-y-2">
@@ -32,6 +47,7 @@ export function SignUpForm() {
               placeholder="youremail@example.com"
               name="email"
               id="email"
+              className="bg-muted/30"
             />
             <FormError error={action.error?.fieldErrors?.email?.at(0)} />
           </div>
@@ -41,6 +57,7 @@ export function SignUpForm() {
               name="password"
               id="password"
               placeholder="Enter your password"
+              className="bg-muted/30"
             />
             <FormError error={action.error?.fieldErrors?.password?.at(0)} />
             {action.error?.code === "ERROR" ? (
@@ -60,15 +77,6 @@ export function SignUpForm() {
           or continue with
         </span>
       </div>
-      <p className="pt-4 text-center text-sm">
-        Already have an account?{" "}
-        <Link
-          href="/signin"
-          className="font-medium text-primary hover:underline"
-        >
-          Sign In
-        </Link>
-      </p>
     </div>
   )
 }

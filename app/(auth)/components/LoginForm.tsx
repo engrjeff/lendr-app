@@ -15,10 +15,17 @@ export function LoginForm() {
   const logInAction = useServerAction(login)
 
   return (
-    <div className="container max-w-sm space-y-3 rounded-md border p-6">
-      <h1 className="text-center text-xl font-semibold">Lendr App</h1>
-      <p className="text-center text-muted-foreground">
-        Log in to your account
+    <div className="container max-w-md space-y-2 p-6">
+      <h1 className="text-xl font-semibold">Login to Lendr</h1>
+      <p className="pb-5 text-sm text-muted-foreground">
+        {"Dont't have an account? "}
+        <Link
+          href="/register"
+          className="font-medium text-primary hover:underline"
+        >
+          Sign Up
+        </Link>
+        .
       </p>
       <form onChange={logInAction.reset} action={logInAction.executeFormAction}>
         <fieldset className="space-y-2">
@@ -29,6 +36,8 @@ export function LoginForm() {
               placeholder="youremail@example.com"
               name="email"
               id="email"
+              className="bg-muted/30"
+              autoFocus
             />
             <FormError error={logInAction.error?.fieldErrors?.email?.at(0)} />
           </div>
@@ -38,6 +47,7 @@ export function LoginForm() {
               name="password"
               id="password"
               placeholder="Enter your password"
+              className="bg-muted/30"
             />
             <FormError
               error={logInAction.error?.fieldErrors?.password?.at(0)}
@@ -59,15 +69,6 @@ export function LoginForm() {
           or continue with
         </span>
       </div>
-      <p className="pt-4 text-center text-sm">
-        No account yet?{" "}
-        <Link
-          href="/register"
-          className="font-medium text-primary hover:underline"
-        >
-          Create an Account
-        </Link>
-      </p>
     </div>
   )
 }
