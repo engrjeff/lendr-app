@@ -12,8 +12,8 @@ export default function AuthLayout({
   children: React.ReactNode
 }>) {
   return (
-    <div className="flex min-h-screen flex-col">
-      <div className="p-6">
+    <div className="relative flex min-h-screen flex-col">
+      <div className="absolute left-4 top-4">
         <Link
           href="/"
           className={cn(buttonVariants({ variant: "ghost" }), "rounded-full")}

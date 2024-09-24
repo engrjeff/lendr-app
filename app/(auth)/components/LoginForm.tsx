@@ -15,7 +15,7 @@ export function LoginForm() {
   const logInAction = useServerAction(login)
 
   return (
-    <div className="container max-w-md space-y-2 p-6">
+    <div className="container max-w-md space-y-2">
       <h1 className="text-xl font-semibold">Login to Lendr</h1>
       <p className="pb-5 text-sm text-muted-foreground">
         {"Dont't have an account? "}
