@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import { getDebtByIdAction } from "@/actions/debt"
+import { getDebtById } from "@/queries/debt"
 import { InstallmentPlanItemStatus } from "@prisma/client"
 import { ArrowLeftIcon } from "lucide-react"
 
@@ -17,7 +17,7 @@ interface PageProps {
 }
 
 async function DebtDetailPage({ params, searchParams }: PageProps) {
-  const [debt] = await getDebtByIdAction({
+  const debt = await getDebtById({
     id: params.id,
     status: searchParams.status,
   })

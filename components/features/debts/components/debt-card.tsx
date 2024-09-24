@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { DebtItem } from "@/actions/debt"
+import { type DebtItem } from "@/queries/debt"
 
 import { Badge } from "@/components/ui/badge"
 import {

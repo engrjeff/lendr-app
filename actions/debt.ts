@@ -1,7 +1,6 @@
 "use server"
 
 import { revalidatePath } from "next/cache"
-import { notFound } from "next/navigation"
 import prisma from "@/prisma/client"
 import {
   createDebtSchema,
@@ -13,89 +12,10 @@ import { Debt, DebtStatus, InstallmentPlanItemStatus } from "@prisma/client"
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library"
 import { addDays, addMonths, addWeeks, addYears, format } from "date-fns"
 import * as z from "zod"
-import { inferServerActionReturnData } from "zsa"
 
 import { authedProcedure } from "./procedures/auth"
 
 const action = authedProcedure.createServerAction()
-
-export const getDebtsAction = action
-  .input(
-    z.object({
-      sort: z.string().default("balance"),
-      order: z.string().default("desc"),
-      search: z.string().optional(),
-      status: z.nativeEnum(DebtStatus).optional(),
-    })
-  )
-  .handler(async ({ ctx, input }) => {
-    try {
-      const result = await prisma.debt.findMany({
-        where: {
-          user_id: ctx.user.id,
-          status: input.status ?? undefined,
-          nickname: {
-            contains: input.search,
-            mode: "insensitive",
-          },
-        },
-
-        include: {
-          _count: {
-            select: {
-              installment_plans: {
-                where: {
-                  status: InstallmentPlanItemStatus.PAID,
-                },
-              },
-            },
-          },
-        },
-
-        orderBy: {
-          [input.sort]: input.order,
-        },
-      })
-
-      return result
-    } catch (error) {
-      if (error instanceof PrismaClientKnownRequestError) {
-        throw error.message
-      }
-      throw "Get Debts: Server Error"
-    }
-  })
-
-export type DebtItem = inferServerActionReturnData<
-  typeof getDebtsAction
->[number]
-
-export const getDebtsGroupedByCategory = action.handler(async ({ ctx }) => {
-  try {
-    const result = await prisma.debt.groupBy({
-      by: "category",
-      _sum: {
-        balance: true,
-      },
-      where: {
-        user_id: ctx.user.id,
-        status: DebtStatus.IN_PROGRESS,
-      },
-      orderBy: {
-        _sum: {
-          balance: "desc",
-        },
-      },
-    })
-
-    return result
-  } catch (error) {
-    if (error instanceof PrismaClientKnownRequestError) {
-      throw error.message
-    }
-    throw "Get Debts Grouped by Category: Server Error"
-  }
-})
 
 export const createDebtAction = action
   .input(createDebtSchema)
@@ -158,43 +78,6 @@ export const deleteDebtAction = action
       if (typeof error === "string") throw error
 
       throw "Delete Debt: Server Error"
-    }
-  })
-
-const getDebtByIdActionArgs = withEntityId.merge(
-  z.object({
-    status: z
-      .nativeEnum(InstallmentPlanItemStatus)
-      .optional()
-      .default("UPCOMING"),
-  })
-)
-
-export const getDebtByIdAction = action
-  .input(getDebtByIdActionArgs)
-  .handler(async ({ ctx, input }) => {
-    try {
-      const debt = await prisma.debt.findUnique({
-        where: { id: input.id },
-        include: {
-          installment_plans: {
-            where: {
-              status: input.status,
-            },
-            orderBy: {
-              payment_date: "desc",
-            },
-          },
-        },
-      })
-
-      if (!debt) notFound()
-
-      return debt
-    } catch (error) {
-      if (typeof error === "string") throw error
-
-      throw "Get Debt: Server Error"
     }
   })
 

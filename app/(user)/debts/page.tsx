@@ -1,6 +1,6 @@
 import { Suspense } from "react"
 import { Metadata } from "next"
-import { getDebtsAction, getDebtsGroupedByCategory } from "@/actions/debt"
+import { getDebts, getDebtsGroupedByCategory } from "@/queries/debt"
 import { DebtStatus } from "@prisma/client"
 
 import { Separator } from "@/components/ui/separator"
@@ -34,14 +34,14 @@ const statusFilterOptions = [
 ]
 
 async function DebtsPage({ searchParams }: PageProps) {
-  const [debts] = await getDebtsAction({
+  const debts = await getDebts({
     sort: searchParams.sort,
     order: searchParams.order,
     search: searchParams.search,
     status: searchParams.status,
   })
 
-  const [debtsGroupedByCategory] = await getDebtsGroupedByCategory()
+  const debtsGroupedByCategory = await getDebtsGroupedByCategory()
 
   if (!debts?.length && !searchParams.search && !searchParams.status)
     return <DebtsEmptyView />
