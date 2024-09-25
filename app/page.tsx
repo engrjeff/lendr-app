@@ -124,7 +124,7 @@ export default async function IndexPage() {
       <main className="container grid flex-1 grid-rows-1 p-4 lg:p-6">
         <div className="py-10">
           <Link
-            href="/signup"
+            href={session?.user ? "/dashboard" : "/signup"}
             className="flex w-max items-center gap-2 rounded-full border px-3 py-2 text-xs transition-colors hover:bg-muted"
           >
             <span>Free</span>
