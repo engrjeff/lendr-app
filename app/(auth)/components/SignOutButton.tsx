@@ -1,16 +1,26 @@
-import { signOutAction } from "@/actions/auth"
+"use client"
 
-import { Button } from "@/components/ui/button"
+import { signOutAction } from "@/actions/auth"
+import { useServerAction } from "zsa-react"
+
+import { SubmitButton } from "@/components/ui/submit-button"
 
 export function SignOutButton() {
+  const action = useServerAction(signOutAction)
+
+  async function handleSignout() {
+    try {
+      await action.execute()
+    } catch (error) {}
+  }
+
   return (
-    <Button
+    <SubmitButton
       type="submit"
-      onClick={async () => {
-        await signOutAction()
-      }}
+      onClick={handleSignout}
+      loading={action.isPending}
     >
       Sign Out
-    </Button>
+    </SubmitButton>
   )
 }
