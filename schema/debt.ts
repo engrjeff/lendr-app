@@ -7,7 +7,6 @@ export const createDebtSchema = z
       .min(1, { message: "Nickname is required." }),
     balance: z
       .number({ message: "Must be a number." })
-      .int({ message: "Must be a number." })
       .positive({ message: "Must be greater than 0." }),
     duration: z
       .number({ message: "Must be a number." })
@@ -21,7 +20,6 @@ export const createDebtSchema = z
       .min(1, { message: "Frequency is required." }),
     minimum_payment: z
       .number({ message: "Must be a number." })
-      .int({ message: "Must be a number." })
       .gte(0, { message: "Must be greater than 0." }),
     next_payment_due_date: z
       .string({ required_error: "Payment due date is required." })
