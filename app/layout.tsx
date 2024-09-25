@@ -14,7 +14,8 @@ export const metadata: Metadata = {
     default: "Lendr",
     template: "%s | Lendr",
   },
-  description: "Lendr App - Your hassle-free debt tracker",
+  description:
+    "Lendr App - Your hassle-free debt tracker. Consolidate all your balances in one place.",
 }
 
 export default function RootLayout({

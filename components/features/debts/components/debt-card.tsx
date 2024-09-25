@@ -23,7 +23,7 @@ export function DebtCard({ debt }: { debt: DebtItem }) {
 
   return (
     <Card className="bg-background dark:bg-gray-800/5">
-      <CardHeader className="relative p-3 bg-muted dark:bg-muted/30">
+      <CardHeader className="relative bg-muted p-3 dark:bg-muted/30">
         <div className="flex items-start gap-3">
           <DebtCategoryIcon debtCategory={debt.category} />
           <div>
@@ -31,7 +31,7 @@ export function DebtCard({ debt }: { debt: DebtItem }) {
               href={`/debts/${debt.id}`}
               className="group flex items-center"
             >
-              <CardTitle className="flex items-center text-sm font-semibold group-hover:underline line-clamp-1">
+              <CardTitle className="line-clamp-1 flex items-center text-sm font-semibold group-hover:underline">
                 {debt.nickname}{" "}
               </CardTitle>
             </Link>
@@ -72,7 +72,12 @@ export function DebtCard({ debt }: { debt: DebtItem }) {
 
         <div className="col-span-2 flex items-center gap-4">
           <span className="shrink-0 font-semibold">Progress</span>
-          <Progress value={progress} max={100} className="h-2" />
+          <Progress
+            aria-label={`payment progress for ${debt.nickname}`}
+            value={progress}
+            max={100}
+            className="h-2"
+          />
           <span>{progressPercent}</span>
         </div>
       </CardContent>

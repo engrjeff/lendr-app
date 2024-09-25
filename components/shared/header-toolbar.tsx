@@ -14,6 +14,7 @@ export function HeaderToolbar() {
           buttonVariants({ variant: "ghost", size: "icon" }),
           "rounded-full"
         )}
+        aria-label="notifications"
       >
         <BellIcon className="size-5" />
       </Link>
@@ -23,6 +24,7 @@ export function HeaderToolbar() {
           buttonVariants({ variant: "ghost", size: "icon" }),
           "rounded-full"
         )}
+        aria-label="settings"
       >
         <SettingsIcon className="size-5" />
       </Link>

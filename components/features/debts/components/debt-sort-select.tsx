@@ -68,7 +68,7 @@ export function DebtSortSelect() {
   return (
     <div className="ml-auto flex items-center gap-3">
       <Select defaultValue={currentSort ?? ""} onValueChange={handleSortEvent}>
-        <SelectTrigger className="w-[140px]">
+        <SelectTrigger className="w-[140px]" aria-label="Sort">
           <SelectValue placeholder="Sort" />
         </SelectTrigger>
         <SelectContent>
