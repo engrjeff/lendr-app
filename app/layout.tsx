@@ -17,10 +17,13 @@ export const metadata: Metadata = {
   description:
     "Lendr App - Your hassle-free debt tracker. Consolidate all your balances in one place.",
   openGraph: {
+    title: "Lendr App",
     images: [
       {
-        url: "/opengraph-image.png",
+        url: "https://res.cloudinary.com/abide-in-the-vine/image/upload/v1727278931/lendr-banner_rjtv5d.png",
         alt: "Lendr App",
+        width: 1200,
+        height: 630,
       },
     ],
   },

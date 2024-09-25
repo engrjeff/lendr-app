@@ -94,7 +94,7 @@ export const payInstallmentItemAction = action
       const result = await prisma.installmentPlanItem.update({
         where: { id: input.id },
         data: {
-          actual_payment_date: input.actual_payment_date,
+          actual_payment_date: input.actual_payment_date ?? input.payment_date,
           note: input.note,
           status: InstallmentPlanItemStatus.PAID,
         },
