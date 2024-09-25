@@ -45,7 +45,7 @@ export default async function IndexPage() {
                 href="/dashboard"
                 className="inline-flex items-center rounded-full bg-foreground px-4 py-2.5 text-sm font-medium text-background transition-colors hover:bg-foreground/80"
               >
-                Dashboard <ChevronRightIcon className="ml-2 size-4" />
+                Go to Dashboard <ChevronRightIcon className="ml-2 size-4" />
               </Link>
             ) : (
               <>
@@ -138,12 +138,30 @@ export default async function IndexPage() {
             Consolidate your debt balances in one place.
           </p>
 
-          <Link
-            href="/register"
-            className="inline-flex w-max items-center rounded-full bg-foreground px-4 py-2 text-sm font-medium text-background transition-colors hover:bg-foreground/80"
-          >
-            Get Started <ChevronRightIcon className="ml-2 size-4" />
-          </Link>
+          {session?.user ? (
+            <Link
+              href="/dashboard"
+              className="inline-flex w-max items-center rounded-full bg-foreground px-4 py-2 text-sm font-medium text-background transition-colors hover:bg-foreground/80"
+            >
+              Go to Dashboard <ChevronRightIcon className="ml-2 size-4" />
+            </Link>
+          ) : (
+            <div className="flex items-center gap-4">
+              <Link
+                href="/register"
+                className="inline-flex w-max items-center rounded-full bg-foreground px-4 py-2 text-sm font-medium text-background transition-colors hover:bg-foreground/80"
+              >
+                Get Started <ChevronRightIcon className="ml-2 size-4" />
+              </Link>
+
+              <Link
+                href="/signin"
+                className="inline-flex w-max items-center rounded-full bg-transparent px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted"
+              >
+                Sign In <ChevronRightIcon className="ml-2 size-4" />
+              </Link>
+            </div>
+          )}
         </div>
       </main>
 
