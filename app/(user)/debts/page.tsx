@@ -3,6 +3,14 @@ import { Metadata } from "next"
 import { getDebts } from "@/queries/debt"
 import { DebtStatus } from "@prisma/client"
 
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb"
 import { Separator } from "@/components/ui/separator"
 import { DebtList } from "@/components/features/debts/components/debt-list"
 import { DebtSortSelect } from "@/components/features/debts/components/debt-sort-select"
@@ -47,43 +55,98 @@ async function DebtsPage({ searchParams }: PageProps) {
     return <DebtsEmptyView />
 
   return (
-    <div className="flex flex-col space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-xl font-bold">Debts</h1>
-          <p className="text-sm text-muted-foreground">
-            List of your balances.
-          </p>
+    <div className="space-y-6">
+      <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
+        <div className="flex items-center justify-between">
+          <Breadcrumb>
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbPage>Debts</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
+
+          <div className="md:hidden">
+            <NewDebtForm />
+          </div>
         </div>
-        <NewDebtForm />
+
+        <Suspense>
+          <SearchField placeholder="Search debt" className="flex-1" />
+        </Suspense>
       </div>
 
-      <div className="space-y-6">
+      <div className="flex items-center gap-4">
         <Suspense>
-          <div className="flex items-center gap-4">
-            <StatusFilter defaultValue="" options={statusFilterOptions} />
+          <StatusFilter defaultValue="" options={statusFilterOptions} />
+          <div className="ml-auto hidden items-center gap-4 md:flex">
             <DebtViewButton />
-            <div className="ml-auto flex items-center gap-4">
-              <DebtSortSelect />
-              <Separator orientation="vertical" className="h-8 py-1" />
-              <SearchField placeholder="Search debt" className="flex-1" />
-            </div>
+            <DebtSortSelect />
+            <Separator orientation="vertical" className="h-8 py-1" />
           </div>
         </Suspense>
-        {!debts?.length ? (
-          <EmptyViews searchParams={searchParams} />
-        ) : (
-          <>
-            {searchParams.view === "list" ? (
-              <DebtTable debts={debts ?? []} />
-            ) : (
-              <DebtList debts={debts ?? []} />
-            )}
-          </>
-        )}
+
+        <div className="hidden md:block">
+          <NewDebtForm />
+        </div>
       </div>
+
+      {!debts?.length ? (
+        <EmptyViews searchParams={searchParams} />
+      ) : (
+        <>
+          {searchParams.view === "list" ? (
+            <DebtTable debts={debts ?? []} />
+          ) : (
+            <DebtList debts={debts ?? []} />
+          )}
+        </>
+      )}
     </div>
   )
+
+  // return (
+  //   <div className="flex flex-col space-y-6">
+  //     <div className="flex items-center justify-between">
+  //       <div>
+  //         <h1 className="text-xl font-bold">Debts</h1>
+  //         <p className="text-sm text-muted-foreground">
+  //           List of your balances.
+  //         </p>
+  //       </div>
+  //       <NewDebtForm />
+  //     </div>
+
+  //     <div className="space-y-6">
+  //       <Suspense>
+  //         <div className="flex items-center gap-4">
+  //           <StatusFilter defaultValue="" options={statusFilterOptions} />
+  //           <DebtViewButton />
+  //           <div className="ml-auto flex items-center gap-4">
+  //             <DebtSortSelect />
+  //             <Separator orientation="vertical" className="h-8 py-1" />
+  //             <SearchField placeholder="Search debt" className="flex-1" />
+  //           </div>
+  //         </div>
+  //       </Suspense>
+  //       {!debts?.length ? (
+  //         <EmptyViews searchParams={searchParams} />
+  //       ) : (
+  //         <>
+  //           {searchParams.view === "list" ? (
+  //             <DebtTable debts={debts ?? []} />
+  //           ) : (
+  //             <DebtList debts={debts ?? []} />
+  //           )}
+  //         </>
+  //       )}
+  //     </div>
+  //   </div>
+  // )
 }
 
 function EmptyViews({ searchParams }: PageProps) {

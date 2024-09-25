@@ -36,7 +36,7 @@ export function DebtViewButton() {
   return (
     <Link
       title="Change View"
-      href={`${pathname}?${createQueryString(currentView === "list" ? "grid" : "list")}`}
+      href={`${pathname}?${createQueryString(currentView === "list" ? "" : "list")}`}
       aria-label="change view"
       className={cn(
         buttonVariants({ size: "icon", variant: "outline" }),

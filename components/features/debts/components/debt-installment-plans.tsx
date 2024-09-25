@@ -9,6 +9,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { DataTable } from "@/components/ui/data-table/data-table"
 import { useDataTable } from "@/components/ui/data-table/useDataTable"
 
+import { InstallmentList } from "../installment-list"
 import { InstallmentPlanRowActions } from "./installment-plan-row-actions"
 import { PayAllButton } from "./pay-all-button"
 import { StatusFilter } from "./status-filter"
@@ -39,14 +40,16 @@ const columns: ColumnDef<InstallmentPlanItem>[] = [
   },
   {
     accessorKey: "payment_date",
-    header: () => <div className="px-4 py-3">Payment Date</div>,
+    header: () => <div className="px-4 py-3 text-nowrap">Payment Date</div>,
     cell: ({ row }) => (
       <div className="text-nowrap">{row.getValue("payment_date")}</div>
     ),
   },
   {
     accessorKey: "payment_amount",
-    header: () => <div className="px-4 py-3">Payment Amount (Php)</div>,
+    header: () => (
+      <div className="px-4 py-3 text-nowrap">Payment Amount (Php)</div>
+    ),
     cell: ({ row }) => (
       <div className="text-nowrap text-left font-mono">
         {row.original.payment_amount.toFixed(2)}
@@ -119,7 +122,13 @@ export function DebtInstallmentPlans({
           <PayAllButton totalBalance={totalBalance} />
         ) : null}
       </div>
-      <DataTable table={table} columnLength={columns.length} noHover />
+      <div className="hidden md:block">
+        <DataTable table={table} columnLength={columns.length} noHover />
+      </div>
+
+      <div className="block md:hidden">
+        <InstallmentList installmentPlans={installmentPlans} />
+      </div>
     </div>
   )
 }

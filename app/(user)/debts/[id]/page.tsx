@@ -4,10 +4,17 @@ import { getDebtById } from "@/queries/debt"
 import { InstallmentPlanItemStatus } from "@prisma/client"
 
 import { cn } from "@/lib/utils"
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb"
 import { buttonVariants } from "@/components/ui/button"
 import { DebtCategoryIcon } from "@/components/features/debts/components/debt-category-icon"
 import { DebtInstallmentPlans } from "@/components/features/debts/components/debt-installment-plans"
-import { BackButton } from "@/components/shared/back-button"
 
 interface PageProps {
   params: { id: string }
@@ -28,14 +35,28 @@ async function DebtDetailPage({ params, searchParams }: PageProps) {
     <div className="flex flex-col space-y-6">
       <div className="flex items-center justify-between">
         <div className="space-y-4">
-          <BackButton />
-          <div className="flex items-center gap-3">
+          <Breadcrumb>
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbLink href="/debts">Debts</BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbPage>{debt.nickname}</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
+          <div className="items-center gap-3 hidden">
             <DebtCategoryIcon debtCategory={debt.category} />
             <h1 className="text-xl font-bold">{debt?.nickname}</h1>
           </div>
         </div>
 
-        <Link href="#" className={cn(buttonVariants({ size: "sm" }))}>
+        <Link href="#" className={cn(buttonVariants({ size: "sm" }), "hidden")}>
           View Transactions
         </Link>
       </div>

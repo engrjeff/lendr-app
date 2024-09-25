@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import NextTopLoader from "nextjs-toploader"
 
+import { cn } from "@/lib/utils"
 import AppProviders from "@/components/providers/app-providers"
 
 import "./globals.css"
@@ -22,8 +23,8 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
+    <html lang="en" suppressHydrationWarning className="h-full scroll-smooth">
+      <body className={cn(inter.className, "antialiased h-full")}>
         <NextTopLoader color="#6D28D9" />
         <AppProviders>{children}</AppProviders>
       </body>

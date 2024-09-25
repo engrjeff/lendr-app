@@ -29,9 +29,9 @@ function UserMenu({ user }: { user?: Session["user"] }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="secondary" size="icon" className="rounded-full">
-          <Avatar>
-            <AvatarFallback className="bg-primary text-white">
+        <Button variant="secondary" size="icon" className="size-auto rounded">
+          <Avatar className="size-8 rounded">
+            <AvatarFallback className="rounded bg-primary text-white">
               {getInitials(user.name!)}
             </AvatarFallback>
           </Avatar>

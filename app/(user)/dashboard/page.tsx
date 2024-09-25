@@ -19,7 +19,7 @@ function DashboardPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-3 items-start gap-6">
+      <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-2 xl:grid-cols-3">
         <PayoffProgress />
         <DebtByCategoryChart />
       </div>

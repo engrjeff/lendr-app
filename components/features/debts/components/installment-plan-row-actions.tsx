@@ -138,6 +138,78 @@ export function InstallmentPlanRowActions({
   )
 }
 
+export function InstallmentPlanItemAction({
+  installmentPlanItem,
+}: {
+  installmentPlanItem: InstallmentPlanItem
+}) {
+  const [action, setAction] = useState<Action>()
+
+  return (
+    <>
+      {installmentPlanItem.status === InstallmentPlanItemStatus.PAID ? null : (
+        <Button
+          size="sm"
+          className="bg-green-600"
+          onClick={() => setAction("pay-now")}
+        >
+          Mark as Paid
+        </Button>
+      )}
+
+      <Dialog
+        open={action === "pay-now"}
+        onOpenChange={(isOpen) => {
+          if (!isOpen) setAction(undefined)
+        }}
+      >
+        <DialogPortal>
+          <DialogContent
+            className="sm:max-w-md"
+            onInteractOutside={(e) => e.preventDefault()}
+          >
+            <DialogHeader>
+              <DialogTitle>
+                Pay for Date {installmentPlanItem.payment_date}
+              </DialogTitle>
+            </DialogHeader>
+            <InstallmentPayForm
+              installmentPlanItem={installmentPlanItem}
+              afterSubmit={() => setAction(undefined)}
+            />
+          </DialogContent>
+        </DialogPortal>
+      </Dialog>
+
+      <Dialog
+        open={action === "add-note"}
+        onOpenChange={(isOpen) => {
+          if (!isOpen) setAction(undefined)
+        }}
+      >
+        <DialogPortal>
+          <DialogContent
+            className="sm:max-w-md"
+            onInteractOutside={(e) => e.preventDefault()}
+          >
+            <DialogHeader>
+              <DialogTitle>
+                {installmentPlanItem.note ? "Update" : "Add"} Note for Date{" "}
+                {installmentPlanItem.payment_date}
+              </DialogTitle>
+            </DialogHeader>
+            <InstallmentNoteForm
+              installmentId={installmentPlanItem.id}
+              initialValue={installmentPlanItem.note}
+              afterSubmit={() => setAction(undefined)}
+            />
+          </DialogContent>
+        </DialogPortal>
+      </Dialog>
+    </>
+  )
+}
+
 function InstallmentPayForm({
   installmentPlanItem,
   afterSubmit,

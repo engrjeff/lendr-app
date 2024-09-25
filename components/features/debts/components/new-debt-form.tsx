@@ -54,8 +54,12 @@ export function NewDebtForm() {
           Add Debt
         </Button>
       </SheetTrigger>
-      <SheetContent side="right" className="overflow-y-auto sm:max-w-[450px]">
-        <SheetHeader>
+      <SheetContent
+        side="right"
+        className="w-[95%] overflow-y-auto sm:max-w-[450px]"
+        onInteractOutside={(e) => e.preventDefault()}
+      >
+        <SheetHeader className="text-left">
           <SheetTitle>Add Debt Entry</SheetTitle>
           <SheetDescription>Fill in the form below.</SheetDescription>
         </SheetHeader>

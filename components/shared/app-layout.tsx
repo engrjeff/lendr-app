@@ -5,9 +5,9 @@ import { AppSideBar } from "./app-sidebar"
 
 function AppLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen w-full">
+    <div className="flex h-full flex-col">
       <AppSideBar />
-      <div className="absolute inset-0 left-[240px] flex min-h-full flex-col">
+      <div className="flex min-h-full flex-col lg:pl-sidebar">
         <AppHeader />
         <main className="grid flex-1 grid-rows-1 p-6">{children}</main>
       </div>

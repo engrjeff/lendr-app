@@ -22,7 +22,7 @@ export function DebtCard({ debt }: { debt: DebtItem }) {
   const remainingBalance = (debt.balance * (100 - progress)) / 100
 
   return (
-    <Card>
+    <Card className="bg-background dark:bg-gray-500/5">
       <CardHeader className="relative p-3">
         <div className="flex items-start gap-3">
           <DebtCategoryIcon debtCategory={debt.category} />
@@ -49,7 +49,7 @@ export function DebtCard({ debt }: { debt: DebtItem }) {
         </div>
       </CardHeader>
       <Separator />
-      <CardContent className="grid grid-cols-2 justify-between gap-3 bg-muted p-4 text-sm dark:bg-white/5">
+      <CardContent className="grid grid-cols-2 justify-between gap-3 p-4 text-sm">
         <p className="text-muted-foreground">Remaining Balance</p>
         <p className="font-medium">
           Php {remainingBalance.toLocaleString()}{" "}

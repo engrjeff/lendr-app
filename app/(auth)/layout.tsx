@@ -13,8 +13,8 @@ export default function AuthLayout({
   children: React.ReactNode
 }>) {
   return (
-    <div className="relative flex min-h-screen flex-col">
-      <div className="absolute inset-x-4 top-4 flex items-center justify-between">
+    <div className="relative flex min-h-full flex-col">
+      <div className="absolute inset-x-3 top-4 flex items-center justify-between lg:inset-x-4">
         <Link
           href="/"
           className={cn(buttonVariants({ variant: "ghost" }), "rounded-full")}

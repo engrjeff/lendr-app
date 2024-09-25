@@ -29,7 +29,7 @@ export function PayoffProgressClient({
 
   if (!total)
     return (
-      <Card className="col-span-2">
+      <Card>
         <CardHeader>
           <CardDescription>Outstanding Balance</CardDescription>
           <CardTitle className="font-bold">
@@ -51,7 +51,7 @@ export function PayoffProgressClient({
   const percentPaid = paid / total
 
   return (
-    <Card className="col-span-2">
+    <Card className="lg:col-span-2">
       <CardHeader>
         <CardDescription>Outstanding Balance</CardDescription>
         <CardTitle className="font-bold">
@@ -85,10 +85,10 @@ export function PayoffProgressClient({
         </div>
 
         {nextDue ? (
-          <div className="flex items-center justify-between rounded border bg-muted/30 p-4">
+          <div className="flex flex-col justify-between gap-3 rounded border bg-muted/30 p-4 md:flex-row md:items-center">
             <p className="text-sm">
               Next payment of{" "}
-              <span className="font-semibold">
+              <span className="font-semibold text-blue-500">
                 PHP {nextDue.payment_amount.toLocaleString()}
               </span>{" "}
               due on {format(nextDue.payment_date, "MMM dd, yyyy")}
