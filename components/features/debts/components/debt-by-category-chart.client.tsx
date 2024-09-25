@@ -57,7 +57,7 @@ export function DebtByCategoryChartClient({ debtsByCategory }: Props) {
       <CardContent className="flex-1 pb-0">
         <ChartContainer
           config={chartConfig}
-          className="mx-auto aspect-square md:max-h-[250px]"
+          className="mx-auto aspect-square max-h-[200px] md:max-h-[220px]"
         >
           <PieChart>
             <ChartTooltip
@@ -68,7 +68,7 @@ export function DebtByCategoryChartClient({ debtsByCategory }: Props) {
               data={chartData}
               dataKey="balance"
               nameKey="category"
-              innerRadius={70}
+              innerRadius={60}
               strokeWidth={5}
             >
               <Label
@@ -84,7 +84,7 @@ export function DebtByCategoryChartClient({ debtsByCategory }: Props) {
                         <tspan
                           x={viewBox.cx}
                           y={viewBox.cy}
-                          className="fill-foreground text-xl font-semibold"
+                          className="fill-foreground text-lg font-semibold"
                         >
                           {totalBalance?.toLocaleString()}
                         </tspan>

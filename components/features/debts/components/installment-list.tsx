@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 
-import { InstallmentPlanItemAction } from "./components/installment-plan-row-actions"
+import { InstallmentPlanItemAction } from "./installment-plan-row-actions"
 
 export function InstallmentList({
   installmentPlans,

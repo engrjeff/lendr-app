@@ -9,7 +9,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { DataTable } from "@/components/ui/data-table/data-table"
 import { useDataTable } from "@/components/ui/data-table/useDataTable"
 
-import { InstallmentList } from "../installment-list"
+import { InstallmentList } from "./installment-list"
 import { InstallmentPlanRowActions } from "./installment-plan-row-actions"
 import { PayAllButton } from "./pay-all-button"
 import { StatusFilter } from "./status-filter"

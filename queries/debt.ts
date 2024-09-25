@@ -11,6 +11,7 @@ const getDebtsInputSchema = z.object({
   order: z.string().optional(),
   search: z.string().optional(),
   status: z.nativeEnum(DebtStatus).optional(),
+  limit: z.number().optional(),
 })
 
 type GetDebtsInput = z.infer<typeof getDebtsInputSchema>
@@ -35,6 +36,8 @@ export const getDebts = async (input: GetDebtsInput) => {
           mode: "insensitive",
         },
       },
+
+      take: input.limit,
 
       include: {
         _count: {

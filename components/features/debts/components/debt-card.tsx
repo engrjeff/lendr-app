@@ -22,8 +22,8 @@ export function DebtCard({ debt }: { debt: DebtItem }) {
   const remainingBalance = (debt.balance * (100 - progress)) / 100
 
   return (
-    <Card className="bg-background dark:bg-gray-500/5">
-      <CardHeader className="relative p-3">
+    <Card className="bg-background dark:bg-gray-800/5">
+      <CardHeader className="relative p-3 bg-muted dark:bg-muted/30">
         <div className="flex items-start gap-3">
           <DebtCategoryIcon debtCategory={debt.category} />
           <div>
@@ -31,13 +31,9 @@ export function DebtCard({ debt }: { debt: DebtItem }) {
               href={`/debts/${debt.id}`}
               className="group flex items-center"
             >
-              <CardTitle className="flex items-center text-sm font-semibold group-hover:underline">
+              <CardTitle className="flex items-center text-sm font-semibold group-hover:underline line-clamp-1">
                 {debt.nickname}{" "}
               </CardTitle>
-
-              <Badge variant={debt.status} className="ml-3">
-                {debt.status.replaceAll("_", " ")}
-              </Badge>
             </Link>
             <CardDescription className="text-xs">
               {debt.category}
@@ -50,6 +46,11 @@ export function DebtCard({ debt }: { debt: DebtItem }) {
       </CardHeader>
       <Separator />
       <CardContent className="grid grid-cols-2 justify-between gap-3 p-4 text-sm">
+        <div className="col-span-2">
+          <Badge variant={debt.status} className="text-nowrap">
+            {debt.status.replaceAll("_", " ")}
+          </Badge>
+        </div>
         <p className="text-muted-foreground">Remaining Balance</p>
         <p className="font-medium">
           Php {remainingBalance.toLocaleString()}{" "}
