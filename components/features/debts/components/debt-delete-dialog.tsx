@@ -36,6 +36,10 @@ export function DebtDeleteDialog({ debt, ...props }: DebtDeleteDialogProps) {
       }
 
       toast.success(`Debt deleted!`)
+
+      if (props.onOpenChange) {
+        props.onOpenChange(false)
+      }
     } catch (error) {}
   }
 
