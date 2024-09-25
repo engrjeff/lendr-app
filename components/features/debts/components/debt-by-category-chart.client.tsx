@@ -54,7 +54,7 @@ export function DebtByCategoryChartClient({ debtsByCategory }: Props) {
         <CardTitle className="text-lg">Balance by Category</CardTitle>
         <CardDescription>Showing remaining balance to pay.</CardDescription>
       </CardHeader>
-      <CardContent className="flex-1 pb-0">
+      <CardContent className="flex-1">
         <ChartContainer
           config={chartConfig}
           className="mx-auto aspect-square max-h-[200px] md:max-h-[220px]"
@@ -103,6 +103,18 @@ export function DebtByCategoryChartClient({ debtsByCategory }: Props) {
             </Pie>
           </PieChart>
         </ChartContainer>
+
+        <div className="flex flex-wrap items-center justify-center gap-4">
+          {chartData.map((data) => (
+            <div key={data.category} className="flex items-center">
+              <div
+                className="mr-2 size-2 shrink-0 rounded-[2px]"
+                style={{ backgroundColor: data.fill }}
+              ></div>
+              <span className="text-xs">{data.category}</span>
+            </div>
+          ))}
+        </div>
       </CardContent>
     </Card>
   )

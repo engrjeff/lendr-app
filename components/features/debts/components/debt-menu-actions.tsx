@@ -32,7 +32,7 @@ export function DebtMenuActions({ debt }: { debt: Debt }) {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuLabel>Menu</DropdownMenuLabel>
+          <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild>
             <Link href={`/debts/${debt.id}`}>View Details</Link>

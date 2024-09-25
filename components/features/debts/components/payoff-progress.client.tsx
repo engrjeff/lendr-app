@@ -51,7 +51,7 @@ export function PayoffProgressClient({
   const percentPaid = paid / total
 
   return (
-    <Card className="lg:col-span-2 flex flex-col">
+    <Card className="flex flex-col lg:col-span-2">
       <CardHeader>
         <CardDescription>Outstanding Balance</CardDescription>
         <CardTitle className="font-bold">
@@ -61,13 +61,15 @@ export function PayoffProgressClient({
           </span>
         </CardTitle>
       </CardHeader>
-      <CardContent className="flex flex-col gap-4 flex-1">
+      <CardContent className="flex flex-1 flex-col gap-4">
         <div className="flex items-center">
           <div
             className="h-2 rounded-l bg-red-500"
             style={{ width: `${percentUnpaid * 100}%` }}
           ></div>
-          <Separator className="h-3 bg-white" orientation="vertical" />
+          {paid > 0 ? (
+            <Separator className="h-3 bg-white" orientation="vertical" />
+          ) : null}
           <div
             className="h-2 rounded-r bg-green-500"
             style={{ width: `${percentPaid * 100}%` }}
@@ -85,7 +87,7 @@ export function PayoffProgressClient({
         </div>
 
         {nextDue ? (
-          <div className="flex flex-col mt-auto justify-between gap-3 rounded border bg-muted/30 p-4 md:flex-row md:items-center">
+          <div className="mt-auto flex flex-col justify-between gap-3 rounded border bg-muted/30 p-4 md:flex-row md:items-center">
             <p className="text-sm">
               Next payment of{" "}
               <span className="font-semibold text-blue-500">
