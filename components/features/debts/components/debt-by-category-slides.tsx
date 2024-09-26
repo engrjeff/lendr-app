@@ -1,9 +1,68 @@
-import { getBalancesByCategory } from "@/queries/debt"
+"use client"
+
+import { useQuery } from "@tanstack/react-query"
+
+import {
+  Card,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import { Skeleton } from "@/components/ui/skeleton"
 
 import { DebtByCategorySliderClient } from "./debt-by-category-slider.client"
 
-export async function DebtByCategorySlider() {
-  const data = await getBalancesByCategory()
+export function DebtByCategorySlider() {
+  const result = useQuery({
+    queryKey: ["balance-by-category-slider"],
+    queryFn: async () => {
+      const response = await fetch(`/api/debts/balance-by-category`)
 
-  return <DebtByCategorySliderClient data={data} />
+      if (!response.ok) return []
+
+      return await response.json()
+    },
+  })
+
+  if (result.isLoading)
+    return (
+      <Card className="border-none lg:col-span-3">
+        <CardHeader className="p-0 pb-6">
+          <CardTitle className="text-lg">
+            Paidoff Progress by Category
+          </CardTitle>
+          <CardDescription>
+            Overview of your paidoff progress by category
+          </CardDescription>
+        </CardHeader>
+        <ul className="grid grid-cols-2 gap-4 lg:grid-cols-3 xl:grid-cols-4">
+          <li>
+            <Skeleton className="h-[360px]" />
+          </li>
+          <li>
+            <Skeleton className="h-[360px]" />
+          </li>
+          <li className="hidden lg:block">
+            <Skeleton className="h-[360px]" />
+          </li>
+          <li className="hidden xl:block">
+            <Skeleton className="h-[360px]" />
+          </li>
+        </ul>
+      </Card>
+    )
+
+  if (!result.data) return null
+
+  return (
+    <Card className="border-none lg:col-span-3">
+      <CardHeader className="p-0 pb-6">
+        <CardTitle className="text-lg">Paidoff Progress by Category</CardTitle>
+        <CardDescription>
+          Overview of your paidoff progress by category
+        </CardDescription>
+      </CardHeader>
+      <DebtByCategorySliderClient data={result.data} />
+    </Card>
+  )
 }
