@@ -209,7 +209,7 @@ export const getDebtPayoffProgress = async () => {
       },
     })
 
-    const nextDue = await prisma.installmentPlanItem.findFirst({
+    const nextDueQuery = prisma.installmentPlanItem.findFirst({
       where: {
         debt: {
           user_id: user?.id,
@@ -228,7 +228,7 @@ export const getDebtPayoffProgress = async () => {
       },
     })
 
-    const lastPayment = await prisma.installmentPlanItem.findFirst({
+    const lastPaymentQuery = prisma.installmentPlanItem.findFirst({
       where: {
         debt: {
           user_id: user?.id,
@@ -246,6 +246,11 @@ export const getDebtPayoffProgress = async () => {
         payment_date: "desc",
       },
     })
+
+    const [nextDue, lastPayment] = await Promise.all([
+      nextDueQuery,
+      lastPaymentQuery,
+    ])
 
     const payoffData = {
       paid: paid._sum.payment_amount ?? 0,
