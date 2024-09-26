@@ -1,4 +1,6 @@
-import { getDebts } from "@/queries/debt"
+"use client"
+
+import { useQuery } from "@tanstack/react-query"
 
 import {
   Card,
@@ -6,16 +8,41 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { Skeleton } from "@/components/ui/skeleton"
 
 import { DebtList } from "./debt-list"
 
-export async function RecentlyAddedDebts() {
-  const recentDebts = await getDebts({
-    limit: 2,
-    status: "IN_PROGRESS",
+export function RecentlyAddedDebts() {
+  const debts = useQuery({
+    queryKey: ["recent-debts"],
+    queryFn: async () => {
+      const response = await fetch(`/api/debts/recently-added`)
+
+      if (!response.ok) return []
+
+      return await response.json()
+    },
   })
 
-  if (!recentDebts) return null
+  if (debts.isLoading)
+    return (
+      <Card className="border-none lg:col-span-3">
+        <CardHeader className="p-0 pb-6">
+          <CardTitle className="text-lg">Recently Added Debts</CardTitle>
+          <CardDescription>Recently added unpaid balances</CardDescription>
+        </CardHeader>
+        <ul className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+          <li>
+            <Skeleton className="h-[260px]" />
+          </li>
+          <li>
+            <Skeleton className="h-[260px]" />
+          </li>
+        </ul>
+      </Card>
+    )
+
+  if (!debts.data) return null
 
   return (
     <Card className="border-none lg:col-span-3">
@@ -23,7 +50,7 @@ export async function RecentlyAddedDebts() {
         <CardTitle className="text-lg">Recently Added Debts</CardTitle>
         <CardDescription>Recently added unpaid balances</CardDescription>
       </CardHeader>
-      <DebtList debts={recentDebts} />
+      <DebtList debts={debts.data} />
     </Card>
   )
 }
