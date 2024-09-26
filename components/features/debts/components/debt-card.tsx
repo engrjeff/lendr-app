@@ -1,6 +1,6 @@
 import Link from "next/link"
 import { type DebtItem } from "@/queries/debt"
-import { DebtStatus } from "@prisma/client"
+import { DebtStatus, InstallmentPlanItemStatus } from "@prisma/client"
 
 import { Badge } from "@/components/ui/badge"
 import {
@@ -17,10 +17,19 @@ import { DebtCategoryIcon } from "./debt-category-icon"
 import { DebtMenuActions } from "./debt-menu-actions"
 
 export function DebtCard({ debt }: { debt: DebtItem }) {
-  const progress = (debt._count.installment_plans / debt.duration) * 100
+  const paidPlans = debt.installment_plans.filter(
+    (d) => d.status === InstallmentPlanItemStatus.PAID
+  ).length
+
+  const progress = (paidPlans / debt.duration) * 100
+
   const progressPercent = progress.toFixed(0) + "%"
 
   const remainingBalance = (debt.balance * (100 - progress)) / 100
+
+  const upcomingDueDate = debt.installment_plans
+    .filter((d) => d.status === InstallmentPlanItemStatus.UPCOMING)
+    .at(0)?.payment_date
 
   return (
     <Card className="relative h-full bg-background dark:bg-gray-800/5">
@@ -60,16 +69,16 @@ export function DebtCard({ debt }: { debt: DebtItem }) {
             <p className="font-medium">Php {debt.balance.toLocaleString()} </p>
           </>
         )}
-        {debt.status === DebtStatus.IN_PROGRESS ? (
+        {debt.status === DebtStatus.IN_PROGRESS && upcomingDueDate ? (
           <>
             <p className="text-muted-foreground">Next Payment on</p>
             <p className="font-medium">
-              {new Date(debt.next_payment_due_date).toDateString()}
+              {new Date(upcomingDueDate).toDateString()}
             </p>
           </>
         ) : (
           <>
-            <p className="text-muted-foreground">Full paid on</p>
+            <p className="text-muted-foreground">Fully paid on</p>
             <p className="font-medium">
               {new Date(debt.actual_paid_off_date!).toDateString()}
             </p>

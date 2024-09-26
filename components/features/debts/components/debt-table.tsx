@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import { DebtItem } from "@/queries/debt"
+import { InstallmentPlanItemStatus } from "@prisma/client"
 import { ColumnDef } from "@tanstack/react-table"
 
 import { Badge } from "@/components/ui/badge"
@@ -42,8 +43,12 @@ const columns: ColumnDef<DebtItem>[] = [
         return <Badge variant="PAID">PAID</Badge>
       }
 
-      const progress =
-        (row.original._count.installment_plans / row.original.duration) * 100
+      const paidPlans = row.original.installment_plans.filter(
+        (d) => d.status === InstallmentPlanItemStatus.PAID
+      ).length
+
+      const progress = (paidPlans / row.original.duration) * 100
+
       const progressPercent = progress.toFixed(0) + "%"
 
       return (
@@ -59,9 +64,9 @@ const columns: ColumnDef<DebtItem>[] = [
 
   {
     accessorKey: "balance",
-    header: () => <div className="px-4 py-3">Balance (Php)</div>,
+    header: () => <div className="px-4 py-3 text-right">Balance (Php)</div>,
     cell: ({ row }) => (
-      <div className="text-nowrap font-mono">
+      <div className="text-nowrap text-right font-mono">
         {row.original.balance.toLocaleString()}
       </div>
     ),

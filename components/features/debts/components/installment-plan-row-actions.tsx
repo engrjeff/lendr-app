@@ -286,10 +286,10 @@ function InstallmentPayForm({
               name="payment_date"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Payment Date *</FormLabel>
+                  <FormLabel>Due Date *</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="Payment Date"
+                      placeholder="Due Date"
                       type="date"
                       min={format(new Date(), "yyyy-MM-dd")}
                       disabled

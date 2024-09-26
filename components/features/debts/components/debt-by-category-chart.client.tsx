@@ -49,7 +49,7 @@ export function DebtByCategoryChartClient({ debtsByCategory }: Props) {
   }))
 
   return (
-    <Card className="flex flex-col">
+    <Card className="flex max-w-96 flex-col">
       <CardHeader className="pb-0">
         <CardTitle className="text-lg">Balance by Category</CardTitle>
         <CardDescription>Showing remaining balance to pay.</CardDescription>

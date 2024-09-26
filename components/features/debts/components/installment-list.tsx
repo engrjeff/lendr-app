@@ -1,4 +1,5 @@
-import { InstallmentPlanItem } from "@prisma/client"
+import { InstallmentPlanItem, InstallmentPlanItemStatus } from "@prisma/client"
+import { format } from "date-fns"
 
 import { Badge } from "@/components/ui/badge"
 import {
@@ -30,12 +31,23 @@ export function InstallmentList({
       {installmentPlans.map((plan) => (
         <li key={plan.id}>
           <Card className="bg-muted dark:bg-muted/30">
-            <CardHeader className="p-3 space-y-1 items-start">
+            <CardHeader className="items-start space-y-1 p-3">
               <Badge variant={plan.status} className="mb-3">
                 {plan.status.replace("_", " ")}
               </Badge>
               <CardDescription className="text-sm">Due Date</CardDescription>
               <CardTitle className="text-base">{plan.payment_date}</CardTitle>
+              {plan.status === InstallmentPlanItemStatus.PAID &&
+              plan.actual_payment_date ? (
+                <>
+                  <CardDescription className="text-sm">
+                    Actual Payment Date
+                  </CardDescription>
+                  <CardTitle className="text-base">
+                    {format(plan.actual_payment_date, "MMM dd, yyyy")}
+                  </CardTitle>
+                </>
+              ) : null}
               <CardDescription className="text-sm">Amount</CardDescription>
               <CardTitle className="text-base">
                 <span className="text-xs text-muted-foreground">PHP</span>{" "}

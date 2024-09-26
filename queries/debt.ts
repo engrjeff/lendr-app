@@ -40,15 +40,7 @@ export const getDebts = async (input: GetDebtsInput) => {
       take: input.limit,
 
       include: {
-        _count: {
-          select: {
-            installment_plans: {
-              where: {
-                status: InstallmentPlanItemStatus.PAID,
-              },
-            },
-          },
-        },
+        installment_plans: true,
       },
 
       orderBy: {
@@ -102,6 +94,9 @@ export const getDebtsGroupedByCategory = async () => {
             },
           },
         },
+      },
+      orderBy: {
+        balance: "desc",
       },
     })
 
@@ -165,9 +160,6 @@ export const getDebtById = async (input: GetDebtByIdInput) => {
           where: {
             status: input.status ?? InstallmentPlanItemStatus.UPCOMING,
           },
-          orderBy: {
-            payment_date: "desc",
-          },
         },
       },
     })
@@ -216,6 +208,13 @@ export const getDebtPayoffProgress = async () => {
           user_id: user?.id,
         },
         status: InstallmentPlanItemStatus.UPCOMING,
+      },
+      include: {
+        debt: {
+          select: {
+            nickname: true,
+          },
+        },
       },
       orderBy: {
         payment_date: "desc",

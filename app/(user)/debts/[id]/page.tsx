@@ -50,7 +50,7 @@ async function DebtDetailPage({ params, searchParams }: PageProps) {
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
-          <div className="items-center gap-3 hidden">
+          <div className="hidden items-center gap-3">
             <DebtCategoryIcon debtCategory={debt.category} />
             <h1 className="text-xl font-bold">{debt?.nickname}</h1>
           </div>

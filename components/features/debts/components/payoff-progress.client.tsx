@@ -67,7 +67,7 @@ export function PayoffProgressClient({
             className="h-2 rounded-l bg-red-500"
             style={{ width: `${percentUnpaid * 100}%` }}
           ></div>
-          {paid > 0 ? (
+          {paid > 0 && unpaid > 0 ? (
             <Separator className="h-3 bg-white" orientation="vertical" />
           ) : null}
           <div
@@ -87,7 +87,7 @@ export function PayoffProgressClient({
         </div>
 
         {nextDue ? (
-          <div className="mt-auto flex flex-col justify-between gap-3 rounded border bg-muted/30 p-4 md:flex-row md:items-center">
+          <div className="mt-auto flex flex-col justify-between gap-3 rounded border bg-muted/30 p-4 xl:flex-row xl:items-center">
             <p className="text-sm">
               Next payment of{" "}
               <span className="font-semibold text-blue-500">
