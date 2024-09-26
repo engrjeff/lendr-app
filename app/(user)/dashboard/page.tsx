@@ -1,7 +1,6 @@
 import { Metadata } from "next"
 
 import { DebtByCategoryChart } from "@/components/features/debts/components/debt-by-category-chart"
-import { DebtByCategorySlider } from "@/components/features/debts/components/debt-by-category-slides"
 import { PayoffProgress } from "@/components/features/debts/components/payoff-progress"
 import { RecentlyAddedDebts } from "@/components/features/debts/components/recently-added-debts"
 
@@ -24,7 +23,6 @@ function DashboardPage() {
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 xl:grid-cols-3">
         <PayoffProgress />
         <DebtByCategoryChart />
-        <DebtByCategorySlider />
         <RecentlyAddedDebts />
       </div>
     </div>
