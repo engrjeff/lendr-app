@@ -17,13 +17,28 @@ import { Separator } from "@/components/ui/separator"
 interface PayoffProgressClientProps {
   paid: number
   unpaid: number
-  nextDue: InstallmentPlanItem | null
+  nextDue:
+    | (InstallmentPlanItem & {
+        debt: {
+          nickname: string
+        }
+      })
+    | null
+
+  lastPayment:
+    | (InstallmentPlanItem & {
+        debt: {
+          nickname: string
+        }
+      })
+    | null
 }
 
 export function PayoffProgressClient({
   paid,
   unpaid,
   nextDue,
+  lastPayment,
 }: PayoffProgressClientProps) {
   const total = paid + unpaid
 
@@ -86,23 +101,46 @@ export function PayoffProgressClient({
           </div>
         </div>
 
-        {nextDue ? (
-          <div className="mt-auto flex flex-col justify-between gap-3 rounded border bg-muted/30 p-4 xl:flex-row xl:items-center">
-            <p className="text-sm">
-              Next payment of{" "}
-              <span className="font-semibold text-blue-500">
-                PHP {nextDue.payment_amount.toLocaleString()}
-              </span>{" "}
-              due on {format(nextDue.payment_date, "MMM dd, yyyy")}
-            </p>
-            <Link
-              href={`/debts/${nextDue.debtId}`}
-              className="flex items-center text-sm text-blue-500 hover:underline"
-            >
-              Learn More <ExternalLinkIcon className="ml-3 size-4" />
-            </Link>
-          </div>
-        ) : null}
+        <div className="mt-auto flex flex-col gap-4 xl:flex-row">
+          {lastPayment ? (
+            <div className="flex flex-col justify-between gap-3 rounded border bg-muted/30 p-4">
+              <p className="text-sm">
+                Last payment of{" "}
+                <span className="font-semibold text-green-500">
+                  PHP {lastPayment.payment_amount.toLocaleString()}
+                </span>{" "}
+                for{" "}
+                <span className="font-bold">{lastPayment.debt.nickname}</span>{" "}
+                on {format(lastPayment.actual_payment_date!, "MMM dd, yyyy")}
+              </p>
+              <Link
+                href={`/debts/${lastPayment.debtId}`}
+                className="inline-flex w-max items-center text-sm text-green-500 hover:underline"
+              >
+                Learn More <ExternalLinkIcon className="ml-3 size-4" />
+              </Link>
+            </div>
+          ) : null}
+
+          {nextDue ? (
+            <div className="flex flex-col justify-between gap-3 rounded border bg-muted/30 p-4">
+              <p className="text-sm">
+                Next payment for{" "}
+                <span className="font-bold">{nextDue.debt.nickname}</span> of{" "}
+                <span className="font-semibold text-blue-500">
+                  PHP {nextDue.payment_amount.toLocaleString()}
+                </span>{" "}
+                due on {format(nextDue.payment_date, "MMM dd, yyyy")}
+              </p>
+              <Link
+                href={`/debts/${nextDue.debtId}`}
+                className="inline-flex w-max items-center text-sm text-blue-500 hover:underline"
+              >
+                Learn More <ExternalLinkIcon className="ml-3 size-4" />
+              </Link>
+            </div>
+          ) : null}
+        </div>
       </CardContent>
     </Card>
   )

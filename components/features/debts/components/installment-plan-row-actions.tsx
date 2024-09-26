@@ -334,7 +334,7 @@ function InstallmentPayForm({
             )}
           />
           <div className="flex items-center justify-end gap-3 pt-6">
-            <Button type="button" variant="ghost">
+            <Button type="button" variant="ghost" onClick={afterSubmit}>
               Cancel
             </Button>
             <SubmitButton loading={action.isPending}>Pay Now</SubmitButton>
@@ -402,7 +402,7 @@ function InstallmentNoteForm({
             )}
           />
           <div className="flex items-center justify-end gap-3 pt-6">
-            <Button type="button" variant="ghost">
+            <Button type="button" variant="ghost" onClick={afterSubmit}>
               Cancel
             </Button>
             <SubmitButton

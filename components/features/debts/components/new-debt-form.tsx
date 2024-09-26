@@ -10,6 +10,7 @@ import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { useServerAction } from "zsa-react"
 
+import { formatDate } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import {
@@ -426,8 +427,6 @@ function DebtForm({ afterSubmit }: { afterSubmit: () => void }) {
     </Form>
   )
 }
-
-const formatDate = (dateStr: string) => format(dateStr, "MMM dd, yyyy")
 
 function getPaidOffDate(
   nextPayDateStr: string,

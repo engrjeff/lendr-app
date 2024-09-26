@@ -40,7 +40,11 @@ export const getDebts = async (input: GetDebtsInput) => {
       take: input.limit,
 
       include: {
-        installment_plans: true,
+        installment_plans: {
+          orderBy: {
+            payment_date: "asc",
+          },
+        },
       },
 
       orderBy: {
@@ -160,6 +164,9 @@ export const getDebtById = async (input: GetDebtByIdInput) => {
           where: {
             status: input.status ?? InstallmentPlanItemStatus.UPCOMING,
           },
+          orderBy: {
+            payment_date: "asc",
+          },
         },
       },
     })
@@ -221,10 +228,30 @@ export const getDebtPayoffProgress = async () => {
       },
     })
 
+    const lastPayment = await prisma.installmentPlanItem.findFirst({
+      where: {
+        debt: {
+          user_id: user?.id,
+        },
+        status: InstallmentPlanItemStatus.PAID,
+      },
+      include: {
+        debt: {
+          select: {
+            nickname: true,
+          },
+        },
+      },
+      orderBy: {
+        payment_date: "desc",
+      },
+    })
+
     const payoffData = {
       paid: paid._sum.payment_amount ?? 0,
       unpaid: unpaid._sum.payment_amount ?? 0,
       nextDue,
+      lastPayment,
     }
 
     return payoffData
@@ -232,5 +259,83 @@ export const getDebtPayoffProgress = async () => {
     if (typeof error === "string") throw error
 
     throw "Get Debt Payoff Progress: Server Error"
+  }
+}
+
+export const getBalancesByCategory = async () => {
+  try {
+    const user = await getUser()
+
+    const remainingBalances = await prisma.debt.findMany({
+      where: {
+        user_id: user?.id,
+      },
+      select: {
+        id: true,
+        category: true,
+        installment_plans: true,
+      },
+      orderBy: {
+        balance: "desc",
+      },
+    })
+
+    const balanceByCategory = new Map<
+      string,
+      { balance: number; paid: number; total: number }
+    >()
+
+    remainingBalances.forEach((item) => {
+      const totalSum = item.installment_plans.reduce(
+        (total, ip) => total + ip.payment_amount,
+        0
+      )
+
+      const balanceSum = item.installment_plans
+        .filter((i) => i.status === InstallmentPlanItemStatus.UPCOMING)
+        .reduce((total, ip) => total + ip.payment_amount, 0)
+
+      const paidSum = item.installment_plans
+        .filter((i) => i.status === InstallmentPlanItemStatus.PAID)
+        .reduce((total, ip) => total + ip.payment_amount, 0)
+
+      if (balanceByCategory.has(item.category)) {
+        const current = balanceByCategory.get(item.category)
+
+        const bal = current?.balance ?? 0
+        const paid = current?.paid ?? 0
+        const total = current?.total ?? 0
+
+        balanceByCategory.set(item.category, {
+          balance: bal + balanceSum,
+          paid: paid + paidSum,
+          total: total + totalSum,
+        })
+      } else {
+        balanceByCategory.set(item.category, {
+          balance: balanceSum,
+          paid: paidSum,
+          total: totalSum,
+        })
+      }
+    })
+
+    const data = Object.entries(Object.fromEntries(balanceByCategory))
+      .map(([category, value]) => {
+        return {
+          category,
+          balance: value.balance as number,
+          paid: value.paid as number,
+          total: value.total as number,
+        }
+      })
+      .filter((i) => i.balance !== 0)
+
+    return data
+  } catch (error) {
+    if (error instanceof PrismaClientKnownRequestError) {
+      throw error.message
+    }
+    throw "Get Balances by Category: Server Error"
   }
 }

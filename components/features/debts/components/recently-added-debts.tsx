@@ -11,8 +11,6 @@ import { DebtList } from "./debt-list"
 
 export async function RecentlyAddedDebts() {
   const recentDebts = await getDebts({
-    sort: "createdAt",
-    order: "asc",
     limit: 2,
     status: "IN_PROGRESS",
   })

@@ -208,7 +208,7 @@ export const saveInstallmentNoteAction = action
     }
   })
 
-const formatDate = (dateStr: string) => format(dateStr, "MMM dd, yyyy")
+const formatDate = (dateStr: string) => format(dateStr, "yyyy-MM-dd")
 
 function getNextPayDate(
   currentPayDate: string,

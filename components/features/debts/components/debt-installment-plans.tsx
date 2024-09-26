@@ -3,8 +3,8 @@
 import { Suspense } from "react"
 import { InstallmentPlanItem, InstallmentPlanItemStatus } from "@prisma/client"
 import { ColumnDef } from "@tanstack/react-table"
-import { format } from "date-fns"
 
+import { formatDate } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
 import { Checkbox } from "@/components/ui/checkbox"
 import { DataTable } from "@/components/ui/data-table/data-table"
@@ -43,7 +43,7 @@ const columns: ColumnDef<InstallmentPlanItem>[] = [
     accessorKey: "payment_date",
     header: () => <div className="text-nowrap px-4 py-3">Due Date</div>,
     cell: ({ row }) => (
-      <div className="text-nowrap">{row.getValue("payment_date")}</div>
+      <div className="text-nowrap">{formatDate(row.original.payment_date)}</div>
     ),
   },
   {
@@ -52,7 +52,7 @@ const columns: ColumnDef<InstallmentPlanItem>[] = [
     cell: ({ row }) => (
       <div className="text-nowrap">
         {row.original.actual_payment_date
-          ? format(row.original.actual_payment_date, "MMM dd, yyyy")
+          ? formatDate(row.original.actual_payment_date)
           : "--"}
       </div>
     ),
@@ -87,9 +87,13 @@ const columns: ColumnDef<InstallmentPlanItem>[] = [
   {
     id: "actions",
     enableHiding: false,
-    header: () => <div className="px-4 py-3">Actions</div>,
+    header: () => <div className="px-4 py-3 text-center">Actions</div>,
     cell: ({ row }) => {
-      return <InstallmentPlanRowActions installmentPlanItem={row.original} />
+      return (
+        <div className="flex justify-center">
+          <InstallmentPlanRowActions installmentPlanItem={row.original} />
+        </div>
+      )
     },
   },
 ]

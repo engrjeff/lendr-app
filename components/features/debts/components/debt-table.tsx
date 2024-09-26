@@ -75,9 +75,13 @@ const columns: ColumnDef<DebtItem>[] = [
   {
     id: "actions",
     enableHiding: false,
-    header: () => <div className="px-4 py-3">Actions</div>,
+    header: () => <div className="px-4 py-3 text-center">Actions</div>,
     cell: ({ row }) => {
-      return <DebtMenuActions debt={row.original} />
+      return (
+        <div className="text-center">
+          <DebtMenuActions debt={row.original} />
+        </div>
+      )
     },
   },
 ]

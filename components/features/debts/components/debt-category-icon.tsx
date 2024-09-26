@@ -16,7 +16,7 @@ export function DebtCategoryIcon({
       className={cn(
         category?.textColor,
         category?.bgColor,
-        "size-9 rounded-full flex items-center justify-center bg-opacity-70 dark:bg-opacity-10",
+        "size-9 rounded-full flex items-center justify-center bg-opacity-20 dark:bg-opacity-10",
         noBg ? "bg-transparent dark:bg-transparent" : ""
       )}
     >
