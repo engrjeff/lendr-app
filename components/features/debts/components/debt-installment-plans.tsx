@@ -3,6 +3,7 @@
 import { Suspense } from "react"
 import { InstallmentPlanItem, InstallmentPlanItemStatus } from "@prisma/client"
 import { ColumnDef } from "@tanstack/react-table"
+import { format } from "date-fns"
 
 import { Badge } from "@/components/ui/badge"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -40,15 +41,26 @@ const columns: ColumnDef<InstallmentPlanItem>[] = [
   },
   {
     accessorKey: "payment_date",
-    header: () => <div className="px-4 py-3 text-nowrap">Payment Date</div>,
+    header: () => <div className="text-nowrap px-4 py-3">Due Date</div>,
     cell: ({ row }) => (
       <div className="text-nowrap">{row.getValue("payment_date")}</div>
     ),
   },
   {
+    accessorKey: "actual_payment_date",
+    header: () => <div className="text-nowrap px-4 py-3">Payment Date</div>,
+    cell: ({ row }) => (
+      <div className="text-nowrap">
+        {row.original.actual_payment_date
+          ? format(row.original.actual_payment_date, "MMM dd, yyyy")
+          : "--"}
+      </div>
+    ),
+  },
+  {
     accessorKey: "payment_amount",
     header: () => (
-      <div className="px-4 py-3 text-nowrap">Payment Amount (Php)</div>
+      <div className="text-nowrap px-4 py-3">Payment Amount (Php)</div>
     ),
     cell: ({ row }) => (
       <div className="text-nowrap text-left font-mono">
@@ -68,7 +80,7 @@ const columns: ColumnDef<InstallmentPlanItem>[] = [
     accessorKey: "note",
     header: () => <div className="px-4 py-3">Note</div>,
     cell: ({ row }) => (
-      <div className="text-nowrap">{row.getValue("note")}</div>
+      <div className="text-nowrap">{row.getValue("note") ?? "--"}</div>
     ),
   },
 

@@ -91,10 +91,12 @@ export const payInstallmentItemAction = action
 
       if (!found) throw `Cannot find installment plan item with ID ${input.id}`
 
+      const actualPaymentDate = input.actual_payment_date ?? input.payment_date
+
       const result = await prisma.installmentPlanItem.update({
         where: { id: input.id },
         data: {
-          actual_payment_date: input.actual_payment_date ?? input.payment_date,
+          actual_payment_date: actualPaymentDate,
           note: input.note,
           status: InstallmentPlanItemStatus.PAID,
         },
@@ -116,7 +118,10 @@ export const payInstallmentItemAction = action
       if (unpaidCount === 0) {
         await prisma.debt.update({
           where: { id: result.debtId },
-          data: { status: DebtStatus.PAID },
+          data: {
+            status: DebtStatus.PAID,
+            actual_paid_off_date: actualPaymentDate,
+          },
         })
       }
 
@@ -157,7 +162,10 @@ export const payAllInstallmentAction = action
       // mark the debt record as PAID
       await prisma.debt.update({
         where: { id: input.debtId },
-        data: { status: DebtStatus.PAID },
+        data: {
+          status: DebtStatus.PAID,
+          actual_paid_off_date: input.actual_payment_date,
+        },
       })
 
       revalidatePath(`/debts/${input.debtId}`)
@@ -210,13 +218,13 @@ function getNextPayDate(
   if (frequency === "One Time Payment") return formatDate(currentPayDate)
 
   if (frequency === "Daily")
-    return formatDate(addDays(currentPayDate, duration).toDateString())
+    return formatDate(addDays(currentPayDate, duration - 1).toDateString())
 
   if (frequency === "Weekly")
-    return formatDate(addWeeks(currentPayDate, duration).toDateString())
+    return formatDate(addWeeks(currentPayDate, duration - 1).toDateString())
 
   if (frequency === "Monthly")
-    return formatDate(addMonths(currentPayDate, duration).toDateString())
+    return formatDate(addMonths(currentPayDate, duration - 1).toDateString())
 
   if (frequency === "Quarterly")
     return formatDate(
@@ -224,7 +232,7 @@ function getNextPayDate(
     )
 
   if (frequency === "Annually")
-    return formatDate(addYears(currentPayDate, duration).toDateString())
+    return formatDate(addYears(currentPayDate, duration - 1).toDateString())
 
   return formatDate(currentPayDate)
 }

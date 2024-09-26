@@ -24,7 +24,7 @@ export const getDebts = async (input: GetDebtsInput) => {
 
     const user = await getUser()
 
-    const sort = input.sort ?? "balance"
+    const sort = input.sort ?? "createdAt"
     const order = input.order ?? "desc"
 
     const result = await prisma.debt.findMany({

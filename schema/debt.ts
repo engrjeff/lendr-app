@@ -57,7 +57,9 @@ export type CreateDebtSchema = z.infer<typeof createDebtSchema>
 export const payInstallmentSchema = z.object({
   payment_date: z.string(),
   payment_amount: z.number(),
-  actual_payment_date: z.string().optional(),
+  actual_payment_date: z
+    .string({ required_error: "Required." })
+    .min(1, { message: "Required." }),
   note: z.string().optional(),
 })
 
@@ -65,7 +67,9 @@ export type PayInstallmentSchema = z.infer<typeof payInstallmentSchema>
 
 export const payAllInstallmentSchema = z.object({
   debtId: z.string(),
-  actual_payment_date: z.string().optional(),
+  actual_payment_date: z
+    .string({ required_error: "Required." })
+    .min(1, { message: "Required." }),
   note: z.string().optional(),
 })
 

@@ -329,7 +329,7 @@ function DebtForm({ afterSubmit }: { afterSubmit: () => void }) {
                 {form.watch("next_payment_due_date") ? (
                   <FormDescription>
                     Expected paid off date:{" "}
-                    {getPaidOffDate(nextPaymentDate, duration, frequency)}
+                    {getPaidOffDate(nextPaymentDate, duration - 1, frequency)}
                   </FormDescription>
                 ) : null}
                 <FormMessage />

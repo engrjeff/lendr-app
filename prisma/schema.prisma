@@ -113,6 +113,7 @@ model Debt {
   minimum_payment       Float
   next_payment_due_date String
   tracking_start_date   String
+  actual_paid_off_date  String?
 
   is_mine Boolean? @default(true)
 
