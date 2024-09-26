@@ -13,7 +13,7 @@ export default async function IndexPage() {
   return (
     <div className="flex h-full flex-col">
       <header className="relative border-b py-2 lg:py-4">
-        <div className="container flex items-center px-4 lg:grid lg:grid-cols-3">
+        <div className="container flex max-w-screen-lg items-center px-4 lg:grid lg:grid-cols-3">
           <Link href="/" className="inline-block text-xl font-bold">
             Lendr
           </Link>
@@ -121,7 +121,7 @@ export default async function IndexPage() {
           </div>
         </div>
       </header>
-      <main className="container grid flex-1 grid-rows-1 p-4 lg:p-6">
+      <main className="container grid max-w-screen-lg flex-1 grid-rows-1 p-4 lg:p-6">
         <div className="py-10">
           <Link
             href={session?.user ? "/dashboard" : "/signup"}
@@ -131,7 +131,7 @@ export default async function IndexPage() {
             <span>- No credit card required</span>
             <ChevronRightIcon className="size-4" />
           </Link>
-          <h1 className="mb-3 mt-6 text-3xl font-extrabold md:text-5xl">
+          <h1 className="mb-3 mt-6 text-4xl font-extrabold md:text-5xl">
             Lendr - Debt Tracker
           </h1>
           <p className="mb-6 text-muted-foreground">
