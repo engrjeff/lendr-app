@@ -35,11 +35,11 @@ export function DebtByCategorySlider() {
             Overview of your paidoff progress by category
           </CardDescription>
         </CardHeader>
-        <ul className="grid grid-cols-2 gap-4 lg:grid-cols-3 xl:grid-cols-4">
+        <ul className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           <li>
             <Skeleton className="h-[360px]" />
           </li>
-          <li>
+          <li className="hidden md:block">
             <Skeleton className="h-[360px]" />
           </li>
           <li className="hidden lg:block">
