@@ -26,8 +26,8 @@ export function DebtByCategorySlider() {
 
   if (result.isLoading)
     return (
-      <Card className="border-none lg:col-span-3">
-        <CardHeader className="p-0 pb-6">
+      <Card className="border-none">
+        <CardHeader className="hidden p-0 pb-6">
           <CardTitle className="text-lg">
             Paidoff Progress by Category
           </CardTitle>
@@ -55,8 +55,8 @@ export function DebtByCategorySlider() {
   if (!result.data) return null
 
   return (
-    <Card className="border-none lg:col-span-3">
-      <CardHeader className="p-0 pb-6">
+    <Card className="border-none">
+      <CardHeader className="hidden p-0 pb-6">
         <CardTitle className="text-lg">Paidoff Progress by Category</CardTitle>
         <CardDescription>
           Overview of your paidoff progress by category

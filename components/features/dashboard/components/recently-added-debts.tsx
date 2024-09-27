@@ -25,12 +25,12 @@ export function RecentlyAddedDebts() {
 
   if (debts.isLoading)
     return (
-      <Card className="border-none lg:col-span-3">
+      <Card className="border-none">
         <CardHeader className="p-0 pb-6">
           <CardTitle className="text-lg">Recently Added Debts</CardTitle>
           <CardDescription>Recently added unpaid balances</CardDescription>
         </CardHeader>
-        <ul className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+        <ul className="grid grid-cols-1 gap-6 md:grid-cols-2">
           <li>
             <Skeleton className="h-[260px]" />
           </li>
@@ -44,12 +44,15 @@ export function RecentlyAddedDebts() {
   if (!debts.data) return null
 
   return (
-    <Card className="border-none lg:col-span-3">
+    <Card className="border-none">
       <CardHeader className="p-0 pb-6">
         <CardTitle className="text-lg">Recently Added Debts</CardTitle>
         <CardDescription>Recently added unpaid balances</CardDescription>
       </CardHeader>
-      <DebtList debts={debts.data} />
+      <DebtList
+        debts={debts.data}
+        className="grid w-full grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-2"
+      />
     </Card>
   )
 }

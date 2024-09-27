@@ -7,10 +7,9 @@ export async function PayoffProgress() {
 
   return (
     <PayoffProgressClient
-      lastPayment={data.lastPayment}
-      nextDue={data.nextDue}
       unpaid={data.unpaid}
       paid={data.paid}
+      lastPayment={data.lastPayment}
     />
   )
 }

@@ -16,11 +16,11 @@ export async function DebtByCategoryChart() {
   if (!debtsByCategory.length)
     return (
       <Card className="flex flex-col">
-        <CardHeader>
+        <CardHeader className="p-3">
           <CardTitle className="text-lg">Balance by Category</CardTitle>
           <CardDescription>Showing remaining balance to pay.</CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-3">
           <p className="text-center text-sm text-muted-foreground">
             No data to show
           </p>

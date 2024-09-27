@@ -2,6 +2,7 @@ import prisma from "@/prisma/client"
 import { withEntityId } from "@/schema/utils"
 import { DebtStatus, InstallmentPlanItemStatus } from "@prisma/client"
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library"
+import { endOfMonth, format, startOfMonth } from "date-fns"
 import * as z from "zod"
 
 import { getUser } from "./user"
@@ -209,26 +210,26 @@ export const getDebtPayoffProgress = async () => {
       },
     })
 
-    const nextDueQuery = prisma.installmentPlanItem.findFirst({
-      where: {
-        debt: {
-          user_id: user?.id,
-        },
-        status: InstallmentPlanItemStatus.UPCOMING,
-      },
-      include: {
-        debt: {
-          select: {
-            nickname: true,
-          },
-        },
-      },
-      orderBy: {
-        payment_date: "asc",
-      },
-    })
+    // const nextDueQuery = prisma.installmentPlanItem.findFirst({
+    //   where: {
+    //     debt: {
+    //       user_id: user?.id,
+    //     },
+    //     status: InstallmentPlanItemStatus.UPCOMING,
+    //   },
+    //   include: {
+    //     debt: {
+    //       select: {
+    //         nickname: true,
+    //       },
+    //     },
+    //   },
+    //   orderBy: {
+    //     payment_date: "asc",
+    //   },
+    // })
 
-    const lastPaymentQuery = prisma.installmentPlanItem.findFirst({
+    const lastPayment = await prisma.installmentPlanItem.findFirst({
       where: {
         debt: {
           user_id: user?.id,
@@ -247,16 +248,16 @@ export const getDebtPayoffProgress = async () => {
       },
     })
 
-    const [nextDue, lastPayment] = await Promise.all([
-      nextDueQuery,
-      lastPaymentQuery,
-    ])
+    // const [nextDue, lastPayment] = await Promise.all([
+    //   nextDueQuery,
+    //   lastPaymentQuery,
+    // ])
 
     const payoffData = {
       paid: paid._sum.payment_amount ?? 0,
       unpaid: unpaid._sum.payment_amount ?? 0,
-      nextDue,
       lastPayment,
+      // nextDue,
     }
 
     return payoffData
@@ -342,5 +343,40 @@ export const getBalancesByCategory = async () => {
       throw error.message
     }
     throw "Get Balances by Category: Server Error"
+  }
+}
+
+export async function getDebtsForMonth() {
+  try {
+    const user = await getUser()
+
+    const startDayOfMonth = startOfMonth(new Date())
+    const endDayOfMonth = endOfMonth(new Date())
+
+    const debtsForMonth = await prisma.installmentPlanItem.findMany({
+      where: {
+        debt: {
+          user_id: user?.id,
+        },
+        status: InstallmentPlanItemStatus.UPCOMING,
+        payment_date: {
+          gte: format(startDayOfMonth, "yyyy-MM-dd"),
+          lte: format(endDayOfMonth, "yyyy-MM-dd"),
+        },
+      },
+      include: {
+        debt: {
+          select: { nickname: true },
+        },
+      },
+      take: 5,
+    })
+
+    return debtsForMonth
+  } catch (error) {
+    if (error instanceof PrismaClientKnownRequestError) {
+      throw error.message
+    }
+    throw "Get Debts for Month: Server Error"
   }
 }

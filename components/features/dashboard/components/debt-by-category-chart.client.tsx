@@ -40,11 +40,11 @@ export function DebtByCategoryChartClient({ debtsByCategory }: Props) {
 
   return (
     <Card className="flex max-w-md flex-col">
-      <CardHeader className="pb-0">
+      <CardHeader className="p-3 pb-0">
         <CardTitle className="text-lg">Balance by Category</CardTitle>
         <CardDescription>Showing remaining balance to pay.</CardDescription>
       </CardHeader>
-      <CardContent className="flex-1">
+      <CardContent className="flex-1 p-3">
         <ChartContainer
           config={chartConfig}
           className="mx-auto aspect-square max-h-[200px] md:max-h-[220px]"

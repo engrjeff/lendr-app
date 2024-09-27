@@ -47,15 +47,12 @@ export function DebtByCategorySliderClient({ data }: Props) {
   }))
 
   return (
-    <Carousel
-      className="relative w-full lg:col-span-3"
-      opts={{ align: "start" }}
-    >
+    <Carousel className="relative w-full" opts={{ align: "start" }}>
       <CarouselContent>
         {chartData.map((item, index) => (
           <CarouselItem
             key={index}
-            className="basis-full md:basis-1/2 lg:basis-1/3 xl:basis-1/4"
+            className="basis-full md:basis-1/2 lg:basis-1/3"
           >
             <Card className="flex flex-col">
               <CardHeader className="items-center pb-0 pt-3">
