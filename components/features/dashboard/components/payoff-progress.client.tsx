@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { InstallmentPlanItem } from "@prisma/client"
+import { InstallmentPlanItem, InstallmentPlanItemStatus } from "@prisma/client"
 import { format } from "date-fns"
 import { ExternalLinkIcon } from "lucide-react"
 
@@ -113,7 +113,7 @@ export function PayoffProgressClient({
                 on {format(lastPayment.actual_payment_date!, "MMM dd, yyyy")}
               </p>
               <Link
-                href={`/debts/${lastPayment.debtId}`}
+                href={`/debts/${lastPayment.debtId}?status=${InstallmentPlanItemStatus.PAID}`}
                 className="inline-flex w-max items-center text-sm text-green-500 hover:underline"
               >
                 Learn More <ExternalLinkIcon className="ml-3 size-4" />
