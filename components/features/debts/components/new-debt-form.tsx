@@ -174,9 +174,9 @@ function DebtForm({ afterSubmit }: { afterSubmit: () => void }) {
             name="nickname"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Nickname *</FormLabel>
+                <FormLabel>Name *</FormLabel>
                 <FormControl>
-                  <Input placeholder="Nickname" {...field} />
+                  <Input placeholder="Debt name" {...field} />
                 </FormControl>
                 <FormDescription>
                   A descriptive name for this debt.
