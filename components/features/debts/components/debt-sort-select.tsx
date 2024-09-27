@@ -1,21 +1,13 @@
 "use client"
 
-import { startTransition, useCallback, useState } from "react"
+import { ChangeEvent, startTransition, useCallback, useState } from "react"
 import Link from "next/link"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { ArrowDownAZIcon, ArrowUpZAIcon } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+import { NativeSelect } from "@/components/ui/native-select"
 
 export function DebtSortSelect() {
   const sortParamKey = "sort"
@@ -55,10 +47,10 @@ export function DebtSortSelect() {
     [searchParams, order]
   )
 
-  function handleSortEvent(value: string) {
-    if (!value) return
+  function handleSortEvent(e: ChangeEvent<HTMLSelectElement>) {
+    if (!e.currentTarget.value) return
 
-    const queryString = createQueryString(value)
+    const queryString = createQueryString(e.currentTarget.value)
 
     startTransition(() => {
       router.push(`${pathname}?${queryString}`)
@@ -67,20 +59,20 @@ export function DebtSortSelect() {
 
   return (
     <div className="ml-auto flex items-center gap-3">
-      <Select defaultValue={currentSort ?? ""} onValueChange={handleSortEvent}>
-        <SelectTrigger className="w-[140px]" aria-label="Sort">
-          <SelectValue placeholder="Sort" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectGroup>
-            <SelectLabel>Sort</SelectLabel>
-            <SelectItem value="balance">Balance</SelectItem>
-            <SelectItem value="createdAt">Date Added</SelectItem>
-            <SelectItem value="nickname">Name</SelectItem>
-            <SelectItem value="category">Category</SelectItem>
-          </SelectGroup>
-        </SelectContent>
-      </Select>
+      <label htmlFor="debt-sort" className="sr-only">
+        Sort
+      </label>
+      <NativeSelect
+        name="debt-sort"
+        id="debt-sort"
+        defaultValue={currentSort ?? ""}
+        onChange={handleSortEvent}
+      >
+        <option value="balance">Balance</option>
+        <option value="createdAt">Date Added</option>
+        <option value="nickname">Name</option>
+        <option value="category">Category</option>
+      </NativeSelect>
       <Link
         title="Sort Order"
         href={`${pathname}?${createQueryString(currentSort ?? "balance")}`}
