@@ -124,7 +124,11 @@ export function PayoffProgressClient({
                     {(new Date(lastPayment.payment_date).getMonth() + 1)
                       .toString()
                       .padStart(2, "0")}
-                    /{new Date(lastPayment.payment_date).getDate()}
+                    /
+                    {new Date(lastPayment.payment_date)
+                      .getDate()
+                      .toString()
+                      .padStart(2, "0")}
                   </span>
                   <span
                     className="mr-2.5 mt-1 block h-4 w-1 rounded"

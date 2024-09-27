@@ -2,6 +2,7 @@
 
 import { InstallmentPlanItem } from "@prisma/client"
 import { useQuery } from "@tanstack/react-query"
+import { format } from "date-fns"
 import { MoreHorizontalIcon } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -34,7 +35,7 @@ export function UpcomingPayables() {
 
   if (result.isLoading) return <Skeleton className="h-[250px] w-full" />
 
-  if (!result?.data)
+  if (!result?.data?.length)
     return (
       <Card className="flex flex-col">
         <CardHeader className="relative p-3">
@@ -89,7 +90,7 @@ export function UpcomingPayables() {
         <div className="rounded-md bg-gray-100 p-3 dark:bg-muted/30">
           <div className="mb-1 flex items-center gap-2">
             <CardDescription className="mb-2 shrink-0">
-              September 2024
+              {format(new Date(), "MMMM yyyy")}
             </CardDescription>
             <div className="mb-1.5 h-px flex-1 bg-border" />
           </div>
