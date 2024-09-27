@@ -91,6 +91,7 @@ function DebtForm({ afterSubmit }: { afterSubmit: () => void }) {
       next_payment_due_date: "",
       lendee_name: "",
       lendee_email: "",
+      should_notify: false,
       duration: 1,
     },
   })
