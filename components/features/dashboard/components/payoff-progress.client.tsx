@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { InstallmentPlanItem, InstallmentPlanItemStatus } from "@prisma/client"
 import { format } from "date-fns"
-import { ExternalLinkIcon } from "lucide-react"
+import { ChevronRightIcon, ExternalLinkIcon } from "lucide-react"
 
 import {
   Card,
@@ -13,6 +13,8 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
+
+import { chartConfig } from "./chart-config"
 
 interface PayoffProgressClientProps {
   paid: number
@@ -29,6 +31,7 @@ interface PayoffProgressClientProps {
     | (InstallmentPlanItem & {
         debt: {
           nickname: string
+          category: string
         }
       })
     | null
@@ -100,7 +103,58 @@ export function PayoffProgressClient({
           </div>
         </div>
 
-        <div>
+        {lastPayment ? (
+          <div className="relative">
+            <Link
+              href={`/debts/${lastPayment.debtId}?status=${InstallmentPlanItemStatus.PAID}`}
+              aria-label="click to view details"
+              className="absolute inset-0 ml-auto inline-block text-muted-foreground hover:text-foreground"
+            ></Link>
+            <div className="rounded-md bg-gray-100 p-3 dark:bg-muted/30">
+              <div className="mb-1 flex items-center gap-2">
+                <CardDescription className="mb-2 shrink-0">
+                  Latest Payment
+                </CardDescription>
+                <div className="mb-1.5 h-px flex-1 bg-border" />
+              </div>
+
+              <div>
+                <div className="flex items-start text-sm">
+                  <span className="mr-3 mt-px block text-center font-semibold">
+                    {(new Date(lastPayment.payment_date).getMonth() + 1)
+                      .toString()
+                      .padStart(2, "0")}
+                    /{new Date(lastPayment.payment_date).getDate()}
+                  </span>
+                  <span
+                    className="mr-2.5 mt-1 block h-4 w-1 rounded"
+                    style={{
+                      backgroundColor:
+                        chartConfig[lastPayment.debt.category].color,
+                    }}
+                  />
+                  <div className="mt-px flex flex-col">
+                    <span className="font-semibold">
+                      {lastPayment.debt.nickname}
+                    </span>
+                    <span className="text-xs text-muted-foreground">
+                      Php {lastPayment.payment_amount.toLocaleString()}
+                    </span>
+                  </div>
+                  <Link
+                    href={`/debts/${lastPayment.debtId}?status=${InstallmentPlanItemStatus.PAID}`}
+                    aria-label="view details"
+                    className="ml-auto inline-block text-muted-foreground hover:text-foreground"
+                  >
+                    <ChevronRightIcon className="size-4" />
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : null}
+
+        <div className="hidden">
           {lastPayment ? (
             <div className="flex flex-col justify-between gap-3 rounded border bg-muted/30 p-4">
               <p className="text-sm">

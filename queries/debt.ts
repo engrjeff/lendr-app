@@ -240,6 +240,7 @@ export const getDebtPayoffProgress = async () => {
         debt: {
           select: {
             nickname: true,
+            category: true,
           },
         },
       },
