@@ -19,7 +19,17 @@ export default {
 
         const { email, password } = validation.data
 
-        const foundUser = await prisma.user.findUnique({ where: { email } })
+        const foundUser = await prisma.user.findUnique({
+          where: { email },
+
+          include: {
+            _count: {
+              select: {
+                debts: true,
+              },
+            },
+          },
+        })
 
         if (!foundUser) throw new AccessDenied("Invalid credentials.")
 
@@ -54,7 +64,7 @@ export default {
 
         if (!passwordsMatch) throw new AccessDenied("Invalid credentials.")
 
-        const { name, email: userEmail, id, image, role } = foundUser
+        const { name, email: userEmail, id, image, role, _count } = foundUser
 
         return {
           name,
@@ -62,6 +72,7 @@ export default {
           id,
           image,
           role,
+          hasRecords: _count.debts > 0,
         }
       },
     }),

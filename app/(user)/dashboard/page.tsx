@@ -1,16 +1,22 @@
 import { Metadata } from "next"
+import { auth } from "@/auth"
 
 import { DebtByCategoryChart } from "@/components/features/dashboard/components/debt-by-category-chart"
 import { DebtByCategorySlider } from "@/components/features/dashboard/components/debt-by-category-slides"
 import { PayoffProgress } from "@/components/features/dashboard/components/payoff-progress"
 import { RecentlyAddedDebts } from "@/components/features/dashboard/components/recently-added-debts"
 import { UpcomingPayables } from "@/components/features/dashboard/components/upcoming-payables"
+import { DebtsEmptyView } from "@/components/features/debts/components/debts-empty-view"
 
 export const metadata: Metadata = {
   title: "Dashboard",
 }
 
-function DashboardPage() {
+async function DashboardPage() {
+  const session = await auth()
+
+  if (!session?.user.hasRecords) return <DebtsEmptyView forDashboard />
+
   return (
     <div className="flex flex-col space-y-6">
       <div className="flex items-center justify-between">

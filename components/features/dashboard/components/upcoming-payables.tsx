@@ -17,6 +17,14 @@ import { Skeleton } from "@/components/ui/skeleton"
 
 import { chartConfig } from "./chart-config"
 
+function getDateDisplay(dateString: string) {
+  const mo = (new Date(dateString).getMonth() + 1).toString().padStart(2, "0")
+
+  const dd = new Date(dateString).getDate().toString().padStart(2, "0")
+
+  return `${mo}/${dd}`
+}
+
 type Item = InstallmentPlanItem & {
   debt: { nickname: string; category: string }
 }
@@ -37,7 +45,7 @@ export function UpcomingPayables() {
 
   if (!result?.data?.length)
     return (
-      <Card className="flex flex-col">
+      <Card className="flex h-[250px] flex-col">
         <CardHeader className="relative p-3">
           <CardTitle className="text-sm font-semibold">
             Upcoming Payables
@@ -61,9 +69,10 @@ export function UpcomingPayables() {
             </div>
 
             <div className="py-4 text-center">
+              <p>🎉</p>
               <p className="text-lg font-semibold">Great!</p>
               <p className="text-muted-foreground">
-                You have no upcoming payables. 🎉
+                You have no upcoming payables.
               </p>
             </div>
           </div>
@@ -99,8 +108,8 @@ export function UpcomingPayables() {
             {result.data?.map((item) => (
               <li key={`upcoming-payable-${item.id}`}>
                 <div className="flex items-start text-sm">
-                  <span className="mr-3 mt-px block w-4 text-center font-semibold">
-                    {new Date(item.payment_date).getDate()}
+                  <span className="mr-3 mt-px block w-10 text-center font-semibold">
+                    {getDateDisplay(item.payment_date)}
                   </span>
                   <span
                     className="mr-2.5 mt-1 block h-4 w-1 rounded"

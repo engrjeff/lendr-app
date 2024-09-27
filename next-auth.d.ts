@@ -8,6 +8,7 @@ declare module "next-auth/jwt" {
     id: string
     role: ROLE
     email: string
+    hasRecords: boolean
   }
 }
 
@@ -16,11 +17,13 @@ declare module "next-auth" {
     user: {
       id: string
       role: ROLE
+      hasRecords: boolean
     } & DefaultSession["user"]
   }
 
   interface User {
     id: string
     role: ROLE
+    hasRecords: boolean
   }
 }

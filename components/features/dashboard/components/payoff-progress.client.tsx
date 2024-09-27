@@ -37,6 +37,14 @@ interface PayoffProgressClientProps {
     | null
 }
 
+function getDateDisplay(dateString: string) {
+  const mo = (new Date(dateString).getMonth() + 1).toString().padStart(2, "0")
+
+  const dd = new Date(dateString).getDate().toString().padStart(2, "0")
+
+  return `${mo}/${dd}`
+}
+
 export function PayoffProgressClient({
   paid,
   unpaid,
@@ -121,14 +129,7 @@ export function PayoffProgressClient({
               <div>
                 <div className="flex items-start text-sm">
                   <span className="mr-3 mt-px block text-center font-semibold">
-                    {(new Date(lastPayment.payment_date).getMonth() + 1)
-                      .toString()
-                      .padStart(2, "0")}
-                    /
-                    {new Date(lastPayment.payment_date)
-                      .getDate()
-                      .toString()
-                      .padStart(2, "0")}
+                    {getDateDisplay(lastPayment.payment_date)}
                   </span>
                   <span
                     className="mr-2.5 mt-1 block h-4 w-1 rounded"
