@@ -85,7 +85,7 @@ function DebtForm({ afterSubmit }: { afterSubmit: () => void }) {
     mode: "onChange",
     defaultValues: {
       category: "",
-      frequency: "Monthly",
+      frequency: "One Time Payment",
       is_mine: true,
       nickname: "",
       next_payment_due_date: "",
