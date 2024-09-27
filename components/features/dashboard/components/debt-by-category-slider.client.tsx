@@ -25,7 +25,7 @@ import {
 } from "@/components/ui/carousel"
 import { ChartConfig, ChartContainer } from "@/components/ui/chart"
 
-import { categories } from "./debt-categories"
+import { chartConfig } from "./chart-config"
 
 interface Props {
   data: {
@@ -35,16 +35,6 @@ interface Props {
     balance: number
   }[]
 }
-
-const chartConfig = categories.reduce((config, item) => {
-  return {
-    ...config,
-    [item.name]: {
-      label: item.name,
-      color: item.chartColor,
-    },
-  }
-}, {} as ChartConfig) satisfies ChartConfig
 
 export function DebtByCategorySliderClient({ data }: Props) {
   const chartData = data?.map((item) => ({

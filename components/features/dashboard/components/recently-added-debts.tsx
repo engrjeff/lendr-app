@@ -9,8 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
-
-import { DebtList } from "./debt-list"
+import { DebtList } from "@/components/features/debts/components/debt-list"
 
 export function RecentlyAddedDebts() {
   const debts = useQuery({

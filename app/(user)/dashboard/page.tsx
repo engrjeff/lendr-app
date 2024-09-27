@@ -1,9 +1,9 @@
 import { Metadata } from "next"
 
-import { DebtByCategoryChart } from "@/components/features/debts/components/debt-by-category-chart"
-import { DebtByCategorySlider } from "@/components/features/debts/components/debt-by-category-slides"
-import { PayoffProgress } from "@/components/features/debts/components/payoff-progress"
-import { RecentlyAddedDebts } from "@/components/features/debts/components/recently-added-debts"
+import { DebtByCategoryChart } from "@/components/features/dashboard/components/debt-by-category-chart"
+import { DebtByCategorySlider } from "@/components/features/dashboard/components/debt-by-category-slides"
+import { PayoffProgress } from "@/components/features/dashboard/components/payoff-progress"
+import { RecentlyAddedDebts } from "@/components/features/dashboard/components/recently-added-debts"
 
 export const metadata: Metadata = {
   title: "Dashboard",
