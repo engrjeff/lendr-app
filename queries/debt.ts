@@ -224,7 +224,7 @@ export const getDebtPayoffProgress = async () => {
         },
       },
       orderBy: {
-        payment_date: "desc",
+        payment_date: "asc",
       },
     })
 
@@ -243,7 +243,7 @@ export const getDebtPayoffProgress = async () => {
         },
       },
       orderBy: {
-        payment_date: "desc",
+        payment_date: "asc",
       },
     })
 
