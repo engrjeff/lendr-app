@@ -5,7 +5,7 @@ import { createDebtAction } from "@/actions/debt"
 import { createDebtSchema, CreateDebtSchema } from "@/schema/debt"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { addDays, addMonths, addWeeks, addYears, format } from "date-fns"
-import { InfoIcon, PlusCircleIcon } from "lucide-react"
+import { PlusCircleIcon } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { useServerAction } from "zsa-react"
@@ -35,12 +35,6 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet"
 import { SubmitButton } from "@/components/ui/submit-button"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
 
 import { categories } from "./debt-categories"
 
@@ -214,22 +208,7 @@ function DebtForm({ afterSubmit }: { afterSubmit: () => void }) {
             name="minimum_payment"
             render={() => (
               <FormItem>
-                <div className="flex items-center justify-between">
-                  <FormLabel>Installment Payment * </FormLabel>
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger type="button" aria-label="What is this?">
-                        <InfoIcon className="size-4" />
-                      </TooltipTrigger>
-                      <TooltipContent className="max-w-60">
-                        <p>
-                          The lowest amount you are required to pay without
-                          incurring a penalty.
-                        </p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                </div>
+                <FormLabel>Installment Payment * </FormLabel>
                 <FormControl>
                   <NumberInput
                     disabled={!form.watch("balance")}
@@ -418,7 +397,10 @@ function DebtForm({ afterSubmit }: { afterSubmit: () => void }) {
             </>
           )}
 
-          <div className="pt-6">
+          <div className="flex items-center justify-end gap-3 pt-6">
+            <Button variant="ghost" type="button" onClick={afterSubmit}>
+              Cancel
+            </Button>
             <SubmitButton loading={isPending} type="submit">
               Save Debt
             </SubmitButton>
