@@ -366,7 +366,7 @@ export async function getDebtsForMonth() {
       },
       include: {
         debt: {
-          select: { nickname: true },
+          select: { nickname: true, category: true },
         },
       },
       take: 5,
