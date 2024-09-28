@@ -1,7 +1,7 @@
 import { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "Transactions",
+  title: "Funds",
 }
 
 interface PageProps {
@@ -13,10 +13,8 @@ async function TransactionsPage({ searchParams }: PageProps) {
     <div className="flex flex-col space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-bold">Transactions</h1>
-          <p className="text-sm text-muted-foreground">
-            List of your transactions.
-          </p>
+          <h1 className="text-xl font-bold">Funds</h1>
+          <p className="text-sm text-muted-foreground">List of your funds.</p>
         </div>
       </div>
     </div>

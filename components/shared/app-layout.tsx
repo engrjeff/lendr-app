@@ -4,6 +4,7 @@ import { AuthFooter } from "@/app/(auth)/components/AuthFooter"
 
 import { AppHeader } from "./app-header"
 import { AppSideBar } from "./app-sidebar"
+import { BottomNavigation } from "./bottom-navigation"
 
 function AppLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -14,6 +15,7 @@ function AppLayout({ children }: { children: React.ReactNode }) {
         <main className="grid flex-1 grid-rows-1 p-3 lg:p-6">{children}</main>
         <AuthFooter />
       </div>
+      <BottomNavigation />
     </div>
   )
 }

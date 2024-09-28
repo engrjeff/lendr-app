@@ -1,6 +1,6 @@
 export function AuthFooter() {
   return (
-    <footer className="border-t">
+    <footer className="invisible mt-4 lg:visible lg:mt-0 lg:border-t">
       <p className="container py-4 text-center text-xs">
         Lendr App &copy; {new Date().getFullYear()}. Made by{" "}
         <a
