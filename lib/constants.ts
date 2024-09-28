@@ -1,4 +1,4 @@
-import { Home, ListTodo, TrendingUp, type LucideIcon } from "lucide-react"
+import { Home, PiggyBankIcon, WalletIcon, type LucideIcon } from "lucide-react"
 
 export type SimpleMenuItem = {
   label: string
@@ -17,11 +17,11 @@ export const APP_MENU: AppMenuItem[] = [
   {
     label: "Debts",
     href: "/debts",
-    Icon: ListTodo,
+    Icon: WalletIcon,
   },
   {
-    label: "Transactions",
-    href: "/transactions",
-    Icon: TrendingUp,
+    label: "Funds",
+    href: "/funds",
+    Icon: PiggyBankIcon,
   },
 ]
