@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
+import { Analytics } from "@vercel/analytics/react"
 import NextTopLoader from "nextjs-toploader"
 
 import { cn } from "@/lib/utils"
@@ -39,6 +40,7 @@ export default function RootLayout({
       <body className={cn(inter.className, "antialiased h-full")}>
         <NextTopLoader color="#6D28D9" />
         <AppProviders>{children}</AppProviders>
+        <Analytics />
       </body>
     </html>
   )
