@@ -1,6 +1,5 @@
 "use server"
 
-import { redirect } from "next/navigation"
 import { signIn, signOut } from "@/auth"
 import prisma from "@/prisma/client"
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes"
@@ -57,7 +56,23 @@ export const registerUser = createServerAction()
         },
       })
 
-      redirect("/signin")
+      // automatically log in the new user
+      try {
+        await signIn("credentials", {
+          email: input.email,
+          password: input.password,
+          redirectTo: DEFAULT_LOGIN_REDIRECT,
+        })
+      } catch (error) {
+        if (error instanceof AuthError) {
+          switch (error.type) {
+            case "AccessDenied":
+              throw new Error("Invalid credentials.")
+          }
+        }
+
+        throw error
+      }
     } catch (error) {
       throw error
     }

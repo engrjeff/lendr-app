@@ -15,7 +15,7 @@ import { FormError } from "@/components/shared/form-error"
 export function SignUpForm() {
   const action = useServerAction(registerUser, {
     onSuccess(args) {
-      toast.success("Success! You are now registered.", {
+      toast.success("Awesome! You are now registered.", {
         position: "top-center",
       })
     },
@@ -67,21 +67,6 @@ export function SignUpForm() {
               className="bg-muted/30"
             />
             <FormError error={action.error?.fieldErrors?.password?.at(0)} />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="confirmPassword">Confirm Password</Label>
-            <PasswordInput
-              name="confirmPassword"
-              id="confirmPassword"
-              placeholder="Re-enter your password"
-              className="bg-muted/30"
-            />
-            <FormError
-              error={action.error?.fieldErrors?.confirmPassword?.at(0)}
-            />
-            {action.error?.code === "ERROR" ? (
-              <FormError error={action.error?.message} />
-            ) : null}
           </div>
           <div className="pt-6">
             <SubmitButton loading={action.isPending} className="w-full">
