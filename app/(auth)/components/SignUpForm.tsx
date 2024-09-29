@@ -1,6 +1,8 @@
 "use client"
 
+import { useRef } from "react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { registerUser } from "@/actions/auth"
 import { toast } from "sonner"
 import { useServerAction } from "zsa-react"
@@ -13,11 +15,28 @@ import { SubmitButton } from "@/components/ui/submit-button"
 import { FormError } from "@/components/shared/form-error"
 
 export function SignUpForm() {
+  const emailRef = useRef<HTMLInputElement | null>(null)
+
+  const router = useRouter()
+
   const action = useServerAction(registerUser, {
     onSuccess(args) {
-      toast.success("Awesome! You are now registered.", {
-        position: "top-center",
-      })
+      if (args.data.status === "success") {
+        toast.success(args.data.message, { position: "top-center" })
+
+        router.push("/signin")
+      }
+    },
+    onError(args) {
+      if (args.err.code === "PRECONDITION_FAILED") {
+        toast.error(args.err.message, { position: "top-center" })
+
+        emailRef.current?.focus()
+      }
+
+      if (args.err.code === "ERROR") {
+        toast.error(args.err.message, { position: "top-center" })
+      }
     },
   })
 
@@ -28,7 +47,7 @@ export function SignUpForm() {
         {"Already have an account? "}
         <Link
           href="/signin"
-          className="font-medium text-primary hover:underline"
+          className="font-medium text-blue-500 hover:underline"
         >
           Log in
         </Link>
@@ -55,6 +74,7 @@ export function SignUpForm() {
               name="email"
               id="email"
               className="bg-muted/30"
+              ref={emailRef}
             />
             <FormError error={action.error?.fieldErrors?.email?.at(0)} />
           </div>

@@ -1,4 +1,4 @@
-export const AUTH_ROUTES = ["/signin", "/register"]
+export const AUTH_ROUTES = ["/signin", "/register", "/verify"]
 
 export const API_AUTH_PREFIX = "/api/auth"
 

@@ -12,6 +12,8 @@ export default auth((req) => {
 
   if (nextUrl.pathname === "/") return NextResponse.next()
 
+  if (nextUrl.pathname.startsWith("/verify")) return NextResponse.next()
+
   const isApiAuthRoute = nextUrl.pathname.startsWith(API_AUTH_PREFIX)
   const isAuthPageRoute = AUTH_ROUTES.includes(nextUrl.pathname)
 

@@ -1,7 +1,9 @@
 "use client"
 
+import { useRef } from "react"
 import Link from "next/link"
 import { login } from "@/actions/auth"
+import { toast } from "sonner"
 import { useServerAction } from "zsa-react"
 
 import { Input } from "@/components/ui/input"
@@ -12,7 +14,29 @@ import { SubmitButton } from "@/components/ui/submit-button"
 import { FormError } from "@/components/shared/form-error"
 
 export function LoginForm() {
-  const logInAction = useServerAction(login)
+  const formRef = useRef<HTMLFormElement | null>(null)
+
+  const logInAction = useServerAction(login, {
+    onError({ err }) {
+      if (err.name === "Verification") {
+        toast.success(
+          err?.message
+            ? err.message?.split("..")[0]
+            : "Please verify your email first."
+        )
+
+        formRef.current?.reset()
+
+        return
+      }
+      if (err.code !== "INPUT_PARSE_ERROR") {
+        toast.error(
+          err?.message ? err.message?.split(".")[0] : "Error signing in.",
+          { position: "top-center" }
+        )
+      }
+    },
+  })
 
   return (
     <div className="container max-w-md space-y-2">
@@ -21,13 +45,17 @@ export function LoginForm() {
         {"Dont't have an account? "}
         <Link
           href="/register"
-          className="font-medium text-primary hover:underline"
+          className="font-medium text-blue-500 hover:underline"
         >
           Sign Up
         </Link>
         .
       </p>
-      <form onChange={logInAction.reset} action={logInAction.executeFormAction}>
+      <form
+        ref={formRef}
+        onChange={logInAction.reset}
+        action={logInAction.executeFormAction}
+      >
         <fieldset className="space-y-2">
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
@@ -52,9 +80,6 @@ export function LoginForm() {
             <FormError
               error={logInAction.error?.fieldErrors?.password?.at(0)}
             />
-            {logInAction.error?.code === "ERROR" ? (
-              <FormError error={logInAction.error?.message} />
-            ) : null}
           </div>
           <div className="pt-6">
             <SubmitButton loading={logInAction.isPending} className="w-full">

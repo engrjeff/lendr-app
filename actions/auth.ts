@@ -1,12 +1,13 @@
 "use server"
 
 import { signIn, signOut } from "@/auth"
+import { sendVerificationEmail } from "@/emails/mail"
 import prisma from "@/prisma/client"
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes"
 import { loginSchema, registerSchema } from "@/schema/auth"
+import { generateVerificationToken } from "@/server/tokens"
 import bcrypt from "bcryptjs"
-import { AuthError } from "next-auth"
-import { createServerAction } from "zsa"
+import { createServerAction, ZSAError } from "zsa"
 
 export const signOutAction = createServerAction().handler(async () => {
   await signOut({
@@ -17,22 +18,11 @@ export const signOutAction = createServerAction().handler(async () => {
 export const login = createServerAction()
   .input(loginSchema, { type: "formData" })
   .handler(async ({ input }) => {
-    try {
-      await signIn("credentials", {
-        email: input.email,
-        password: input.password,
-        redirectTo: DEFAULT_LOGIN_REDIRECT,
-      })
-    } catch (error) {
-      if (error instanceof AuthError) {
-        switch (error.type) {
-          case "AccessDenied":
-            throw new Error("Invalid credentials.")
-        }
-      }
-
-      throw error
-    }
+    await signIn("credentials", {
+      email: input.email,
+      password: input.password,
+      redirectTo: DEFAULT_LOGIN_REDIRECT,
+    })
   })
 
 export const registerUser = createServerAction()
@@ -44,7 +34,10 @@ export const registerUser = createServerAction()
       const existingUser = await prisma.user.findUnique({ where: { email } })
 
       if (existingUser)
-        throw new Error("User with the given email already exists.")
+        throw new ZSAError(
+          "PRECONDITION_FAILED",
+          "User with the given email already exists."
+        )
 
       const hashedPassword = await bcrypt.hash(password, 10)
 
@@ -56,23 +49,38 @@ export const registerUser = createServerAction()
         },
       })
 
-      // automatically log in the new user
-      try {
-        await signIn("credentials", {
-          email: input.email,
-          password: input.password,
-          redirectTo: DEFAULT_LOGIN_REDIRECT,
-        })
-      } catch (error) {
-        if (error instanceof AuthError) {
-          switch (error.type) {
-            case "AccessDenied":
-              throw new Error("Invalid credentials.")
-          }
-        }
+      // send verification email
+      const verificationToken = await generateVerificationToken(newUser.email)
 
-        throw error
+      await sendVerificationEmail(
+        name,
+        verificationToken.email,
+        verificationToken.token
+      )
+
+      return {
+        status: "success",
+        message:
+          "Confirmation email sent! Please view your inbox then verify your registration first.",
       }
+
+      // // automatically log in the new user
+      // try {
+      //   await signIn("credentials", {
+      //     email: input.email,
+      //     password: input.password,
+      //     redirectTo: DEFAULT_LOGIN_REDIRECT,
+      //   })
+      // } catch (error) {
+      //   if (error instanceof AuthError) {
+      //     switch (error.type) {
+      //       case "AccessDenied":
+      //         throw new Error("Invalid credentials.")
+      //     }
+      //   }
+
+      //   throw error
+      // }
     } catch (error) {
       throw error
     }
