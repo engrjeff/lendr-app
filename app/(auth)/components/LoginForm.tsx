@@ -22,7 +22,8 @@ export function LoginForm() {
         toast.success(
           err?.message
             ? err.message?.split("..")[0]
-            : "Please verify your email first."
+            : "Please verify your email first.",
+          { position: "top-center" }
         )
 
         formRef.current?.reset()

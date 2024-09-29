@@ -7,7 +7,7 @@ export function AuthFooter() {
           href="https://jeffsegovia.dev"
           target="_blank"
           rel="noopener noreferrer"
-          className="font-semibold text-primary"
+          className="font-semibold text-blue-500"
         >
           Jeff Segovia
         </a>
