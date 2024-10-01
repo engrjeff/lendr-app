@@ -2,7 +2,8 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { Debt, DebtStatus } from "@prisma/client"
+import { DebtItem } from "@/queries/debt"
+import { DebtStatus } from "@prisma/client"
 import { MoreHorizontalIcon } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -16,10 +17,11 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 import { DebtDeleteDialog } from "./debt-delete-dialog"
+import { EditDebtForm } from "./edit-debt-form"
 
 type DebtAction = "view" | "edit" | "delete"
 
-export function DebtMenuActions({ debt }: { debt: Debt }) {
+export function DebtMenuActions({ debt }: { debt: DebtItem }) {
   const [action, setAction] = useState<DebtAction>()
 
   return (
@@ -38,7 +40,9 @@ export function DebtMenuActions({ debt }: { debt: Debt }) {
             <Link href={`/debts/${debt.id}`}>View Details</Link>
           </DropdownMenuItem>
           {debt.status !== DebtStatus.PAID ? (
-            <DropdownMenuItem>Edit</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setAction("edit")}>
+              Edit
+            </DropdownMenuItem>
           ) : null}
           <DropdownMenuItem
             onClick={() => setAction("delete")}
@@ -52,6 +56,16 @@ export function DebtMenuActions({ debt }: { debt: Debt }) {
       <DebtDeleteDialog
         debt={debt}
         open={action === "delete"}
+        onOpenChange={(isOpen) => {
+          if (!isOpen) {
+            setAction(undefined)
+          }
+        }}
+      />
+
+      <EditDebtForm
+        debt={debt}
+        open={action === "edit"}
         onOpenChange={(isOpen) => {
           if (!isOpen) {
             setAction(undefined)

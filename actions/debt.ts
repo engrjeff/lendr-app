@@ -54,6 +54,70 @@ export const createDebtAction = action
     }
   })
 
+export const editDebtAction = action
+  .input(z.object({ id: z.string(), data: createDebtSchema }))
+  .handler(async ({ ctx, input }) => {
+    try {
+      const debt = await prisma.debt.findUnique({
+        where: { id: input.id },
+        include: {
+          installment_plans: {
+            where: {
+              status: InstallmentPlanItemStatus.PAID,
+            },
+          },
+        },
+      })
+
+      if (!debt) throw `Cannot find debt with ID ${input.id}`
+
+      const hasPaidInstallment = debt.installment_plans.length > 0
+
+      const { is_mine, lendee_email, lendee_name, ...fields } = input.data
+
+      const result = await prisma.debt.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          user_id: ctx.user.id,
+          tracking_start_date: input.data.next_payment_due_date,
+          ...(is_mine ? fields : input.data),
+        },
+      })
+
+      if (!hasPaidInstallment) {
+        // delete all current installment plans for this debt
+        await prisma.installmentPlanItem.deleteMany({
+          where: {
+            debtId: input.id,
+          },
+        })
+
+        // create new installment plans
+        const installmentPlans = generateInstallmentPlans(result)
+
+        await prisma.installmentPlanItem.createMany({
+          data: installmentPlans,
+        })
+      }
+
+      revalidatePath(`/debts`)
+
+      return result
+    } catch (error) {
+      if (error instanceof PrismaClientKnownRequestError) {
+        switch (error.code) {
+          case "P2002":
+            throw `${input.data.nickname} already exists.`
+        }
+      }
+      console.log(error)
+
+      throw "Edit Debt: Server Error"
+    }
+  })
+
 export const deleteDebtAction = action
   .input(withEntityId)
   .handler(async ({ ctx, input }) => {
