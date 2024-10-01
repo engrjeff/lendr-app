@@ -370,7 +370,7 @@ export async function getDebtsForMonth() {
           select: { nickname: true, category: true },
         },
       },
-      take: 5,
+      take: 3,
     })
 
     return debtsForMonth
