@@ -17,7 +17,9 @@ export async function DebtByCategoryChart() {
     return (
       <Card className="flex min-h-[250px] flex-col">
         <CardHeader className="p-3">
-          <CardTitle className="text-lg">Balance by Category</CardTitle>
+          <CardTitle className="text-sm font-semibold">
+            Balance by Category
+          </CardTitle>
           <CardDescription>Showing remaining balance to pay.</CardDescription>
         </CardHeader>
         <CardContent className="p-3">

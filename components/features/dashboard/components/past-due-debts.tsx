@@ -2,7 +2,6 @@
 
 import { InstallmentPlanItem } from "@prisma/client"
 import { useQuery } from "@tanstack/react-query"
-import { format } from "date-fns"
 import { MoreHorizontalIcon } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -14,8 +13,6 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
-
-import { chartConfig } from "./chart-config"
 
 function getDateDisplay(dateString: string) {
   const mo = (new Date(dateString).getMonth() + 1).toString().padStart(2, "0")
@@ -29,11 +26,11 @@ type Item = InstallmentPlanItem & {
   debt: { nickname: string; category: string }
 }
 
-export function UpcomingPayables() {
+export function PastDueDebts() {
   const result = useQuery<Array<Item>>({
-    queryKey: ["debts-for-month"],
+    queryKey: ["past-due-debts"],
     queryFn: async () => {
-      const response = await fetch(`/api/debts/debts-for-month`)
+      const response = await fetch(`/api/debts/past-due`)
 
       if (!response.ok) return []
 
@@ -46,9 +43,7 @@ export function UpcomingPayables() {
   return (
     <Card className="flex flex-col">
       <CardHeader className="relative p-3">
-        <CardTitle className="text-sm font-semibold">
-          Upcoming Payables
-        </CardTitle>
+        <CardTitle className="text-sm font-semibold">Past Due</CardTitle>
 
         <Button
           size="icon"
@@ -63,7 +58,7 @@ export function UpcomingPayables() {
         <div className="h-full rounded-md bg-gray-100 p-3 dark:bg-muted/30">
           <div className="mb-1 flex items-center gap-2">
             <CardDescription className="mb-2 shrink-0">
-              {format(new Date(), "MMMM yyyy")}
+              Due Dates You Missed
             </CardDescription>
             <div className="mb-1.5 h-px flex-1 bg-border" />
           </div>
@@ -72,7 +67,7 @@ export function UpcomingPayables() {
               <p>🎉</p>
               <p className="text-lg font-semibold">Great!</p>
               <p className="text-muted-foreground">
-                You have no upcoming payables.
+                You have no missed due date.
               </p>
             </div>
           ) : (
@@ -83,12 +78,7 @@ export function UpcomingPayables() {
                     <span className="mr-3 mt-px block w-10 text-center font-semibold">
                       {getDateDisplay(item.payment_date)}
                     </span>
-                    <span
-                      className="mr-2.5 mt-1 block h-4 w-1 rounded"
-                      style={{
-                        backgroundColor: chartConfig[item.debt.category].color,
-                      }}
-                    />
+                    <span className="mr-2.5 mt-1 block h-4 w-1 rounded bg-red-500" />
                     <div className="mt-px flex flex-col">
                       <span className="font-semibold">
                         {item.debt.nickname}

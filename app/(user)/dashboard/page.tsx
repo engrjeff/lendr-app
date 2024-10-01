@@ -3,6 +3,7 @@ import { auth } from "@/auth"
 
 import { DebtByCategoryChart } from "@/components/features/dashboard/components/debt-by-category-chart"
 import { DebtByCategorySlider } from "@/components/features/dashboard/components/debt-by-category-slides"
+import { PastDueDebts } from "@/components/features/dashboard/components/past-due-debts"
 import { PayoffProgress } from "@/components/features/dashboard/components/payoff-progress"
 import { RecentlyAddedDebts } from "@/components/features/dashboard/components/recently-added-debts"
 import { UpcomingPayables } from "@/components/features/dashboard/components/upcoming-payables"
@@ -29,21 +30,17 @@ async function DashboardPage() {
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 xl:grid-cols-3">
-        <div className="space-y-4 md:col-span-2 md:space-y-6">
-          <div className="grid gap-6 lg:grid-cols-2">
-            <PayoffProgress />
-            <UpcomingPayables />
-            <div className="md:hidden">
-              <DebtByCategoryChart />
-            </div>
-          </div>
+        <PayoffProgress />
+        <UpcomingPayables />
+        <PastDueDebts />
+
+        <DebtByCategoryChart />
+        <div className="xl:col-span-2">
           <DebtByCategorySlider />
-          <RecentlyAddedDebts />
-        </div>
-        <div className="hidden md:block">
-          <DebtByCategoryChart />
         </div>
       </div>
+
+      <RecentlyAddedDebts />
     </div>
   )
 }
