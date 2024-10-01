@@ -3,6 +3,7 @@
 import { Suspense } from "react"
 import { InstallmentPlanItem, InstallmentPlanItemStatus } from "@prisma/client"
 import { ColumnDef } from "@tanstack/react-table"
+import { isBefore } from "date-fns"
 
 import { formatDate } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
@@ -71,9 +72,18 @@ const columns: ColumnDef<InstallmentPlanItem>[] = [
   {
     accessorKey: "status",
     header: () => <div className="px-4 py-3">Status</div>,
-    cell: ({ row }) => (
-      <Badge variant={row.original.status}>{row.getValue("status")}</Badge>
-    ),
+    cell: ({ row }) => {
+      if (
+        row.original.status !== InstallmentPlanItemStatus.PAID &&
+        isBefore(row.original.payment_date, new Date())
+      ) {
+        return <Badge variant="PAST_DUE">Past Due</Badge>
+      }
+
+      return (
+        <Badge variant={row.original.status}>{row.getValue("status")}</Badge>
+      )
+    },
   },
 
   {

@@ -158,12 +158,38 @@ export const getDebtById = async (input: GetDebtByIdInput) => {
 
     if (!parsedInput.success) return null
 
+    if (input.status === InstallmentPlanItemStatus.PAST_DUE) {
+      const debt = await prisma.debt.findUnique({
+        where: { id: input.id, user_id: user?.id },
+        include: {
+          installment_plans: {
+            where: {
+              status: InstallmentPlanItemStatus.UPCOMING,
+              payment_date: {
+                lt: format(new Date(), "yyyy-MM-dd"),
+              },
+            },
+            orderBy: {
+              payment_date: "asc",
+            },
+          },
+        },
+      })
+
+      return debt
+    }
+
     const debt = await prisma.debt.findUnique({
       where: { id: input.id, user_id: user?.id },
       include: {
         installment_plans: {
           where: {
             status: input.status ?? InstallmentPlanItemStatus.UPCOMING,
+            NOT: {
+              payment_date: {
+                lt: format(new Date(), "yyyy-MM-dd"),
+              },
+            },
           },
           orderBy: {
             payment_date: "asc",
@@ -371,6 +397,9 @@ export async function getDebtsForMonth() {
         },
       },
       take: 3,
+      orderBy: {
+        payment_date: "asc",
+      },
     })
 
     return debtsForMonth
@@ -379,5 +408,41 @@ export async function getDebtsForMonth() {
       throw error.message
     }
     throw "Get Debts for Month: Server Error"
+  }
+}
+
+export async function getPastDueDebts() {
+  try {
+    const user = await getUser()
+
+    const now = new Date()
+
+    const pastDueDebts = await prisma.installmentPlanItem.findMany({
+      where: {
+        debt: {
+          user_id: user?.id,
+        },
+        status: InstallmentPlanItemStatus.UPCOMING,
+        payment_date: {
+          lt: format(now, "yyyy-MM-dd"),
+        },
+      },
+      include: {
+        debt: {
+          select: { nickname: true, category: true },
+        },
+      },
+      take: 3,
+      orderBy: {
+        payment_date: "asc",
+      },
+    })
+
+    return pastDueDebts
+  } catch (error) {
+    if (error instanceof PrismaClientKnownRequestError) {
+      throw error.message
+    }
+    throw "Get Past Due Debts: Server Error"
   }
 }

@@ -8,6 +8,7 @@ import {
   PiggyBankIcon,
   PodcastIcon,
   ShieldCheckIcon,
+  ShoppingBagIcon,
   UserIcon,
   WalletIcon,
 } from "lucide-react"
@@ -31,11 +32,19 @@ export const categories = [
   },
   {
     name: "Bills",
-    borderColor: "border-lime-500",
-    bgColor: "bg-lime-500",
-    textColor: "text-lime-500",
+    borderColor: "border-teal-500",
+    bgColor: "bg-teal-500",
+    textColor: "text-teal-500",
     icon: <BanknoteIcon className="size-5" />,
-    chartColor: "#84cc16",
+    chartColor: "#14b8a6",
+  },
+  {
+    name: "Ecommerce",
+    borderColor: "border-yellow-500",
+    bgColor: "bg-yellow-500",
+    textColor: "text-yellow-500",
+    icon: <ShoppingBagIcon className="size-5" />,
+    chartColor: "#eab308",
   },
   {
     name: "Subscription",

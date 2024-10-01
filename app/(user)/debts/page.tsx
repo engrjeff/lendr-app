@@ -40,7 +40,6 @@ const statusFilterOptions = [
   { value: "", label: "All" },
   { value: DebtStatus.IN_PROGRESS, label: "In Progress" },
   { value: DebtStatus.PAID, label: "Paid" },
-  { value: DebtStatus.CANCELLED, label: "Cancelled" },
 ]
 
 async function DebtsPage({ searchParams }: PageProps) {
@@ -83,6 +82,9 @@ async function DebtsPage({ searchParams }: PageProps) {
       <div className="flex items-center gap-4">
         <Suspense>
           <StatusFilter defaultValue="" options={statusFilterOptions} />
+          <div className="ml-auto flex items-center md:hidden">
+            <DebtSortSelect />
+          </div>
           <div className="ml-auto hidden items-center gap-4 md:flex">
             <DebtViewButton />
             <DebtSortSelect />

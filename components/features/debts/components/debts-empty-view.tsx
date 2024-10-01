@@ -1,8 +1,17 @@
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb"
+
 import { NewDebtForm } from "./new-debt-form"
 
 export function DebtsEmptyView({ forDashboard }: { forDashboard?: boolean }) {
   return (
-    <div className="flex flex-col space-y-6">
+    <div className="flex flex-col space-y-4">
       <div className="flex items-center justify-between">
         {forDashboard ? (
           <div>
@@ -12,12 +21,17 @@ export function DebtsEmptyView({ forDashboard }: { forDashboard?: boolean }) {
             </p>
           </div>
         ) : (
-          <div>
-            <h1 className="text-xl font-bold">Debts</h1>
-            <p className="text-sm text-muted-foreground">
-              List of your balances.
-            </p>
-          </div>
+          <Breadcrumb>
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbPage>Debts</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
         )}
       </div>
       <div className="flex flex-1 flex-col items-center justify-center gap-3 border border-dashed">

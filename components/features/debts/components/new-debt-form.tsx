@@ -107,6 +107,10 @@ function DebtForm({ afterSubmit }: { afterSubmit: () => void }) {
     } else {
       form.setValue("duration", 1)
     }
+
+    if (frequency === "One Time Payment") {
+      form.setValue("minimum_payment", balance)
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [balance, minPayment, frequency])
 
@@ -205,27 +209,6 @@ function DebtForm({ afterSubmit }: { afterSubmit: () => void }) {
           />
           <FormField
             control={form.control}
-            name="minimum_payment"
-            render={() => (
-              <FormItem>
-                <FormLabel>Installment Payment * </FormLabel>
-                <FormControl>
-                  <NumberInput
-                    disabled={!form.watch("balance")}
-                    placeholder="0.00"
-                    currency="PHP"
-                    min={0}
-                    {...form.register("minimum_payment", {
-                      valueAsNumber: true,
-                    })}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
             name="frequency"
             render={({ field }) => (
               <FormItem>
@@ -262,6 +245,31 @@ function DebtForm({ afterSubmit }: { afterSubmit: () => void }) {
               </FormItem>
             )}
           />
+          <FormField
+            control={form.control}
+            name="minimum_payment"
+            render={() => (
+              <FormItem>
+                <FormLabel>Installment Payment * </FormLabel>
+                <FormControl>
+                  <NumberInput
+                    disabled={
+                      !form.watch("balance") ||
+                      form.watch("frequency") === "One Time Payment"
+                    }
+                    placeholder="0.00"
+                    currency="PHP"
+                    min={0}
+                    {...form.register("minimum_payment", {
+                      valueAsNumber: true,
+                    })}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           <FormField
             control={form.control}
             name="duration"
