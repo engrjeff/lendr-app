@@ -52,7 +52,7 @@ export function DebtByCategorySlider() {
       </Card>
     )
 
-  if (!result.data) return null
+  if (!result.data?.length) return null
 
   return (
     <Card className="border-none">
