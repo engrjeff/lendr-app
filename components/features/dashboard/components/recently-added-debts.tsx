@@ -41,7 +41,7 @@ export function RecentlyAddedDebts() {
       </Card>
     )
 
-  if (!debts.data) return null
+  if (!debts.data?.length) return null
 
   return (
     <Card className="border-none">
