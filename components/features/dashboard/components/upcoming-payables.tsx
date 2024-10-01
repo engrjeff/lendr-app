@@ -43,49 +43,13 @@ export function UpcomingPayables() {
 
   if (result.isLoading) return <Skeleton className="h-[250px] w-full" />
 
-  if (!result?.data?.length)
-    return (
-      <Card className="flex h-[250px] flex-col">
-        <CardHeader className="relative p-3">
-          <CardTitle className="text-sm font-semibold">
-            Upcoming Payables
-          </CardTitle>
-          <Button
-            size="icon"
-            variant="ghost"
-            aria-label="more details"
-            className="absolute right-3 top-0 size-8"
-          >
-            <MoreHorizontalIcon className="size-4" />
-          </Button>
-        </CardHeader>
-        <CardContent className="flex-1 px-3 pb-3">
-          <div className="h-full rounded-md bg-gray-100 p-3 dark:bg-muted/30">
-            <div className="mb-1 flex items-center gap-2">
-              <CardDescription className="mb-2 shrink-0">
-                September 2024
-              </CardDescription>
-              <div className="mb-1.5 h-px flex-1 bg-border" />
-            </div>
-
-            <div className="py-4 text-center">
-              <p>🎉</p>
-              <p className="text-lg font-semibold">Great!</p>
-              <p className="text-muted-foreground">
-                You have no upcoming payables.
-              </p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-    )
-
   return (
     <Card>
       <CardHeader className="relative p-3">
         <CardTitle className="text-sm font-semibold">
           Upcoming Payables
         </CardTitle>
+
         <Button
           size="icon"
           variant="ghost"
@@ -103,30 +67,41 @@ export function UpcomingPayables() {
             </CardDescription>
             <div className="mb-1.5 h-px flex-1 bg-border" />
           </div>
-
-          <ul className="space-y-3">
-            {result.data?.map((item) => (
-              <li key={`upcoming-payable-${item.id}`}>
-                <div className="flex items-start text-sm">
-                  <span className="mr-3 mt-px block w-10 text-center font-semibold">
-                    {getDateDisplay(item.payment_date)}
-                  </span>
-                  <span
-                    className="mr-2.5 mt-1 block h-4 w-1 rounded"
-                    style={{
-                      backgroundColor: chartConfig[item.debt.category].color,
-                    }}
-                  />
-                  <div className="mt-px flex flex-col">
-                    <span className="font-semibold">{item.debt.nickname}</span>
-                    <span className="text-xs text-muted-foreground">
-                      Php {item.payment_amount.toLocaleString()}
+          {result.data?.length === 0 ? (
+            <div className="py-4 text-center">
+              <p>🎉</p>
+              <p className="text-lg font-semibold">Great!</p>
+              <p className="text-muted-foreground">
+                You have no upcoming payables.
+              </p>
+            </div>
+          ) : (
+            <ul className="space-y-3">
+              {result.data?.map((item) => (
+                <li key={`upcoming-payable-${item.id}`}>
+                  <div className="flex items-start text-sm">
+                    <span className="mr-3 mt-px block w-10 text-center font-semibold">
+                      {getDateDisplay(item.payment_date)}
                     </span>
+                    <span
+                      className="mr-2.5 mt-1 block h-4 w-1 rounded"
+                      style={{
+                        backgroundColor: chartConfig[item.debt.category].color,
+                      }}
+                    />
+                    <div className="mt-px flex flex-col">
+                      <span className="font-semibold">
+                        {item.debt.nickname}
+                      </span>
+                      <span className="text-xs text-muted-foreground">
+                        Php {item.payment_amount.toLocaleString()}
+                      </span>
+                    </div>
                   </div>
-                </div>
-              </li>
-            ))}
-          </ul>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       </CardContent>
     </Card>
