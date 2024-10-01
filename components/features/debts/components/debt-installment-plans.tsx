@@ -60,12 +60,10 @@ const columns: ColumnDef<InstallmentPlanItem>[] = [
   },
   {
     accessorKey: "payment_amount",
-    header: () => (
-      <div className="text-nowrap px-4 py-3">Payment Amount (Php)</div>
-    ),
+    header: () => <div className="text-nowrap px-4 py-3">Payment Amount</div>,
     cell: ({ row }) => (
       <div className="text-nowrap text-left font-mono">
-        {row.original.payment_amount.toFixed(2)}
+        Php {row.original.payment_amount.toFixed(2)}
       </div>
     ),
   },
@@ -88,10 +86,13 @@ const columns: ColumnDef<InstallmentPlanItem>[] = [
 
   {
     accessorKey: "note",
-    header: () => <div className="px-4 py-3">Note</div>,
-    cell: ({ row }) => (
-      <div className="text-nowrap">{row.getValue("note") ?? "--"}</div>
-    ),
+    header: () => <div className="px-4 py-3 text-center">Note</div>,
+    cell: ({ row }) =>
+      row.getValue("note") ? (
+        <div className="text-nowrap">{row.getValue("note")}</div>
+      ) : (
+        <div className="text-center">{"--"}</div>
+      ),
   },
 
   {

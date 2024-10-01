@@ -29,7 +29,10 @@ const columns: ColumnDef<DebtItem>[] = [
     header: () => <div className="px-4 py-3">Name</div>,
     cell: ({ row }) => (
       <div className="text-nowrap">
-        <Link href={`/debts/${row.original.id}`} className="hover:underline">
+        <Link
+          href={`/debts/${row.original.id}`}
+          className="font-medium text-blue-500 underline underline-offset-4 hover:no-underline"
+        >
           {row.getValue("nickname")}
         </Link>
       </div>
@@ -64,10 +67,10 @@ const columns: ColumnDef<DebtItem>[] = [
 
   {
     accessorKey: "balance",
-    header: () => <div className="px-4 py-3 text-right">Balance (Php)</div>,
+    header: () => <div className="px-4 py-3 text-right">Balance</div>,
     cell: ({ row }) => (
       <div className="text-nowrap text-right font-mono">
-        {row.original.balance.toLocaleString()}
+        Php {row.original.balance.toLocaleString()}
       </div>
     ),
   },
