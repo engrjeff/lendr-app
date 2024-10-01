@@ -35,7 +35,7 @@ async function DashboardPage() {
         <PastDueDebts />
 
         <DebtByCategoryChart />
-        <div className="xl:col-span-2">
+        <div className="lg:col-span-2">
           <DebtByCategorySlider />
         </div>
       </div>
