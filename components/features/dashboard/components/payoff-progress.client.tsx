@@ -112,7 +112,7 @@ export function PayoffProgressClient({
         </div>
 
         {lastPayment ? (
-          <div className="relative">
+          <div className="group relative">
             <Link
               href={`/debts/${lastPayment.debtId}?status=${InstallmentPlanItemStatus.PAID}`}
               aria-label="click to view details"
@@ -129,7 +129,7 @@ export function PayoffProgressClient({
               <div>
                 <div className="flex items-start text-sm">
                   <span className="mr-3 mt-px block text-center font-semibold">
-                    {getDateDisplay(lastPayment.payment_date)}
+                    {getDateDisplay(lastPayment.actual_payment_date!)}
                   </span>
                   <span
                     className="mr-2.5 mt-1 block h-4 w-1 rounded"
@@ -139,17 +139,23 @@ export function PayoffProgressClient({
                     }}
                   />
                   <div className="mt-px flex flex-col">
-                    <span className="font-semibold">
+                    <span className="font-semibold group-hover:text-blue-500">
                       {lastPayment.debt.nickname}
                     </span>
-                    <span className="text-xs text-muted-foreground">
-                      Php {lastPayment.payment_amount.toLocaleString()}
-                    </span>
+                    <p className="space-x-2 text-xs text-muted-foreground">
+                      <span>
+                        Php {lastPayment.payment_amount.toLocaleString()}
+                      </span>
+                      <span>&middot;</span>
+                      <span>
+                        Due: {getDateDisplay(lastPayment.payment_date!)}
+                      </span>
+                    </p>
                   </div>
                   <Link
                     href={`/debts/${lastPayment.debtId}?status=${InstallmentPlanItemStatus.PAID}`}
                     aria-label="view details"
-                    className="ml-auto inline-block text-muted-foreground hover:text-foreground"
+                    className="ml-auto inline-block text-muted-foreground hover:text-foreground group-hover:text-blue-500"
                   >
                     <ChevronRightIcon className="size-4" />
                   </Link>
