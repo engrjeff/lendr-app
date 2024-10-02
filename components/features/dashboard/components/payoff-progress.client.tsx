@@ -112,13 +112,8 @@ export function PayoffProgressClient({
         </div>
 
         {lastPayment ? (
-          <div className="group relative">
-            <Link
-              href={`/debts/${lastPayment.debtId}?status=${InstallmentPlanItemStatus.PAID}`}
-              aria-label="click to view details"
-              className="absolute inset-0 ml-auto inline-block text-muted-foreground hover:text-foreground"
-            ></Link>
-            <div className="rounded-md bg-gray-100 p-3 dark:bg-muted/30">
+          <div className="relative">
+            <div className="rounded-md bg-gray-100 p-2 dark:bg-muted/30">
               <div className="mb-1 flex items-center gap-2">
                 <CardDescription className="mb-2 shrink-0">
                   Latest Payment
@@ -127,39 +122,37 @@ export function PayoffProgressClient({
               </div>
 
               <div>
-                <div className="flex items-start text-sm">
-                  <span className="mr-3 mt-px block text-center font-semibold">
-                    {getDateDisplay(lastPayment.actual_payment_date!)}
-                  </span>
-                  <span
-                    className="mr-2.5 mt-1 block h-4 w-1 rounded"
-                    style={{
-                      backgroundColor:
-                        chartConfig[lastPayment.debt.category].color,
-                    }}
-                  />
-                  <div className="mt-px flex flex-col">
-                    <span className="font-semibold group-hover:text-blue-500">
-                      {lastPayment.debt.nickname}
+                <Link
+                  href={`/debts/${lastPayment.debtId}?status=${InstallmentPlanItemStatus.PAID}`}
+                >
+                  <div className="flex items-start rounded-md p-1 text-sm hover:bg-muted">
+                    <span className="mr-3 mt-px block text-center font-semibold">
+                      {getDateDisplay(lastPayment.actual_payment_date!)}
                     </span>
-                    <p className="space-x-2 text-xs text-muted-foreground">
-                      <span>
-                        Php {lastPayment.payment_amount.toLocaleString()}
+                    <span
+                      className="mr-2.5 mt-1 block h-4 w-1 rounded"
+                      style={{
+                        backgroundColor:
+                          chartConfig[lastPayment.debt.category].color,
+                      }}
+                    />
+                    <div className="mt-px flex flex-col">
+                      <span className="font-semibold group-hover:text-blue-500">
+                        {lastPayment.debt.nickname}
                       </span>
-                      <span>&middot;</span>
-                      <span>
-                        Due: {getDateDisplay(lastPayment.payment_date!)}
-                      </span>
-                    </p>
+                      <p className="space-x-2 text-xs text-muted-foreground">
+                        <span>
+                          Php {lastPayment.payment_amount.toLocaleString()}
+                        </span>
+                        <span>&middot;</span>
+                        <span>
+                          Due: {getDateDisplay(lastPayment.payment_date!)}
+                        </span>
+                      </p>
+                    </div>
+                    <ChevronRightIcon className="ml-auto size-4 self-center text-muted-foreground" />
                   </div>
-                  <Link
-                    href={`/debts/${lastPayment.debtId}?status=${InstallmentPlanItemStatus.PAID}`}
-                    aria-label="view details"
-                    className="ml-auto inline-block text-muted-foreground hover:text-foreground group-hover:text-blue-500"
-                  >
-                    <ChevronRightIcon className="size-4" />
-                  </Link>
-                </div>
+                </Link>
               </div>
             </div>
           </div>

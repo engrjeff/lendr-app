@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link"
 import { InstallmentPlanItem } from "@prisma/client"
 import { useQuery } from "@tanstack/react-query"
 import { MoreHorizontalIcon } from "lucide-react"
@@ -55,7 +56,7 @@ export function PastDueDebts() {
         </Button>
       </CardHeader>
       <CardContent className="flex-1 px-3 pb-3">
-        <div className="h-full rounded-md bg-gray-100 p-3 dark:bg-muted/30">
+        <div className="h-full rounded-md bg-gray-100 p-2 dark:bg-muted/30">
           <div className="mb-1 flex items-center gap-2">
             <CardDescription className="mb-2 shrink-0">
               Due Dates You Missed
@@ -71,23 +72,25 @@ export function PastDueDebts() {
               </p>
             </div>
           ) : (
-            <ul className="space-y-3">
+            <ul className="space-y-1">
               {result.data?.map((item) => (
                 <li key={`upcoming-payable-${item.id}`}>
-                  <div className="flex items-start text-sm">
-                    <span className="mr-3 mt-px block w-10 text-center font-semibold">
-                      {getDateDisplay(item.payment_date)}
-                    </span>
-                    <span className="mr-2.5 mt-1 block h-4 w-1 rounded bg-red-500" />
-                    <div className="mt-px flex flex-col">
-                      <span className="font-semibold">
-                        {item.debt.nickname}
+                  <Link href={`/debts/${item.debtId}`}>
+                    <div className="flex items-start rounded-md p-1 text-sm hover:bg-muted">
+                      <span className="mr-3 mt-px block w-10 text-center font-semibold">
+                        {getDateDisplay(item.payment_date)}
                       </span>
-                      <span className="text-xs text-muted-foreground">
-                        Php {item.payment_amount.toLocaleString()}
-                      </span>
+                      <span className="mr-2.5 mt-1 block h-4 w-1 rounded bg-red-500" />
+                      <div className="mt-px flex flex-col">
+                        <span className="font-semibold">
+                          {item.debt.nickname}
+                        </span>
+                        <span className="text-xs text-muted-foreground">
+                          Php {item.payment_amount.toLocaleString()}
+                        </span>
+                      </div>
                     </div>
-                  </div>
+                  </Link>
                 </li>
               ))}
             </ul>
