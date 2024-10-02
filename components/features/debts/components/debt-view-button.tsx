@@ -34,20 +34,35 @@ export function DebtViewButton() {
   )
 
   return (
-    <Link
-      title="Change View"
-      href={`${pathname}?${createQueryString(currentView === "list" ? "" : "list")}`}
-      aria-label="change view"
-      className={cn(
-        buttonVariants({ size: "icon", variant: "outline" }),
-        "shrink-0"
-      )}
-    >
-      {currentView !== "list" ? (
-        <ListIcon className="size-4" />
-      ) : (
+    <div className="flex h-10 items-center gap-1 rounded border px-1">
+      <Link
+        title="Change View to Grid"
+        href={`${pathname}?${createQueryString("")}`}
+        aria-label="change view to grid"
+        className={cn(
+          buttonVariants({
+            size: "icon",
+            variant: !currentView ? "secondary" : "ghost",
+          }),
+          "shrink-0 size-8"
+        )}
+      >
         <LayoutGridIcon className="size-4" />
-      )}
-    </Link>
+      </Link>
+      <Link
+        title="Change View to List"
+        href={`${pathname}?${createQueryString("list")}`}
+        aria-label="change view to list"
+        className={cn(
+          buttonVariants({
+            size: "icon",
+            variant: currentView === "list" ? "secondary" : "ghost",
+          }),
+          "shrink-0 size-8"
+        )}
+      >
+        <ListIcon className="size-4" />
+      </Link>
+    </div>
   )
 }

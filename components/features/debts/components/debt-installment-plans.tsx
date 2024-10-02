@@ -86,12 +86,12 @@ const columns: ColumnDef<InstallmentPlanItem>[] = [
 
   {
     accessorKey: "note",
-    header: () => <div className="px-4 py-3 text-center">Note</div>,
+    header: () => <div className="px-4 py-3">Note</div>,
     cell: ({ row }) =>
       row.getValue("note") ? (
         <div className="text-nowrap">{row.getValue("note")}</div>
       ) : (
-        <div className="text-center">{"--"}</div>
+        <div className="">{"--"}</div>
       ),
   },
 

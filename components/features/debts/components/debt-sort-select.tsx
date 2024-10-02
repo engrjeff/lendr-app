@@ -58,17 +58,17 @@ export function DebtSortSelect() {
   }
 
   return (
-    <div className="ml-auto flex items-center gap-3 relative">
+    <div className="relative ml-auto flex items-center gap-3">
       <label
         htmlFor="debt-sort"
-        className="absolute top-1 left-1.5 text-[10px] text-muted-foreground pl-1.5 font-medium"
+        className="absolute left-1.5 top-1 pl-1 text-[10px] font-medium text-muted-foreground"
       >
         Sort
       </label>
       <NativeSelect
         name="debt-sort"
         id="debt-sort"
-        className="py-3 pb-1 w-[140px] pl-1.5"
+        className="w-[140px] py-3 pb-1 pl-1.5"
         defaultValue={currentSort ?? ""}
         onChange={handleSortEvent}
       >

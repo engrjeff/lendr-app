@@ -33,7 +33,7 @@ export function DebtCard({ debt }: { debt: DebtItem }) {
 
   return (
     <Card className="relative flex h-full flex-col hover:ring-2 hover:ring-primary">
-      <CardHeader className="p-3">
+      <CardHeader className="p-3 pb-2">
         <div className="flex items-start gap-3">
           <DebtCategoryIcon debtCategory={debt.category} />
           <div>
@@ -47,7 +47,7 @@ export function DebtCard({ debt }: { debt: DebtItem }) {
         </div>
       </CardHeader>
       <CardContent className="flex-1 p-2">
-        <div className="grid h-full grid-cols-2 justify-between gap-3 rounded bg-gray-100 p-4 text-sm dark:bg-muted/30">
+        <div className="grid h-full grid-cols-2 justify-between gap-2 rounded bg-gray-100 p-3 pb-1 text-sm dark:bg-muted/30">
           <div className="col-span-2">
             <Badge variant={debt.status} className="text-nowrap">
               {debt.status.replaceAll("_", " ")}
