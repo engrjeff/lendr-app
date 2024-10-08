@@ -69,13 +69,14 @@ export function DebtSortSelect() {
         name="debt-sort"
         id="debt-sort"
         className="w-[140px] py-3 pb-1 pl-1.5"
-        defaultValue={currentSort ?? ""}
+        defaultValue={currentSort ?? "createdAt"}
         onChange={handleSortEvent}
       >
         <option value="balance">Balance</option>
         <option value="createdAt">Date Added</option>
         <option value="nickname">Name</option>
         <option value="category">Category</option>
+        <option value="status">Status</option>
       </NativeSelect>
       <Link
         title="Sort Order"
