@@ -18,8 +18,33 @@ export const registerSchema = z.object({
     .min(1, { message: "Email is required." }),
   password: z
     .string({ required_error: "Password is required." })
-    .min(6, { message: "Must be a minimum of 8 characters." }),
+    .min(8, { message: "Must be a minimum of 8 characters." }),
 })
+
+export const sendResetPasswordInstructionSchema = z.object({
+  email: z
+    .string()
+    .email({ message: "Enter a valid email." })
+    .min(1, { message: "Email is required." }),
+})
+
+export const resetPasswordSchema = z
+  .object({
+    email: z
+      .string()
+      .email({ message: "Enter a valid email." })
+      .min(1, { message: "Email is required." }),
+    newPassword: z
+      .string({ required_error: "New password is required." })
+      .min(8, { message: "Must be a minimum of 8 characters." }),
+    confirmPassword: z
+      .string({ required_error: "Confirm your password" })
+      .min(8, { message: "Must be a minimum of 8 characters." }),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: "Your passwords don't match",
+    path: ["confirmPassword"],
+  })
 
 export type LoginFormInput = z.infer<typeof loginSchema>
 

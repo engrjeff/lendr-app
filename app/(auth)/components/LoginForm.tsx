@@ -16,6 +16,8 @@ import { FormError } from "@/components/shared/form-error"
 export function LoginForm() {
   const formRef = useRef<HTMLFormElement | null>(null)
 
+  const emailFieldRef = useRef<HTMLInputElement | null>(null)
+
   const logInAction = useServerAction(login, {
     onError({ err }) {
       if (err.name === "Verification") {
@@ -57,10 +59,11 @@ export function LoginForm() {
         onChange={logInAction.reset}
         action={logInAction.executeFormAction}
       >
-        <fieldset className="space-y-2">
+        <fieldset className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
             <Input
+              ref={emailFieldRef}
               type="email"
               placeholder="youremail@example.com"
               name="email"
@@ -71,7 +74,22 @@ export function LoginForm() {
             <FormError error={logInAction.error?.fieldErrors?.email?.at(0)} />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
+            <div className="flex items-center">
+              <Label htmlFor="password" className="inline-block">
+                Password
+              </Label>
+              <Link
+                href={
+                  emailFieldRef.current?.value
+                    ? `/reset-password?email=${encodeURIComponent(emailFieldRef.current?.value)}`
+                    : "/reset-password"
+                }
+                className="ml-auto inline-block text-sm font-medium text-blue-500 hover:underline"
+                tabIndex={-1}
+              >
+                Forgot your password?
+              </Link>
+            </div>
             <PasswordInput
               name="password"
               id="password"

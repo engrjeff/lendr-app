@@ -78,3 +78,71 @@ export async function verifyToken(token: string) {
 
   return { status: "success", message: "Nice! Your email was verified!" }
 }
+
+// Reset Password token
+export async function getResetPasswordTokenByEmail(email: string) {
+  try {
+    const result = await prisma.resetPasswordToken.findFirst({
+      where: { email },
+    })
+
+    return result
+  } catch (error) {
+    return null
+  }
+}
+
+export async function getResetPasswordTokenByToken(token: string) {
+  try {
+    const result = await prisma.resetPasswordToken.findUnique({
+      where: { token },
+    })
+
+    return result
+  } catch (error) {
+    return null
+  }
+}
+
+export async function generateResetPasswordToken(email: string) {
+  const existingToken = await getResetPasswordTokenByEmail(email)
+
+  if (existingToken) {
+    // remove from db
+    await prisma.resetPasswordToken.delete({
+      where: { identifier: existingToken.identifier },
+    })
+  }
+
+  const token = uuidv4()
+  const expires = new Date(new Date().getTime() + 3600 * 1000) //expires in 1 hour
+
+  const newResetPasswordToken = await prisma.resetPasswordToken.create({
+    data: {
+      email,
+      expires,
+      token,
+    },
+  })
+
+  return newResetPasswordToken
+}
+
+export async function verifyResetPasswordToken(token: string) {
+  if (!token) {
+    return { status: "error", token: null }
+  }
+
+  const foundToken = await getResetPasswordTokenByToken(token)
+
+  if (!foundToken) return { status: "error", token: null }
+
+  const hasExpired = new Date() > foundToken.expires
+
+  if (hasExpired) return { status: "error", token: null }
+
+  // delete the token
+  await prisma.resetPasswordToken.delete({ where: { token } })
+
+  return { status: "success", token: foundToken }
+}

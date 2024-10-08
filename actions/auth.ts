@@ -1,11 +1,20 @@
 "use server"
 
+import { redirect } from "next/navigation"
 import { signIn, signOut } from "@/auth"
-import { sendVerificationEmail } from "@/emails/mail"
+import { sendResetPasswordEmail, sendVerificationEmail } from "@/emails/mail"
 import prisma from "@/prisma/client"
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes"
-import { loginSchema, registerSchema } from "@/schema/auth"
-import { generateVerificationToken } from "@/server/tokens"
+import {
+  loginSchema,
+  registerSchema,
+  resetPasswordSchema,
+  sendResetPasswordInstructionSchema,
+} from "@/schema/auth"
+import {
+  generateResetPasswordToken,
+  generateVerificationToken,
+} from "@/server/tokens"
 import bcrypt from "bcryptjs"
 import { createServerAction, ZSAError } from "zsa"
 
@@ -82,6 +91,61 @@ export const registerUser = createServerAction()
       //   throw error
       // }
     } catch (error) {
+      throw error
+    }
+  })
+
+export const sendPasswordResetInstructionAction = createServerAction()
+  .input(sendResetPasswordInstructionSchema, { type: "formData" })
+  .handler(async ({ input }) => {
+    try {
+      const foundUser = await prisma.user.findUnique({
+        where: { email: input.email },
+      })
+
+      if (!foundUser) throw "There's no user found with the provided email."
+
+      // send email here
+      const resetPasswordToken = await generateResetPasswordToken(input.email)
+
+      await sendResetPasswordEmail(input.email, resetPasswordToken.token)
+
+      return {
+        status: "success",
+        message: "Check your email for password reset instructions.",
+      }
+    } catch (error) {
+      if (typeof error === "string") throw error
+
+      throw error
+    }
+  })
+
+export const resetPasswordAction = createServerAction()
+  .input(resetPasswordSchema, { type: "formData" })
+  .handler(async ({ input }) => {
+    try {
+      const foundUser = await prisma.user.findUnique({
+        where: { email: input.email },
+      })
+
+      if (!foundUser) throw "There's no user found with the provided email."
+
+      const hashedPassword = await bcrypt.hash(input.newPassword, 10)
+
+      await prisma.user.update({
+        where: {
+          email: input.email,
+        },
+        data: {
+          hashedPassword,
+        },
+      })
+
+      redirect("/signin")
+    } catch (error) {
+      if (typeof error === "string") throw error
+
       throw error
     }
   })
