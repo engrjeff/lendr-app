@@ -28,6 +28,7 @@ export const PasswordInput = React.forwardRef<HTMLInputElement, InputProps>(
           size="icon"
           variant="ghost"
           className="absolute right-1 top-1 size-8"
+          tabIndex={-1}
         >
           {passwordShown ? (
             <EyeOffIcon className="size-4" />
