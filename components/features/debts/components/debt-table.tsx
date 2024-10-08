@@ -7,6 +7,7 @@ import { ColumnDef } from "@tanstack/react-table"
 
 import { Badge } from "@/components/ui/badge"
 import { DataTable } from "@/components/ui/data-table/data-table"
+import { SortLink } from "@/components/ui/data-table/sort-link"
 import { useDataTable } from "@/components/ui/data-table/useDataTable"
 import { Progress } from "@/components/ui/progress"
 
@@ -16,7 +17,7 @@ import { DebtMenuActions } from "./debt-menu-actions"
 const columns: ColumnDef<DebtItem>[] = [
   {
     accessorKey: "category",
-    header: () => <div className="px-4 py-3">Category</div>,
+    header: () => <SortLink title="Category" sortValue="category" />,
     cell: ({ row }) => (
       <div className="flex items-center gap-2 text-nowrap text-left">
         <DebtCategoryIcon noBg debtCategory={row.original.category} />{" "}
@@ -26,7 +27,9 @@ const columns: ColumnDef<DebtItem>[] = [
   },
   {
     accessorKey: "nickname",
-    header: () => <div className="px-4 py-3">Name</div>,
+    header: () => (
+      <SortLink title="Name" sortValue="nickname" className="px-0" />
+    ),
     cell: ({ row }) => (
       <div className="text-nowrap">
         <Link
@@ -40,7 +43,9 @@ const columns: ColumnDef<DebtItem>[] = [
   },
   {
     accessorKey: "status",
-    header: () => <div className="px-4 py-3">Status</div>,
+    header: () => (
+      <SortLink title="Status" sortValue="status" className="px-0" />
+    ),
     cell: ({ row }) => {
       if (row.original.status === "PAID") {
         return <Badge variant="PAID">PAID</Badge>
@@ -67,7 +72,13 @@ const columns: ColumnDef<DebtItem>[] = [
 
   {
     accessorKey: "balance",
-    header: () => <div className="px-4 py-3 text-right">Balance</div>,
+    header: () => (
+      <SortLink
+        title="Balance"
+        sortValue="balance"
+        className="justify-end px-0"
+      />
+    ),
     cell: ({ row }) => (
       <div className="text-nowrap text-right font-mono">
         Php {row.original.balance.toLocaleString()}

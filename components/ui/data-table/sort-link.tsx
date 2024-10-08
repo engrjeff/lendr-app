@@ -28,7 +28,7 @@ function SortLinkComponent({ title, sortValue, className }: SortLinkProps) {
   const ORDERS = ["desc", "asc", null]
 
   const [orderIndex, setOrderIndex] = useState(() =>
-    currentOrder ? ORDERS.indexOf(currentOrder) : 0
+    currentOrder ? ORDERS.indexOf(currentOrder) + 1 : 0
   )
 
   const order = ORDERS[orderIndex % 3]
@@ -53,7 +53,7 @@ function SortLinkComponent({ title, sortValue, className }: SortLinkProps) {
   )
 
   return (
-    <div className={cn("flex items-center space-x-2", className)}>
+    <div className={cn("flex items-center space-x-2 px-2", className)}>
       <Link
         href={`${pathname}?${createQueryString(sortValue)}`}
         className={cn(buttonVariants({ variant: "ghost", size: "sm" }), "h-8")}
