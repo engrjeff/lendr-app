@@ -3,10 +3,9 @@
 import { useState } from "react"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
-import { getMonthYearDisplay } from "@/server/utils"
 import { CalendarIcon, ChevronDownIcon } from "lucide-react"
 
-import { cn } from "@/lib/utils"
+import { cn, getMonthYearDisplay } from "@/lib/utils"
 import {
   Popover,
   PopoverContent,

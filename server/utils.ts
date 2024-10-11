@@ -47,15 +47,3 @@ export function getMonthFilter(month?: string) {
     endDate: format(endDate, "yyyy-MM-dd"),
   }
 }
-
-export function getMonthYearDisplay(month?: string) {
-  if (month === "All") return "All Time"
-
-  const monthNow = new Date().getMonth()
-
-  const currentMonth = month ? MONTHS.indexOf(month) : monthNow
-
-  const year = new Date().getFullYear()
-
-  return format(new Date(year, currentMonth), "MMMM yyyy")
-}

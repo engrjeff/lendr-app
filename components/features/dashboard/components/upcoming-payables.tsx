@@ -1,11 +1,11 @@
 "use client"
 
 import Link from "next/link"
-import { getMonthYearDisplay } from "@/server/utils"
 import { InstallmentPlanItem } from "@prisma/client"
 import { useQuery } from "@tanstack/react-query"
 import { MoreHorizontalIcon } from "lucide-react"
 
+import { getMonthYearDisplay } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
   Card,
