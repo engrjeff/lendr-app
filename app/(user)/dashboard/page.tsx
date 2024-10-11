@@ -33,7 +33,7 @@ async function DashboardPage({
             Quick insights on your balances.
           </p>
         </div>
-        <div className="ml-auto hidden">
+        <div className="ml-auto">
           <Suspense>
             <MonthFilter />
           </Suspense>

@@ -1,5 +1,5 @@
 import bcrypt from "bcryptjs"
-import { format } from "date-fns"
+import { endOfMonth, format, startOfMonth } from "date-fns"
 
 export async function hashPassword(password: string) {
   return bcrypt.hash(password, 10)
@@ -28,26 +28,24 @@ const MONTHS = [
 ]
 
 export function getMonthFilter(month?: string) {
-  return { startDate: undefined, endDate: undefined }
+  if (month === "All") return { startDate: undefined, endDate: undefined }
 
-  // if (month === "All") return { startDate: undefined, endDate: undefined }
+  const monthIndex =
+    month && MONTHS.includes(month)
+      ? MONTHS.indexOf(month)
+      : new Date().getMonth()
 
-  // const monthIndex =
-  //   month && MONTHS.includes(month)
-  //     ? MONTHS.indexOf(month)
-  //     : new Date().getMonth()
+  const year = new Date().getFullYear()
 
-  // const year = new Date().getFullYear()
+  const now = new Date(year, monthIndex)
 
-  // const now = new Date(year, monthIndex)
+  const startDate = startOfMonth(now)
+  const endDate = endOfMonth(now)
 
-  // const startDate = startOfMonth(now)
-  // const endDate = endOfMonth(now)
-
-  // return {
-  //   startDate: format(startDate, "yyyy-MM-dd"),
-  //   endDate: format(endDate, "yyyy-MM-dd"),
-  // }
+  return {
+    startDate: format(startDate, "yyyy-MM-dd"),
+    endDate: format(endDate, "yyyy-MM-dd"),
+  }
 }
 
 export function getMonthYearDisplay(month?: string) {

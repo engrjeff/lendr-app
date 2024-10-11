@@ -13,6 +13,8 @@ import { DebtByCategoryChartClient } from "./debt-by-category-chart.client"
 export async function DebtByCategoryChart({ month }: { month?: string }) {
   const debtsByCategory = await getDebtsGroupedByCategory({ month })
 
+  console.log(debtsByCategory)
+
   if (!debtsByCategory.length)
     return (
       <Card className="flex min-h-[250px] flex-col">

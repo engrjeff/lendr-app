@@ -108,14 +108,17 @@ export const getDebtsGroupedByCategory = async ({ month }: WidgetParams) => {
         0
       )
 
-      if (balanceByCategory.has(item.category)) {
-        const bal = balanceByCategory.get(item.category)?.remainingBalance ?? 0
+      if (balanceSum > 0) {
+        if (balanceByCategory.has(item.category)) {
+          const bal =
+            balanceByCategory.get(item.category)?.remainingBalance ?? 0
 
-        balanceByCategory.set(item.category, {
-          remainingBalance: bal + balanceSum,
-        })
-      } else {
-        balanceByCategory.set(item.category, { remainingBalance: balanceSum })
+          balanceByCategory.set(item.category, {
+            remainingBalance: bal + balanceSum,
+          })
+        } else {
+          balanceByCategory.set(item.category, { remainingBalance: balanceSum })
+        }
       }
     })
 
