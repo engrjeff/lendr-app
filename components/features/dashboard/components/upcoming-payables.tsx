@@ -1,9 +1,9 @@
 "use client"
 
 import Link from "next/link"
+import { getMonthYearDisplay } from "@/server/utils"
 import { InstallmentPlanItem } from "@prisma/client"
 import { useQuery } from "@tanstack/react-query"
-import { format } from "date-fns"
 import { MoreHorizontalIcon } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -30,11 +30,11 @@ type Item = InstallmentPlanItem & {
   debt: { nickname: string; category: string }
 }
 
-export function UpcomingPayables() {
+export function UpcomingPayables({ month }: { month?: string }) {
   const result = useQuery<Array<Item>>({
-    queryKey: ["debts-for-month"],
+    queryKey: ["debts-for-month", month],
     queryFn: async () => {
-      const response = await fetch(`/api/debts/debts-for-month`)
+      const response = await fetch(`/api/debts/debts-for-month?month=${month}`)
 
       if (!response.ok) return []
 
@@ -43,6 +43,8 @@ export function UpcomingPayables() {
   })
 
   if (result.isLoading) return <Skeleton className="h-[250px] w-full" />
+
+  const monthYear = getMonthYearDisplay(month)
 
   return (
     <Card className="flex flex-col">
@@ -64,7 +66,7 @@ export function UpcomingPayables() {
         <div className="h-full rounded-md bg-gray-100 p-2 dark:bg-muted/30">
           <div className="mb-1 flex items-center gap-2">
             <CardDescription className="mb-2 shrink-0">
-              {format(new Date(), "MMMM yyyy")}
+              {monthYear}
             </CardDescription>
             <div className="mb-1.5 h-px flex-1 bg-border" />
           </div>

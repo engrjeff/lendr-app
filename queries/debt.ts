@@ -1,11 +1,16 @@
 import prisma from "@/prisma/client"
 import { withEntityId } from "@/schema/utils"
+import { getMonthFilter } from "@/server/utils"
 import { DebtStatus, InstallmentPlanItemStatus } from "@prisma/client"
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library"
-import { endOfMonth, format, startOfMonth } from "date-fns"
+import { format } from "date-fns"
 import * as z from "zod"
 
 import { getUser } from "./user"
+
+interface WidgetParams {
+  month?: string
+}
 
 const getDebtsInputSchema = z.object({
   sort: z.string().optional(),
@@ -64,25 +69,11 @@ export const getDebts = async (input: GetDebtsInput) => {
 
 export type DebtItem = Awaited<ReturnType<typeof getDebts>>[number]
 
-export const getDebtsGroupedByCategory = async () => {
+export const getDebtsGroupedByCategory = async ({ month }: WidgetParams) => {
   try {
     const user = await getUser()
 
-    // const result = await prisma.debt.groupBy({
-    //   by: "category",
-    //   _sum: {
-    //     balance: true,
-    //   },
-    //   where: {
-    //     user_id: user?.id,
-    //     status: DebtStatus.IN_PROGRESS,
-    //   },
-    //   orderBy: {
-    //     _sum: {
-    //       balance: "desc",
-    //     },
-    //   },
-    // })
+    const { startDate, endDate } = getMonthFilter(month)
 
     const remainingBalances = await prisma.debt.findMany({
       where: {
@@ -96,6 +87,10 @@ export const getDebtsGroupedByCategory = async () => {
           where: {
             status: {
               not: InstallmentPlanItemStatus.PAID,
+            },
+            payment_date: {
+              gte: startDate,
+              lte: endDate,
             },
           },
         },
@@ -206,9 +201,11 @@ export const getDebtById = async (input: GetDebtByIdInput) => {
   }
 }
 
-export const getDebtPayoffProgress = async () => {
+export const getDebtPayoffProgress = async ({ month }: WidgetParams) => {
   try {
     const user = await getUser()
+
+    const { startDate, endDate } = getMonthFilter(month)
 
     const paid = await prisma.installmentPlanItem.aggregate({
       where: {
@@ -216,6 +213,10 @@ export const getDebtPayoffProgress = async () => {
           user_id: user?.id,
         },
         status: InstallmentPlanItemStatus.PAID,
+        payment_date: {
+          gte: startDate,
+          lte: endDate,
+        },
       },
       _sum: {
         payment_amount: true,
@@ -229,6 +230,10 @@ export const getDebtPayoffProgress = async () => {
         },
         status: {
           not: InstallmentPlanItemStatus.PAID,
+        },
+        payment_date: {
+          gte: startDate,
+          lte: endDate,
         },
       },
       _sum: {
@@ -295,9 +300,11 @@ export const getDebtPayoffProgress = async () => {
   }
 }
 
-export const getBalancesByCategory = async () => {
+export const getBalancesByCategory = async ({ month }: WidgetParams) => {
   try {
     const user = await getUser()
+
+    const { startDate, endDate } = getMonthFilter(month)
 
     const remainingBalances = await prisma.debt.findMany({
       where: {
@@ -306,7 +313,14 @@ export const getBalancesByCategory = async () => {
       select: {
         id: true,
         category: true,
-        installment_plans: true,
+        installment_plans: {
+          where: {
+            payment_date: {
+              gte: startDate,
+              lte: endDate,
+            },
+          },
+        },
       },
       orderBy: {
         balance: "desc",
@@ -373,12 +387,11 @@ export const getBalancesByCategory = async () => {
   }
 }
 
-export async function getDebtsForMonth() {
+export async function getDebtsForMonth({ month }: WidgetParams) {
   try {
     const user = await getUser()
 
-    const startDayOfMonth = startOfMonth(new Date())
-    const endDayOfMonth = endOfMonth(new Date())
+    const { startDate, endDate } = getMonthFilter(month)
 
     const debtsForMonth = await prisma.installmentPlanItem.findMany({
       where: {
@@ -387,8 +400,8 @@ export async function getDebtsForMonth() {
         },
         status: InstallmentPlanItemStatus.UPCOMING,
         payment_date: {
-          gte: format(startDayOfMonth, "yyyy-MM-dd"),
-          lte: format(endDayOfMonth, "yyyy-MM-dd"),
+          gte: startDate,
+          lte: endDate,
         },
       },
       include: {

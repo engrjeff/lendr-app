@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query"
 
 import {
   Card,
+  CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
@@ -12,11 +13,13 @@ import { Skeleton } from "@/components/ui/skeleton"
 
 import { DebtByCategorySliderClient } from "./debt-by-category-slider.client"
 
-export function DebtByCategorySlider() {
+export function DebtByCategorySlider({ month }: { month?: string }) {
   const result = useQuery({
-    queryKey: ["balance-by-category-slider"],
+    queryKey: ["balance-by-category-slider", month],
     queryFn: async () => {
-      const response = await fetch(`/api/debts/balance-by-category`)
+      const response = await fetch(
+        `/api/debts/balance-by-category?month=${month}`
+      )
 
       if (!response.ok) return []
 
@@ -45,14 +48,28 @@ export function DebtByCategorySlider() {
           <li className="hidden lg:block">
             <Skeleton className="h-[360px]" />
           </li>
-          <li className="hidden xl:block">
-            <Skeleton className="h-[360px]" />
-          </li>
         </ul>
       </Card>
     )
 
-  if (!result.data?.length) return null
+  if (!result.data?.length)
+    return (
+      <Card className="flex h-[352px] flex-col">
+        <CardHeader className="p-3">
+          <CardTitle className="text-sm font-semibold">
+            Paidoff Progress by Category
+          </CardTitle>
+          <CardDescription>
+            Overview of your paidoff progress by category
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="mt-auto flex flex-1 flex-col items-center justify-center">
+          <p className="text-center text-sm text-muted-foreground">
+            No data to show
+          </p>
+        </CardContent>
+      </Card>
+    )
 
   return (
     <Card className="border-none">

@@ -10,8 +10,8 @@ import {
 
 import { DebtByCategoryChartClient } from "./debt-by-category-chart.client"
 
-export async function DebtByCategoryChart() {
-  const debtsByCategory = await getDebtsGroupedByCategory()
+export async function DebtByCategoryChart({ month }: { month?: string }) {
+  const debtsByCategory = await getDebtsGroupedByCategory({ month })
 
   if (!debtsByCategory.length)
     return (
@@ -22,7 +22,7 @@ export async function DebtByCategoryChart() {
           </CardTitle>
           <CardDescription>Showing remaining balance to pay.</CardDescription>
         </CardHeader>
-        <CardContent className="p-3">
+        <CardContent className="flex flex-1 flex-col items-center justify-center p-3">
           <p className="text-center text-sm text-muted-foreground">
             No data to show
           </p>

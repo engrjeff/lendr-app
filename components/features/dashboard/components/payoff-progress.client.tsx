@@ -54,8 +54,8 @@ export function PayoffProgressClient({
 
   if (!total)
     return (
-      <Card>
-        <CardHeader>
+      <Card className="flex flex-col">
+        <CardHeader className="p-3">
           <CardDescription>Outstanding Balance</CardDescription>
           <CardTitle className="font-bold">
             PHP 0.00{" "}
@@ -64,7 +64,7 @@ export function PayoffProgressClient({
             </span>
           </CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="flex flex-1 flex-col items-center justify-center">
           <p className="text-center text-sm text-muted-foreground">
             No data to show
           </p>

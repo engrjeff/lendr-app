@@ -46,6 +46,8 @@ export function DebtByCategorySliderClient({ data }: Props) {
     total: item.total,
   }))
 
+  const buttonsShown = chartData.length >= 4
+
   return (
     <Carousel className="relative w-full" opts={{ align: "start" }}>
       <CarouselContent>
@@ -131,14 +133,18 @@ export function DebtByCategorySliderClient({ data }: Props) {
           </CarouselItem>
         ))}
       </CarouselContent>
-      <CarouselPrevious
-        variant="ghost"
-        className="left-2 bg-gray-100 dark:bg-muted/30"
-      />
-      <CarouselNext
-        variant="ghost"
-        className="right-2 bg-gray-100 dark:bg-muted/30"
-      />
+      {buttonsShown ? (
+        <>
+          <CarouselPrevious
+            variant="ghost"
+            className="left-2 bg-gray-100 dark:bg-muted/30"
+          />
+          <CarouselNext
+            variant="ghost"
+            className="right-2 bg-gray-100 dark:bg-muted/30"
+          />
+        </>
+      ) : null}
     </Carousel>
   )
 }

@@ -1,9 +1,12 @@
-import { NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
 import { getDebtsForMonth } from "@/queries/debt"
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    const debts = await getDebtsForMonth()
+    const searchParams = request.nextUrl.searchParams
+    const month = searchParams.get("month") ?? undefined
+
+    const debts = await getDebtsForMonth({ month })
 
     return NextResponse.json(debts)
   } catch (error) {

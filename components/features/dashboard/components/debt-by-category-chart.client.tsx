@@ -38,6 +38,23 @@ export function DebtByCategoryChartClient({ debtsByCategory }: Props) {
     fill: chartConfig[debt.category as keyof ChartConfig]?.color,
   }))
 
+  if (!totalBalance)
+    return (
+      <Card className="flex min-h-[250px] flex-col">
+        <CardHeader className="p-3">
+          <CardTitle className="text-sm font-semibold">
+            Balance by Category
+          </CardTitle>
+          <CardDescription>Showing remaining balance to pay.</CardDescription>
+        </CardHeader>
+        <CardContent className="flex flex-1 flex-col items-center justify-center p-3">
+          <p className="text-center text-sm text-muted-foreground">
+            No data to show
+          </p>
+        </CardContent>
+      </Card>
+    )
+
   return (
     <Card className="flex flex-col">
       <CardHeader className="p-3 pb-0">

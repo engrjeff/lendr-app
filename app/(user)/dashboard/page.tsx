@@ -1,3 +1,4 @@
+import { Suspense } from "react"
 import { Metadata } from "next"
 import { auth } from "@/auth"
 
@@ -8,12 +9,17 @@ import { PayoffProgress } from "@/components/features/dashboard/components/payof
 import { RecentlyAddedDebts } from "@/components/features/dashboard/components/recently-added-debts"
 import { UpcomingPayables } from "@/components/features/dashboard/components/upcoming-payables"
 import { DebtsEmptyView } from "@/components/features/debts/components/debts-empty-view"
+import { MonthFilter } from "@/components/shared/month-filter"
 
 export const metadata: Metadata = {
   title: "Dashboard",
 }
 
-async function DashboardPage() {
+async function DashboardPage({
+  searchParams,
+}: {
+  searchParams: { month?: string }
+}) {
   const session = await auth()
 
   if (!session?.user.hasRecords) return <DebtsEmptyView forDashboard />
@@ -27,16 +33,20 @@ async function DashboardPage() {
             Quick insights on your balances.
           </p>
         </div>
+        <div className="ml-auto">
+          <Suspense>
+            <MonthFilter />
+          </Suspense>
+        </div>
       </div>
-
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 xl:grid-cols-3">
-        <PayoffProgress />
-        <UpcomingPayables />
+        <PayoffProgress month={searchParams.month} />
+        <UpcomingPayables month={searchParams.month} />
         <PastDueDebts />
 
-        <DebtByCategoryChart />
+        <DebtByCategoryChart month={searchParams.month} />
         <div className="lg:col-span-2">
-          <DebtByCategorySlider />
+          <DebtByCategorySlider month={searchParams.month} />
         </div>
       </div>
 

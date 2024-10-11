@@ -1,9 +1,13 @@
-import { NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
 import { getBalancesByCategory } from "@/queries/debt"
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    const data = await getBalancesByCategory()
+    const searchParams = request.nextUrl.searchParams
+
+    const month = searchParams.get("month") ?? undefined
+
+    const data = await getBalancesByCategory({ month })
 
     return NextResponse.json(data)
   } catch (error) {
