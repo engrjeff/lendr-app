@@ -223,10 +223,7 @@ function InstallmentPayForm({
     defaultValues: {
       payment_amount: installmentPlanItem.payment_amount,
       payment_date: format(installmentPlanItem.payment_date, "yyyy-MM-dd"),
-      actual_payment_date: format(
-        installmentPlanItem.payment_date,
-        "yyyy-MM-dd"
-      ),
+      actual_payment_date: format(new Date(), "yyyy-MM-dd"),
       note: installmentPlanItem.note ?? "",
     },
   })
