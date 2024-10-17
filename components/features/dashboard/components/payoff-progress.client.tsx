@@ -125,7 +125,7 @@ export function PayoffProgressClient({
                 <Link
                   href={`/debts/${lastPayment.debtId}?status=${InstallmentPlanItemStatus.PAID}`}
                 >
-                  <div className="flex items-start rounded-md p-1 text-sm hover:bg-muted">
+                  <div className="flex items-start rounded-md p-1 text-sm hover:bg-gray-200 dark:hover:bg-muted">
                     <span className="mr-3 mt-px block text-center font-semibold">
                       {getDateDisplay(lastPayment.actual_payment_date!)}
                     </span>

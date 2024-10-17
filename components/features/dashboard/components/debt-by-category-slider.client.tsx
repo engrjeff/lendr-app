@@ -8,6 +8,7 @@ import {
   RadialBarChart,
 } from "recharts"
 
+import { cn } from "@/lib/utils"
 import {
   Card,
   CardContent,
@@ -133,18 +134,22 @@ export function DebtByCategorySliderClient({ data }: Props) {
           </CarouselItem>
         ))}
       </CarouselContent>
-      {buttonsShown ? (
-        <>
-          <CarouselPrevious
-            variant="ghost"
-            className="left-2 bg-gray-100 dark:bg-muted/30"
-          />
-          <CarouselNext
-            variant="ghost"
-            className="right-2 bg-gray-100 dark:bg-muted/30"
-          />
-        </>
-      ) : null}
+      <>
+        <CarouselPrevious
+          variant="ghost"
+          className={cn(
+            "left-2 bg-gray-100 dark:bg-muted/30",
+            buttonsShown ? "inline-flex" : "md:hidden"
+          )}
+        />
+        <CarouselNext
+          variant="ghost"
+          className={cn(
+            "right-2 bg-gray-100 dark:bg-muted/30",
+            buttonsShown ? "inline-flex" : "md:hidden"
+          )}
+        />
+      </>
     </Carousel>
   )
 }
