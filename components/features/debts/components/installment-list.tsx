@@ -59,7 +59,13 @@ export function InstallmentList({
                     {plan.payment_amount.toLocaleString()}
                   </p>
                 </div>
-                <div className="pt-4">
+                {plan.note ? (
+                  <div>
+                    <p className="text-xs text-muted-foreground">Note</p>
+                    <p className="text-sm">{plan.note}</p>
+                  </div>
+                ) : null}
+                <div className="pt-4 empty:hidden">
                   <InstallmentPlanItemAction installmentPlanItem={plan} />
                 </div>
               </div>
