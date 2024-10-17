@@ -107,7 +107,14 @@ export function DebtCard({ debt }: { debt: DebtItem }) {
         </div>
       </CardContent>
 
-      <Link href={`/debts/${debt.id}`} className="absolute inset-0">
+      <Link
+        href={
+          debt.status === DebtStatus.PAID
+            ? `/debts/${debt.id}?status=${DebtStatus.PAID}`
+            : `/debts/${debt.id}`
+        }
+        className="absolute inset-0"
+      >
         <span className="sr-only">View details</span>
       </Link>
 
