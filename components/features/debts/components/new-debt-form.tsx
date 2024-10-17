@@ -65,7 +65,7 @@ export function NewDebtForm() {
 }
 
 const durationMap = {
-  "One Time Payment": "",
+  "One Time Payment": "One-time",
   Daily: "day(s)",
   Weekly: "week(s)",
   Monthly: "month(s)",
@@ -287,7 +287,7 @@ function DebtForm({ afterSubmit }: { afterSubmit: () => void }) {
                         valueAsNumber: true,
                       })}
                     />
-                    <span className="inline-flex h-10 items-center rounded-r border bg-muted/60 px-1.5 text-xs text-muted-foreground empty:hidden">
+                    <span className="inline-flex h-10 items-center rounded-r border bg-muted/60 px-1.5 text-xs text-muted-foreground">
                       {
                         durationMap[
                           form.watch("frequency") as keyof typeof durationMap

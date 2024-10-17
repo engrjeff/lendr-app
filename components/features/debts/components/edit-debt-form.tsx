@@ -64,7 +64,7 @@ export function EditDebtForm({ open, onOpenChange, debt }: Props) {
 }
 
 const durationMap = {
-  "One Time Payment": "",
+  "One Time Payment": "One-time",
   Daily: "day(s)",
   Weekly: "week(s)",
   Monthly: "month(s)",
@@ -199,8 +199,8 @@ function DebtForm({
             )}
           />
           {hasPaidInstallment ? (
-            <div className="rounded border-l-2 border-blue-500 bg-blue-500/30 px-3 py-3">
-              <InfoIcon className="size-4 mb-1" />
+            <div className="rounded border-l-2 border-blue-500 bg-blue-500/30 p-3">
+              <InfoIcon className="mb-1 size-4" />
               <p className="text-xs">
                 The following fields can no longer be edited since a payment for
                 one or more installment plans for this debt has already been
@@ -314,7 +314,7 @@ function DebtForm({
                         valueAsNumber: true,
                       })}
                     />
-                    <span className="inline-flex h-10 items-center rounded-r border bg-muted/60 px-1.5 text-xs text-muted-foreground empty:hidden">
+                    <span className="inline-flex h-10 items-center rounded-r border bg-muted/60 px-1.5 text-xs text-muted-foreground">
                       {
                         durationMap[
                           form.watch("frequency") as keyof typeof durationMap
