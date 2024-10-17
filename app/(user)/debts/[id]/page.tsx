@@ -2,6 +2,7 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 import { getDebtById } from "@/queries/debt"
 import { InstallmentPlanItemStatus } from "@prisma/client"
+import { isBefore } from "date-fns"
 
 import { cn } from "@/lib/utils"
 import {
@@ -30,6 +31,13 @@ async function DebtDetailPage({ params, searchParams }: PageProps) {
   })
 
   if (!debt) notFound()
+
+  const installmentPlans =
+    searchParams.status === InstallmentPlanItemStatus.UPCOMING
+      ? debt.installment_plans.filter(
+          (item) => !isBefore(item.payment_date, new Date())
+        )
+      : debt.installment_plans
 
   return (
     <div className="flex flex-col space-y-6">
@@ -63,7 +71,7 @@ async function DebtDetailPage({ params, searchParams }: PageProps) {
 
       <DebtInstallmentPlans
         key={searchParams.status}
-        installmentPlans={debt.installment_plans}
+        installmentPlans={installmentPlans}
       />
     </div>
   )
