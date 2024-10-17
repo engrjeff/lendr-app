@@ -1,10 +1,8 @@
-import Link from "next/link"
 import { notFound } from "next/navigation"
 import { getDebtById } from "@/queries/debt"
 import { InstallmentPlanItemStatus } from "@prisma/client"
 import { isBefore } from "date-fns"
 
-import { cn } from "@/lib/utils"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -13,7 +11,6 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
-import { buttonVariants } from "@/components/ui/button"
 import { DebtCategoryIcon } from "@/components/features/debts/components/debt-category-icon"
 import { DebtInstallmentPlans } from "@/components/features/debts/components/debt-installment-plans"
 
@@ -63,15 +60,12 @@ async function DebtDetailPage({ params, searchParams }: PageProps) {
             <h1 className="text-xl font-bold">{debt?.nickname}</h1>
           </div>
         </div>
-
-        <Link href="#" className={cn(buttonVariants({ size: "sm" }), "hidden")}>
-          View Transactions
-        </Link>
       </div>
 
       <DebtInstallmentPlans
         key={searchParams.status}
         installmentPlans={installmentPlans}
+        debt={debt}
       />
     </div>
   )

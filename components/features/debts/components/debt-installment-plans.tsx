@@ -1,6 +1,7 @@
 "use client"
 
 import { Suspense } from "react"
+import { DebtItem } from "@/queries/debt"
 import { InstallmentPlanItem, InstallmentPlanItemStatus } from "@prisma/client"
 import { ColumnDef } from "@tanstack/react-table"
 import { isBefore } from "date-fns"
@@ -11,6 +12,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { DataTable } from "@/components/ui/data-table/data-table"
 import { useDataTable } from "@/components/ui/data-table/useDataTable"
 
+import { DebtEditButton } from "./debt-edit-button"
 import { InstallmentList } from "./installment-list"
 import { InstallmentPlanRowActions } from "./installment-plan-row-actions"
 import { PayAllButton } from "./pay-all-button"
@@ -126,7 +128,9 @@ const statusFilterOptions = [
 
 export function DebtInstallmentPlans({
   installmentPlans,
+  debt,
 }: {
+  debt: DebtItem
   installmentPlans: InstallmentPlanItem[]
 }) {
   const table = useDataTable({ data: installmentPlans ?? [], columns })
@@ -148,6 +152,10 @@ export function DebtInstallmentPlans({
         {table.getIsAllRowsSelected() && installmentPlans.length !== 1 ? (
           <PayAllButton totalBalance={totalBalance} />
         ) : null}
+
+        <div className="ml-auto">
+          <DebtEditButton debt={debt} />
+        </div>
       </div>
       <div className="hidden md:block">
         <DataTable table={table} columnLength={columns.length} noHover />
