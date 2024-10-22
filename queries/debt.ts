@@ -181,14 +181,14 @@ export const getDebtById = async (input: GetDebtByIdInput) => {
       where: { id: input.id, user_id: user?.id },
       include: {
         installment_plans: {
-          where: {
-            status: input.status ?? InstallmentPlanItemStatus.UPCOMING,
-            // NOT: {
-            //   payment_date: {
-            //     lt: format(new Date(), "yyyy-MM-dd"),
-            //   },
-            // },
-          },
+          // where: {
+          //   status: input.status ?? InstallmentPlanItemStatus.UPCOMING,
+          //   // NOT: {
+          //   //   payment_date: {
+          //   //     lt: format(new Date(), "yyyy-MM-dd"),
+          //   //   },
+          //   // },
+          // },
           orderBy: {
             payment_date: "asc",
           },

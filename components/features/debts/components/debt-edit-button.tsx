@@ -13,7 +13,7 @@ export function DebtEditButton({ debt }: { debt: DebtItem }) {
 
   return (
     <>
-      <Button onClick={() => setOpen(true)} size="sm">
+      <Button onClick={() => setOpen(true)} size="sm" variant="secondary">
         <PencilIcon className="mr-2 size-4" /> Update
       </Button>
       <EditDebtForm open={open} onOpenChange={setOpen} debt={debt} />
