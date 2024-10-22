@@ -6,7 +6,6 @@ import { DebtByCategoryChart } from "@/components/features/dashboard/components/
 import { DebtByCategorySlider } from "@/components/features/dashboard/components/debt-by-category-slides"
 import { PastDueDebts } from "@/components/features/dashboard/components/past-due-debts"
 import { PayoffProgress } from "@/components/features/dashboard/components/payoff-progress"
-import { RecentlyAddedDebts } from "@/components/features/dashboard/components/recently-added-debts"
 import { UpcomingPayables } from "@/components/features/dashboard/components/upcoming-payables"
 import { DebtsEmptyView } from "@/components/features/debts/components/debts-empty-view"
 import { MonthFilter } from "@/components/shared/month-filter"
@@ -49,8 +48,6 @@ async function DashboardPage({
           <DebtByCategorySlider month={searchParams.month} />
         </div>
       </div>
-
-      <RecentlyAddedDebts />
     </div>
   )
 }
