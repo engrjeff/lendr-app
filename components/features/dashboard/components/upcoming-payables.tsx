@@ -82,7 +82,7 @@ export function UpcomingPayables({ month }: { month?: string }) {
             <ul className="space-y-1">
               {result.data?.map((item) => (
                 <li key={`upcoming-payable-${item.id}`}>
-                  <Link href={`/debts/${item.debtId}`}>
+                  <Link prefetch={true} href={`/debts/${item.debtId}`}>
                     <div className="flex items-start rounded-md p-1 text-sm hover:bg-gray-200 dark:hover:bg-muted">
                       <span className="mr-3 mt-px block w-10 text-center font-semibold">
                         {getDateDisplay(item.payment_date)}

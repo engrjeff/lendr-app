@@ -114,6 +114,7 @@ export function DebtCard({ debt }: { debt: DebtItem }) {
             : `/debts/${debt.id}`
         }
         className="absolute inset-0"
+        prefetch={true}
       >
         <span className="sr-only">View details</span>
       </Link>

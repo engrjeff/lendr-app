@@ -35,6 +35,7 @@ const columns: ColumnDef<DebtItem>[] = [
         <Link
           href={`/debts/${row.original.id}`}
           className="font-medium text-blue-500 underline underline-offset-4 hover:no-underline"
+          prefetch={true}
         >
           {row.getValue("nickname")}
         </Link>
