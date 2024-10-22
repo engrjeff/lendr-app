@@ -3,14 +3,17 @@
 import { Suspense } from "react"
 import { DebtItem } from "@/queries/debt"
 import { InstallmentPlanItem, InstallmentPlanItemStatus } from "@prisma/client"
-import { ColumnDef } from "@tanstack/react-table"
+import {
+  ColumnDef,
+  getCoreRowModel,
+  useReactTable,
+} from "@tanstack/react-table"
 import { isBefore } from "date-fns"
 
 import { formatDate } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
 import { Checkbox } from "@/components/ui/checkbox"
 import { DataTable } from "@/components/ui/data-table/data-table"
-import { useDataTable } from "@/components/ui/data-table/useDataTable"
 
 import { DebtEditButton } from "./debt-edit-button"
 import { InstallmentList } from "./installment-list"
@@ -133,7 +136,11 @@ export function DebtInstallmentPlans({
   debt: DebtItem
   installmentPlans: InstallmentPlanItem[]
 }) {
-  const table = useDataTable({ data: installmentPlans ?? [], columns })
+  const table = useReactTable({
+    data: installmentPlans ?? [],
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+  })
 
   const totalBalance = installmentPlans.reduce(
     (total, item) => total + item.payment_amount,
