@@ -23,8 +23,8 @@ const badgeVariants = cva(
           "border-transparent bg-green-600 text-primary-foreground hover:bg-green-600/80",
         INVENTORY_ASSEMBLY:
           "border-transparent bg-purple-600 text-primary-foreground hover:bg-purple-600/80",
-        UPCOMING: "border-transparent bg-blue-500/20 text-blue-500",
-        IN_PROGRESS: "border-transparent bg-blue-500/20 text-blue-500",
+        UPCOMING: "border-transparent bg-amber-500/20 text-amber-500",
+        IN_PROGRESS: "border-transparent bg-amber-500/20 text-amber-500",
         CANCELLED: "border-transparent bg-red-500/20 text-red-500",
         PAID: "border-transparent bg-green-500/20 text-green-500",
         PAST_DUE: "border-transparent bg-amber-500/20 text-amber-500",

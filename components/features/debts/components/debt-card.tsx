@@ -49,8 +49,8 @@ export function DebtCard({ debt }: { debt: DebtItem }) {
       <CardContent className="flex-1 p-2">
         <div className="grid h-full grid-cols-2 justify-between gap-2 rounded bg-gray-100 p-3 pb-1 text-sm dark:bg-muted/30">
           <div className="col-span-2">
-            <Badge variant={debt.status} className="text-nowrap">
-              {debt.status.replaceAll("_", " ")}
+            <Badge variant={debt.status} className="text-nowrap capitalize">
+              {debt.status.toLowerCase().replaceAll("_", " ")}
             </Badge>
           </div>
           {debt.status === DebtStatus.IN_PROGRESS ? (

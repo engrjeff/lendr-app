@@ -49,7 +49,7 @@ const columns: ColumnDef<DebtItem>[] = [
     ),
     cell: ({ row }) => {
       if (row.original.status === "PAID") {
-        return <Badge variant="PAID">PAID</Badge>
+        return <Badge variant="PAID">Paid</Badge>
       }
 
       const paidPlans = row.original.installment_plans.filter(
