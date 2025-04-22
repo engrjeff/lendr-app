@@ -412,7 +412,7 @@ export async function getDebtsForMonth({ month }: WidgetParams) {
           select: { nickname: true, category: true },
         },
       },
-      take: 3,
+      // take: 3,
       orderBy: {
         payment_date: "asc",
       },
