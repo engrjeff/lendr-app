@@ -9,7 +9,7 @@ export async function PayoffProgress({ month }: { month?: string }) {
     <PayoffProgressClient
       unpaid={data.unpaid}
       paid={data.paid}
-      lastPayment={data.lastPayment}
+      lastPayments={data.lastPayments}
     />
   )
 }

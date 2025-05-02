@@ -2,8 +2,7 @@
 
 import Link from "next/link"
 import { InstallmentPlanItem, InstallmentPlanItemStatus } from "@prisma/client"
-import { format } from "date-fns"
-import { ChevronRightIcon, ExternalLinkIcon } from "lucide-react"
+import { ChevronRightIcon } from "lucide-react"
 
 import {
   Card,
@@ -27,14 +26,14 @@ interface PayoffProgressClientProps {
   //     })
   //   | null
 
-  lastPayment:
-    | (InstallmentPlanItem & {
-        debt: {
-          nickname: string
-          category: string
-        }
-      })
-    | null
+  lastPayments: Array<
+    InstallmentPlanItem & {
+      debt: {
+        nickname: string
+        category: string
+      }
+    }
+  > | null
 }
 
 function getDateDisplay(dateString: string) {
@@ -48,7 +47,7 @@ function getDateDisplay(dateString: string) {
 export function PayoffProgressClient({
   paid,
   unpaid,
-  lastPayment,
+  lastPayments,
 }: PayoffProgressClientProps) {
   const total = paid + unpaid
 
@@ -111,74 +110,56 @@ export function PayoffProgressClient({
           </div>
         </div>
 
-        {lastPayment ? (
+        {lastPayments?.length ? (
           <div className="relative">
             <div className="rounded-md bg-gray-100 p-2 dark:bg-muted/30">
               <div className="mb-1 flex items-center gap-2">
                 <CardDescription className="mb-2 shrink-0">
-                  Latest Payment
+                  Latest Payments
                 </CardDescription>
                 <div className="mb-1.5 h-px flex-1 bg-border" />
               </div>
 
-              <div>
-                <Link
-                  href={`/debts/${lastPayment.debtId}?status=${InstallmentPlanItemStatus.PAID}`}
-                >
-                  <div className="flex items-start rounded-md p-1 text-sm hover:bg-gray-200 dark:hover:bg-muted">
-                    <span className="mr-3 mt-px block text-center font-semibold">
-                      {getDateDisplay(lastPayment.actual_payment_date!)}
-                    </span>
-                    <span
-                      className="mr-2.5 mt-1 block h-4 w-1 rounded"
-                      style={{
-                        backgroundColor:
-                          chartConfig[lastPayment.debt.category].color,
-                      }}
-                    />
-                    <div className="mt-px flex flex-col">
-                      <span className="font-semibold group-hover:text-blue-500">
-                        {lastPayment.debt.nickname}
-                      </span>
-                      <p className="space-x-2 text-xs text-muted-foreground">
-                        <span>
-                          Php {lastPayment.payment_amount.toLocaleString()}
+              <ul>
+                {lastPayments.map((payment) => (
+                  <li key={payment.id}>
+                    <Link
+                      href={`/debts/${payment.debtId}?status=${InstallmentPlanItemStatus.PAID}`}
+                    >
+                      <div className="flex items-start rounded-md p-1 text-sm hover:bg-gray-200 dark:hover:bg-muted">
+                        <span className="mr-3 mt-px block text-center font-semibold">
+                          {getDateDisplay(payment.actual_payment_date!)}
                         </span>
-                        <span>&middot;</span>
-                        <span>
-                          Due: {getDateDisplay(lastPayment.payment_date!)}
-                        </span>
-                      </p>
-                    </div>
-                    <ChevronRightIcon className="ml-auto size-4 self-center text-muted-foreground" />
-                  </div>
-                </Link>
-              </div>
+                        <span
+                          className="mr-2.5 mt-1 block h-4 w-1 rounded"
+                          style={{
+                            backgroundColor:
+                              chartConfig[payment.debt.category].color,
+                          }}
+                        />
+                        <div className="mt-px flex flex-col">
+                          <span className="font-semibold group-hover:text-blue-500">
+                            {payment.debt.nickname}
+                          </span>
+                          <p className="space-x-2 text-xs text-muted-foreground">
+                            <span>
+                              Php {payment.payment_amount.toLocaleString()}
+                            </span>
+                            <span>&middot;</span>
+                            <span>
+                              Due: {getDateDisplay(payment.payment_date!)}
+                            </span>
+                          </p>
+                        </div>
+                        <ChevronRightIcon className="ml-auto size-4 self-center text-muted-foreground" />
+                      </div>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         ) : null}
-
-        <div className="hidden">
-          {lastPayment ? (
-            <div className="flex flex-col justify-between gap-3 rounded border bg-muted/30 p-4">
-              <p className="text-sm">
-                Last payment of{" "}
-                <span className="font-semibold text-green-500">
-                  PHP {lastPayment.payment_amount.toLocaleString()}
-                </span>{" "}
-                for{" "}
-                <span className="font-bold">{lastPayment.debt.nickname}</span>{" "}
-                on {format(lastPayment.actual_payment_date!, "MMM dd, yyyy")}
-              </p>
-              <Link
-                href={`/debts/${lastPayment.debtId}?status=${InstallmentPlanItemStatus.PAID}`}
-                className="inline-flex w-max items-center text-sm text-green-500 hover:underline"
-              >
-                Learn More <ExternalLinkIcon className="ml-3 size-4" />
-              </Link>
-            </div>
-          ) : null}
-        </div>
       </CardContent>
     </Card>
   )

@@ -263,7 +263,7 @@ export const getDebtPayoffProgress = async ({ month }: WidgetParams) => {
     //   },
     // })
 
-    const lastPayment = await prisma.installmentPlanItem.findFirst({
+    const lastPayments = await prisma.installmentPlanItem.findMany({
       where: {
         debt: {
           user_id: user?.id,
@@ -291,7 +291,7 @@ export const getDebtPayoffProgress = async ({ month }: WidgetParams) => {
     const payoffData = {
       paid: paid._sum.payment_amount ?? 0,
       unpaid: unpaid._sum.payment_amount ?? 0,
-      lastPayment,
+      lastPayments,
       // nextDue,
     }
 
