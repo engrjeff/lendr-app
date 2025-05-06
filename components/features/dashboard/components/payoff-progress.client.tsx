@@ -128,7 +128,7 @@ export function PayoffProgressClient({
                     >
                       <div className="flex items-start rounded-md p-1 text-sm hover:bg-gray-200 dark:hover:bg-muted">
                         <span className="mr-3 mt-px block text-center font-semibold">
-                          {getDateDisplay(payment.actual_payment_date!)}
+                          {getDateDisplay(payment.payment_date!)}
                         </span>
                         <span
                           className="mr-2.5 mt-1 block h-4 w-1 rounded"
@@ -147,7 +147,8 @@ export function PayoffProgressClient({
                             </span>
                             <span>&middot;</span>
                             <span>
-                              Due: {getDateDisplay(payment.payment_date!)}
+                              Paid:{" "}
+                              {getDateDisplay(payment.actual_payment_date!)}
                             </span>
                           </p>
                         </div>

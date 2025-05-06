@@ -269,7 +269,7 @@ export const getDebtPayoffProgress = async ({ month }: WidgetParams) => {
           user_id: user?.id,
         },
         status: InstallmentPlanItemStatus.PAID,
-        actual_payment_date: {
+        payment_date: {
           gte: startDate,
           lte: endDate,
         },
@@ -283,7 +283,7 @@ export const getDebtPayoffProgress = async ({ month }: WidgetParams) => {
         },
       },
       orderBy: {
-        actual_payment_date: "desc",
+        payment_date: "desc",
       },
     })
 
